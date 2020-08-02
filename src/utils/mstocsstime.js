@@ -1,0 +1,44 @@
+/***********************************************************************************************************************
+
+	utils/mstocsstime.js
+
+	Copyright © 2013–2020 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
+	Use of this source code is governed by a BSD 2-clause "Simplified" License, which may be found in the LICENSE file.
+
+***********************************************************************************************************************/
+
+import getTypeOf from './utils/gettypeof';
+
+
+/*
+	Returns the CSS time string represented by the passed number of milliseconds.
+*/
+function msToCSSTime(msec) {
+	if (typeof msec !== 'number' || Number.isNaN(msec) || !Number.isFinite(msec)) {
+		let what;
+
+		switch (typeof msec) {
+			case 'string':
+				what = `"${msec}"`;
+				break;
+
+			case 'number':
+				what = String(msec);
+				break;
+
+			default:
+				what = getTypeOf(msec);
+				break;
+		}
+
+		throw new TypeError(`invalid milliseconds value: ${what}`);
+	}
+
+	return `${msec}ms`;
+}
+
+
+/*
+	Module Exports.
+*/
+export default msToCSSTime;

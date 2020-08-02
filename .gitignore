@@ -5,12 +5,14 @@
 *.html
 
 # Development
-dist/
+build/
 node_modules/
 .build
+*.code-workspace
 .tern-project
+.vscode
 
 # Miscellaneous
 _*
-CHANGELOG*
-TODO*
+CHANGELOG.*
+TODO.*

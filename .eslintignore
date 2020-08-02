@@ -1,0 +1,6 @@
+# ignore directories
+templates/
+vendor/
+
+# ignore _{name} directories and files
+**/_*

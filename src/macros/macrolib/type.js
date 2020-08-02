@@ -1,0 +1,308 @@
+/***********************************************************************************************************************
+
+	macros/macrolib/type.js
+
+	Copyright © 2013–2020 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
+	Use of this source code is governed by a BSD 2-clause "Simplified" License, which may be found in the LICENSE file.
+
+***********************************************************************************************************************/
+
+import Config from './config';
+import Engine from './engine';
+import Macro from './macros/macro';
+import NodeTyper from './lib/nodetyper';
+import State from './state';
+import Wikifier from './markup/wikifier';
+import cssTimeToMS from './utils/csstimetoms';
+import scrubEventKey from './utils/scrubeventkey';
+
+
+/*
+	<<type speed [start delay] [class classes] [element tag] [id ID] [keep|none] [skipkey key]>>
+*/
+Macro.add('type', {
+	isAsync : true,
+	tags    : [],
+
+	handler() {
+		if (this.args.length === 0) {
+			return this.error('no speed specified');
+		}
+
+		const speed = cssTimeToMS(this.args[0]); // in milliseconds
+
+		if (speed < 0) {
+			return this.error(`speed time value must be non-negative (received: ${this.args[0]})`);
+		}
+
+		let cursor;
+		let elClass = '';
+		let elId    = '';
+		let elTag   = 'div';
+		let skipKey = Config.macros.typeSkipKey;
+		let start   = 400; // in milliseconds
+
+		// Process optional arguments.
+		const options = this.args.slice(1);
+
+		while (options.length > 0) {
+			const option = options.shift();
+
+			switch (option) {
+				case 'class': {
+					if (options.length === 0) {
+						return this.error('class option missing required class name(s)');
+					}
+
+					elClass = options.shift();
+
+					if (elClass === '') {
+						throw new Error('class option class name(s) must be non-empty (received: "")');
+					}
+
+					break;
+				}
+
+				case 'element': {
+					if (options.length === 0) {
+						return this.error('element option missing required element tag name');
+					}
+
+					elTag = options.shift();
+
+					if (elTag === '') {
+						throw new Error('element option tag name must be non-empty (received: "")');
+					}
+
+					break;
+				}
+
+				case 'id': {
+					if (options.length === 0) {
+						return this.error('id option missing required ID');
+					}
+
+					elId = options.shift();
+
+					if (elId === '') {
+						throw new Error('id option ID must be non-empty (received: "")');
+					}
+
+					break;
+				}
+
+				case 'keep':
+					cursor = 'keep';
+					break;
+
+				case 'none':
+					cursor = 'none';
+					break;
+
+				case 'skipkey': {
+					if (options.length === 0) {
+						return this.error('skipkey option missing required key value');
+					}
+
+					skipKey = options.shift();
+
+					if (skipKey === '') {
+						throw new Error('skipkey option key value must be non-empty (received: "")');
+					}
+
+					break;
+				}
+
+				case 'start': {
+					if (options.length === 0) {
+						return this.error('start option missing required time value');
+					}
+
+					const value = options.shift();
+					start = cssTimeToMS(value);
+
+					if (start < 0) {
+						throw new Error(`start option time value must be non-negative (received: ${value})`);
+					}
+
+					break;
+				}
+
+				default:
+					return this.error(`unknown option: ${option}`);
+			}
+		}
+
+		const contents = this.payload[0].contents;
+
+		// Do nothing if there's no content to type out.
+		if (contents.trim() === '') {
+			return;
+		}
+
+		// Custom debug view setup.
+		if (Config.debug) {
+			this.debugView.modes({ block : true });
+		}
+
+		// Set up our base class name and event namespace.
+		const className = `macro-${this.name}`;
+		const namespace = `.${className}`;
+
+		// Create a target to be later replaced by the typing wrapper.
+		const $target = jQuery(document.createElement(elTag))
+			.addClass(`${className} ${className}-target`)
+			.appendTo(this.output);
+
+		// Initialize the queue and clean up handlers.
+		if (!Wikifier.temporary.macroTypeQueue) {
+			// Set up the typing handler queue for all invocations.
+			Wikifier.temporary.macroTypeQueue = [];
+
+			// Immediately clear any existing handlers from our namespace and set up a
+			// `:passageinit` event handler to clean up after navigation.
+			$(document)
+				.off(namespace)
+				.one(`:passageinit${namespace}`, () => $(document).off(namespace));
+		}
+
+		// If the queue is empty at this point, set the start typing flag.
+		const startTyping = Wikifier.temporary.macroTypeQueue.length === 0;
+
+		// Push our typing handler onto the queue.
+		Wikifier.temporary.macroTypeQueue.push(() => {
+			const $wrapper = jQuery(document.createElement(elTag))
+				.addClass(className);
+
+			// Add the user ID, if any.
+			if (elId) {
+				$wrapper.attr('id', elId);
+			}
+
+			// Add the user class(es), if any.
+			if (elClass) {
+				$wrapper.addClass(elClass);
+			}
+
+			new Wikifier($wrapper, contents);
+
+			const passage = State.passage;
+
+			// Skip typing if….
+			if (
+				// …we've visited the passage before.
+				!Config.macros.typeVisitedPassages
+				// FIXME: Switch the following out for `State.hasPlayed()` once it
+				// does not consider the most recent moment.
+				&& State.passages.slice(0, -1).some(title => title === passage)
+
+				// …there were any content errors.
+				|| $wrapper.find('.error').length > 0
+			) {
+				$target.replaceWith($wrapper);
+
+				// Remove this handler from the queue.
+				Wikifier.temporary.macroTypeQueue.shift();
+
+				// Run the next typing handler in the queue, if any.
+				if (Wikifier.temporary.macroTypeQueue.length > 0) {
+					Wikifier.temporary.macroTypeQueue.first()();
+				}
+
+				return;
+			}
+
+			// Create a new `NodeTyper` instance for the wrapper's contents and
+			// replace the target with the typing wrapper.
+			const typer = new NodeTyper({
+				targetNode : $wrapper.get(0),
+				classNames : cursor === 'none' ? null : `${className}-cursor`
+			});
+			$target.replaceWith($wrapper);
+
+			// Set up event IDs.
+			const typingCompleteId = ':typingcomplete';
+			const typingStartId    = ':typingstart';
+			const typingStopId     = ':typingstop';
+			const keypressAndNS    = `keypress${namespace}`;
+			const typingStopAndNS  = `${typingStopId}${namespace}`;
+
+			// Set up handlers for spacebar aborting and continuations.
+			$(document)
+				.off(keypressAndNS)
+				.on(keypressAndNS, ev => {
+					// Finish typing if the player aborts via the skip key.
+					if (
+						scrubEventKey(ev.key) === skipKey
+						&& (ev.target === document.body || ev.target === document.documentElement)
+					) {
+						ev.preventDefault();
+						$(document).off(keypressAndNS);
+						typer.finish();
+					}
+				})
+				.one(typingStopAndNS, () => {
+					// Fire the typing complete event and return, if the queue is empty.
+					if (Wikifier.temporary.macroTypeQueue.length === 0) {
+						jQuery.event.trigger(typingCompleteId);
+						return;
+					}
+
+					// Run the next typing handler in the queue.
+					Wikifier.temporary.macroTypeQueue.first()();
+				});
+
+			// Set up the typing interval and start/stop event firing.
+			const typeNode = function typeNode() {
+				// Fire the typing start event.
+				$wrapper.trigger(typingStartId);
+
+				const typeNodeId = setInterval(() => {
+					// Stop typing if….
+					if (
+						// …we've navigated away.
+						State.passage !== passage
+
+						// …we're done typing.
+						|| !typer.type()
+					) {
+						clearInterval(typeNodeId);
+
+						// Remove this handler from the queue.
+						Wikifier.temporary.macroTypeQueue.shift();
+
+						// Fire the typing stop event.
+						$wrapper.trigger(typingStopId);
+
+						// Add the done class to the wrapper.
+						$wrapper.addClass(`${className}-done`);
+
+						// Add the cursor class to the wrapper, if we're keeping it.
+						if (cursor === 'keep') {
+							$wrapper.addClass(`${className}-cursor`);
+						}
+					}
+				}, speed);
+			};
+
+			// Kick off typing the node.
+			if (start) {
+				setTimeout(typeNode, start);
+			}
+			else {
+				typeNode();
+			}
+		});
+
+		// If we're to start typing, then either set up a `:passageend` event handler
+		// to do so or start it immediately, depending on the engine state.
+		if (startTyping) {
+			if (Engine.isPlaying()) {
+				$(document).one(`:passageend${namespace}`, () => Wikifier.temporary.macroTypeQueue.first()());
+			}
+			else {
+				Wikifier.temporary.macroTypeQueue.first()();
+			}
+		}
+	}
+});

@@ -1,0 +1,32 @@
+{
+  "name": "SugarCube",
+  "version": "3.0.0-alpha.0",
+  "author": "Thomas Michael Edwards <thomasmedwards@gmail.com>",
+  "description": "Dependency install configuration for SugarCube's Node.js-hosted build script, build.js.",
+  "license": "BSD-2-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tmedwards/sugarcube-3.git"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-external-helpers": "^7.8.3",
+    "@babel/preset-env": "^7.9.0",
+    "autoprefixer": "^9.7.5",
+    "clean-css": "^4.2.3",
+    "eslint": "^6.8.0",
+    "node-getopt": "^0.2.4",
+    "postcss": "^7.0.27",
+    "rollup": "^2.6.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-includepaths": "^0.2.3",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-uglify": "^6.0.4",
+    "semver": "^5.7.1"
+  },
+  "engine": {
+    "node": ">=12.16.1"
+  },
+  "private": true
+}
