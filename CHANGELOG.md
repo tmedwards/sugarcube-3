@@ -1,5 +1,11 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
+## 2020-11-10
+
+* Internal cleanup.
+* Updated development dependencies.
+* Ported recent changes from v2.
+
 ## 2020-08-02
 
 * Added the `-webkit-touch-callout: none` property to various link/button element styles.
