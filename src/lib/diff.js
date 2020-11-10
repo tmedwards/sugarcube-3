@@ -237,7 +237,7 @@ const Diff = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		Op    : { value : Op },
 		diff  : { value : diff },
 		patch : { value : patch }

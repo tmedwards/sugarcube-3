@@ -222,7 +222,7 @@ KVStore.adapters.add((() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		init   : { value : adapterInit },
 		create : { value : adapterCreate }
 	}));

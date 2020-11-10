@@ -615,7 +615,7 @@ const DebugBar = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		// Debug Bar Functions.
 		init     : { value : debugBarInit },
 		isStowed : { value : debugBarIsStowed },
@@ -626,7 +626,7 @@ const DebugBar = (() => {
 
 		// Watch Functions.
 		watch : {
-			value : Object.preventExtensions(Object.defineProperties(Object.create(null), {
+			value : Object.preventExtensions(Object.create(null, {
 				add       : { value : debugBarWatchAdd },
 				all       : { value : debugBarWatchAddAll },
 				clear     : { value : debugBarWatchClear },

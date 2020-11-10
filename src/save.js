@@ -512,7 +512,7 @@ const Save = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		// Save Functions.
 		init      : { value : savesInit },
 		clear     : { value : savesObjClear },
@@ -521,7 +521,7 @@ const Save = (() => {
 
 		// Autosave Functions.
 		autosave : {
-			value : Object.preventExtensions(Object.defineProperties(Object.create(null), {
+			value : Object.preventExtensions(Object.create(null, {
 				isEnabled : { value : autosaveIsEnabled },
 				has       : { value : autosaveHas },
 				get       : { value : autosaveGet },
@@ -533,7 +533,7 @@ const Save = (() => {
 
 		// Slots Functions.
 		slots : {
-			value : Object.preventExtensions(Object.defineProperties(Object.create(null), {
+			value : Object.preventExtensions(Object.create(null, {
 				isEnabled : { value : slotsIsEnabled },
 				length    : { get : slotsLength },
 				isEmpty   : { value : slotsIsEmpty },
@@ -548,7 +548,7 @@ const Save = (() => {
 
 		// Disk Import/Export Functions.
 		disk : {
-			value : Object.preventExtensions(Object.defineProperties(Object.create(null), {
+			value : Object.preventExtensions(Object.create(null, {
 				export : { value : diskExportSlots },
 				import : { value : diskImportSlots },
 				load   : { value : diskLoad },

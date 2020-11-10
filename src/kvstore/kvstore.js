@@ -62,13 +62,13 @@ const KVStore = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		// Core Functions.
 		create : { value : createStore },
 
 		// Adapter Functions.
 		adapters : {
-			value : Object.preventExtensions(Object.defineProperties(Object.create(null), {
+			value : Object.preventExtensions(Object.create(null, {
 				get : { value : getAdapters },
 				add : { value : addAdapter }
 			}))

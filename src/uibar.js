@@ -377,7 +377,7 @@ const UIBar = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		destroy  : { value : uiBarDestroy },
 		hide     : { value : uiBarHide },
 		init     : { value : uiBarInit },

@@ -109,7 +109,7 @@ const Alert = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.freeze(Object.defineProperties(Object.create(null), {
+	return Object.freeze(Object.create(null, {
 		error : { value : alertError },
 		fatal : { value : alertFatal }
 	}));

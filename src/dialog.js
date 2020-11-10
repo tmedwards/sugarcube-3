@@ -384,7 +384,7 @@ const Dialog = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		append : { value : dialogBodyAppend },
 		body   : { value : dialogBody },
 		close  : { value : dialogClose },

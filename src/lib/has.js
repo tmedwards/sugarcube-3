@@ -125,7 +125,7 @@ const Has = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		audio              : { value : hasAudioElement },
 		fileAPI            : { value : hasFile },
 		geolocation        : { value : hasGeolocation },

@@ -58,7 +58,7 @@ const Db = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		init    : { value : initStores },
 		session : { get : getSession },
 		storage : { get : getPersistent }

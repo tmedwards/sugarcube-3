@@ -62,7 +62,7 @@ const Mesg = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		receive : { value : receive },
 		cancel  : { value : cancel },
 		send    : { value : send }

@@ -60,7 +60,7 @@ const Browser = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		userAgent    : { value : userAgent },
 		isMobile     : { value : isMobile },
 		isGecko      : { value : isGecko },

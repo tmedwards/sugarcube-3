@@ -338,7 +338,7 @@ const Wikifier = (() => {
 			/*
 				Object Exports.
 			*/
-			return Object.freeze(Object.defineProperties(Object.create(null), {
+			return Object.freeze(Object.create(null, {
 				length  : { get : optionLength },
 				options : { get : optionGetter },
 				clear   : { value : optionClear },
@@ -478,7 +478,7 @@ const Wikifier = (() => {
 			/*
 				Object Exports.
 			*/
-			return Object.freeze(Object.defineProperties(Object.create(null), {
+			return Object.freeze(Object.create(null, {
 				// Parser Containers.
 				parsers : { get : parsersGetter },
 
@@ -491,7 +491,7 @@ const Wikifier = (() => {
 
 				// Parser Profile.
 				Profile : {
-					value : Object.freeze(Object.defineProperties(Object.create(null), {
+					value : Object.freeze(Object.create(null, {
 						// Profiles Containers.
 						profiles : { get : profilesGetter },
 

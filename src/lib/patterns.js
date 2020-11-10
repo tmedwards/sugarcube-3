@@ -149,7 +149,7 @@ const Patterns = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		space              : { value : space },
 		spaceNoTerminator  : { value : spaceNoTerminator },
 		lineTerminator     : { value : lineTerminator },

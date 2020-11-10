@@ -288,7 +288,7 @@ const Fullscreen = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		vendor       : { get : getVendor },
 		element      : { get : getElement },
 		isEnabled    : { value : isEnabled },

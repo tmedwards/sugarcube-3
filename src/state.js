@@ -679,7 +679,7 @@ const State = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		// State Functions.
 		reset            : { value : stateReset },
 		restore          : { value : stateRestore },
@@ -714,7 +714,7 @@ const State = (() => {
 
 		// PRNG Functions.
 		prng : {
-			value : Object.preventExtensions(Object.defineProperties(Object.create(null), {
+			value : Object.preventExtensions(Object.create(null, {
 				init      : { value : prngInit },
 				isEnabled : { value : prngIsEnabled },
 				pull      : { get : prngPull },
@@ -733,7 +733,7 @@ const State = (() => {
 
 		// Story Metadata Functions.
 		metadata : {
-			value : Object.preventExtensions(Object.defineProperties(Object.create(null), {
+			value : Object.preventExtensions(Object.create(null, {
 				clear  : { value : metadataClear },
 				delete : { value : metadataDelete },
 				get    : { value : metadataGet },

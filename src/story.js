@@ -430,7 +430,7 @@ const Story = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		// Story Functions.
 		load  : { value : storyLoad },
 		title : { get : storyTitle },

@@ -634,7 +634,7 @@ const Scripting = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		parse           : { value : parse },
 		evalJavaScript  : { value : evalJavaScript },
 		evalTwineScript : { value : evalTwineScript }

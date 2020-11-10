@@ -825,7 +825,7 @@ const UI = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		// UI Functions, Core.
 		assembleLinkList : { value : assembleLinkList },
 		init             : { value : init },

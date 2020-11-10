@@ -198,7 +198,7 @@ const Macro = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		// Macro Functions.
 		add     : { value : macrosAdd },
 		delete  : { value : macrosDelete },

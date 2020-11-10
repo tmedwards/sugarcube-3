@@ -2158,10 +2158,10 @@ const SimpleAudio = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		// Track Functions.
 		tracks : {
-			value : Object.preventExtensions(Object.defineProperties(Object.create(null), {
+			value : Object.preventExtensions(Object.create(null, {
 				add    : { value : trackAdd },
 				delete : { value : trackDelete },
 				clear  : { value : trackClear },
@@ -2172,7 +2172,7 @@ const SimpleAudio = (() => {
 
 		// Group Functions.
 		groups : {
-			value : Object.preventExtensions(Object.defineProperties(Object.create(null), {
+			value : Object.preventExtensions(Object.create(null, {
 				add    : { value : groupAdd },
 				delete : { value : groupDelete },
 				clear  : { value : groupClear },
@@ -2183,7 +2183,7 @@ const SimpleAudio = (() => {
 
 		// Playlist Functions.
 		lists : {
-			value : Object.preventExtensions(Object.defineProperties(Object.create(null), {
+			value : Object.preventExtensions(Object.create(null, {
 				add    : { value : listAdd },
 				delete : { value : listDelete },
 				clear  : { value : listClear },

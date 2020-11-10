@@ -72,7 +72,7 @@ const Template = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		add    : { value : templateAdd },
 		delete : { value : templateDelete },
 		get    : { value : templateGet },

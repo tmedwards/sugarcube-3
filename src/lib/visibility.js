@@ -91,7 +91,7 @@ const Visibility = (() => {
 		Object Exports.
 	*******************************************************************************/
 
-	return Object.preventExtensions(Object.defineProperties(Object.create(null), {
+	return Object.preventExtensions(Object.create(null, {
 		// Functions.
 		vendor    : { get : getVendor },
 		state     : { get : getVisibility },
