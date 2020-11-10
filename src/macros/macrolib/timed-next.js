@@ -113,7 +113,11 @@ Macro.add('timed', {
 			throw new TypeError('callback parameter must be a function');
 		}
 
-		const turnId = State.turns;
+		// Cache info about the current turn.
+		const passage = State.passage;
+		const turn    = State.turns;
+
+		// Timer info.
 		const timers = this.self.timers;
 		let timerId  = null;
 		let nextItem = items.shift();
@@ -122,7 +126,8 @@ Macro.add('timed', {
 			// Bookkeeping.
 			timers.delete(timerId);
 
-			if (turnId !== State.turns) {
+			// Terminate if the player has navigated away.
+			if (State.passage !== passage || State.turns !== turn) {
 				return;
 			}
 
