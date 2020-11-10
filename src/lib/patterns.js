@@ -13,8 +13,14 @@
 
 /*
 	Patterns API static object.
+
+	NOTE: All ES9/ES2018 regular expressions shown in comments below—those with the
+	Unicode flag (`u`)—were transpiled into ES5-compatible regular expressions with
+	regexpu and then transformed into patterns.
+		SEE: https://mothereff.in/regexpu & https://github.com/mathiasbynens/regexpu
 */
 const Patterns = (() => {
+	/* eslint-disable max-len */
 	/*******************************************************************************
 		Patterns.
 	*******************************************************************************/
@@ -23,6 +29,7 @@ const Patterns = (() => {
 		Whitespace patterns.
 
 		Space class (equivalent to `\s`):
+			[\t-\r\x20\xA0\u1680\u180E\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]
 			[\u0020\f\n\r\t\v\u00a0\u1680\u180e\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]
 		Space class, sans line terminators:
 			[\u0020\f\t\v\u00a0\u1680\u180e\u2000-\u200a\u202f\u205f\u3000\ufeff]
@@ -86,10 +93,6 @@ const Patterns = (() => {
 	/*
 		Identifier patterns.
 
-		The following ES9/ES2018 regular expressions were transpiled into ES5-compatible
-		regular expressions with regexpu and then transformed into patterns.
-			SEE: https://mothereff.in/regexpu & https://github.com/mathiasbynens/regexpu
-
 		const identifierStartRe = /[$_\p{ID_Start}]/u;
 		const identifierPartRe  = /[$_\u200C\u200D\p{ID_Continue}]/u;
 	*/
@@ -107,12 +110,20 @@ const Patterns = (() => {
 	// Template name pattern.
 	const templateName = `(?:${identifierStart.replace('\\$', '').replace('_', '')}${identifierPart.replace('[\\$', '[\\x2D')}*)`;
 
+	// HTML tag name pattern.
+	const htmlTagName = (() => {
+		// Element Name: [A-Za-z] [0-9A-Za-z]*
+		//
+		// Custom Element Name: [A-Za-z] (Custom Element Char)* - (Custom Element Char)*
+		// Custom Element Char: "-" | "." | [0-9] | "_" | [a-z] | #xB7 | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x37D] | [#x37F-#x1FFF] | [#x200C-#x200D] | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+		//     SEE: https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name
+		const cenPart = '(?:[\\x2D.0-9A-Z_a-z\\xB7\\xC0-\\xD6\\xD8-\\xF6\\xF8-\\u037D\\u037F-\\u1FFF\\u200C\\u200D\\u203F\\u2040\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD]|[\\uD800-\\uDB7F][\\uDC00-\\uDFFF])';
+
+		return `[A-Za-z](?:${cenPart}*-${cenPart}*|[0-9A-Za-z]*)`;
+	})();
+
 	/*
 		CSS patterns.
-
-		The following ES9/ES2018 regular expressions were transpiled into ES5-compatible
-		regular expressions with regexpu and then transformed into patterns.
-			SEE: https://mothereff.in/regexpu & https://github.com/mathiasbynens/regexpu
 
 		const cssIdentifierStartRe = /(?:-?[A-Z\\_a-z\u0080-\u{10fff}]|--)/u;
 		const cssIdentifierPartRe  = /[-0-9A-Z\\_a-z\u0080-\u{10fff}]/u;
@@ -126,8 +137,8 @@ const Patterns = (() => {
 
 	// CSS image transclusion template pattern.
 	//
-	// NOTE: The alignment syntax isn't supported, but removing it might break uses
-	// of the template in the wild, so we leave it alone for now.
+	// NOTE: The alignment syntax isn't supported here, but removing it might break
+	// uses of the template in the wild, so we leave it alone for now.
 	const cssImage = '\\[[<>]?[Ii][Mm][Gg]\\[(?:\\s|\\S)*?\\]\\]+';
 
 	// Inline CSS pattern.
@@ -162,6 +173,7 @@ const Patterns = (() => {
 		variable           : { value : variable },
 		macroName          : { value : macroName },
 		templateName       : { value : templateName },
+		htmlTagName        : { value : htmlTagName },
 		cssIdentifierStart : { value : cssIdentifierStart },
 		cssIdentifierPart  : { value : cssIdentifierPart },
 		cssIdentifier      : { value : cssIdentifier },
@@ -172,6 +184,7 @@ const Patterns = (() => {
 		url                : { value : url },
 		externalUrl        : { value : externalUrl }
 	}));
+	/* eslint-enable max-len */
 })();
 
 
