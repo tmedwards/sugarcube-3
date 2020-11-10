@@ -127,6 +127,7 @@ const Engine = (() => {
 				.appendTo(document.head)
 				.get(0) // return the <style> element itself
 		)());
+		hideOutlines(); // initially hide outlines
 		let lastOutlineEvent;
 		jQuery(document).on(
 			'mousedown.aria-outlines keydown.aria-outlines',
@@ -593,7 +594,6 @@ const Engine = (() => {
 		}
 
 		// Last second post-processing for accessibility and other things.
-		hideOutlines(); // initially hide outlines
 		jQuery('#story')
 			// Add `link-external` to all `href` bearing `<a>` elements which don't have it.
 			.find('a[href]:not(.link-external)')
