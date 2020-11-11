@@ -33,10 +33,6 @@ KVStore.adapters.add((() => {
 					value : prefix
 				},
 
-				prefixRe : {
-					value : new RegExp(`^${RegExp.escape(prefix)}`)
-				},
-
 				name : {
 					value : 'cookie'
 				},
@@ -77,7 +73,6 @@ KVStore.adapters.add((() => {
 				const kvPair = cookies[i].split('=');
 				const key    = decodeURIComponent(kvPair[0]);
 
-				// if (this.prefixRe.test(key)) {
 				if (key.startsWith(this._prefix)) {
 					const value = decodeURIComponent(kvPair[1]);
 
@@ -85,7 +80,6 @@ KVStore.adapters.add((() => {
 					// non-empty string.  Therefore, receiving an empty string here signifies a
 					// deleted value, not a serialized empty string, so we should omit such pairs.
 					if (value !== '') {
-						// keys.push(key.replace(this.prefixRe, ''));
 						keys.push(key.slice(this._prefix.length));
 					}
 				}

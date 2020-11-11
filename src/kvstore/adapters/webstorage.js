@@ -45,10 +45,6 @@ KVStore.adapters.add((() => {
 					value : prefix
 				},
 
-				prefixRe : {
-					value : new RegExp(`^${RegExp.escape(prefix)}`)
-				},
-
 				name : {
 					value : name
 				},
@@ -85,9 +81,6 @@ KVStore.adapters.add((() => {
 			for (let i = 0, length = this._engine.length; i < length; ++i) {
 				const key = this._engine.key(i);
 
-				// if (this.prefixRe.test(key)) {
-				// 	keys.push(key.replace(this.prefixRe, ''));
-				// }
 				if (key.startsWith(this._prefix)) {
 					keys.push(key.slice(this._prefix.length));
 				}
