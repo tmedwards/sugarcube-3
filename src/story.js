@@ -63,7 +63,6 @@ const Story = (() => {
 			'StoryDisplayTitle',
 			'StoryInit',
 			'StoryMenu',
-			'StoryShare',
 			'StorySubtitle'
 		];
 		const validateStartingPassage = function validateStartingPassage(passage) {

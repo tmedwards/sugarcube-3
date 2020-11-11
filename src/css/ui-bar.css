@@ -211,6 +211,3 @@
 #menu-item-restart a:before {
 	content: "\e82c\00a0";
 }
-#menu-item-share a:before {
-	content: "\e82f\00a0";
-}

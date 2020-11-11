@@ -111,11 +111,6 @@ const UI = (() => {
 		Dialog.open(...args);
 	}
 
-	function openShare(...args) {
-		buildShare();
-		Dialog.open(...args);
-	}
-
 	function buildAutoload() {
 		if (BUILD_DEBUG) { console.log('[UI/uiBuildAutoload()]'); }
 
@@ -804,22 +799,6 @@ const UI = (() => {
 		return true;
 	}
 
-	function buildShare() {
-		if (BUILD_DEBUG) { console.log('[UI/uiBuildShare()]'); }
-
-		try {
-			Dialog
-				.setup(L10n.get('shareTitle'), 'share list')
-				.append(assembleLinkList('StoryShare'));
-		}
-		catch (ex) {
-			Alert.error('StoryShare', ex);
-			return false;
-		}
-
-		return true;
-	}
-
 
 	/*******************************************************************************
 		Object Exports.
@@ -836,13 +815,11 @@ const UI = (() => {
 		restart       : { value : openRestart },
 		saves         : { value : openSaves },
 		settings      : { value : openSettings },
-		share         : { value : openShare },
 		buildAutoload : { value : buildAutoload },
 		buildJumpto   : { value : buildJumpto },
 		buildRestart  : { value : buildRestart },
 		buildSaves    : { value : buildSaves },
-		buildSettings : { value : buildSettings },
-		buildShare    : { value : buildShare }
+		buildSettings : { value : buildSettings }
 	}));
 })();
 

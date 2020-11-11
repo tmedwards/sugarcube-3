@@ -119,11 +119,6 @@ const strings = {
 	restartPrompt : 'Are you sure that you want to restart? Unsaved progress will be lost.',
 
 	/*
-		Share.
-	*/
-	shareTitle : 'Share',
-
-	/*
 		Alert.
 	*/
 	alertTitle : 'Alert',

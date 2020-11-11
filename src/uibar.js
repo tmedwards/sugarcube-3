@@ -112,7 +112,6 @@ const UIBar = (() => {
 					+                 `<li id="menu-item-saves"><a tabindex="0">${L10n.get('savesTitle')}</a></li>`
 					+                 `<li id="menu-item-settings"><a tabindex="0">${L10n.get('settingsTitle')}</a></li>`
 					+                 `<li id="menu-item-restart"><a tabindex="0">${L10n.get('restartTitle')}</a></li>`
-					+                 `<li id="menu-item-share"><a tabindex="0">${L10n.get('shareTitle')}</a></li>`
 					+             '</ul>'
 					+         '</nav>'
 					+     '</div>'
@@ -264,20 +263,6 @@ const UIBar = (() => {
 				Dialog.open();
 			})
 			.text(L10n.get('restartTitle'));
-
-		// Set up the Share menu item.
-		if (Story.has('StoryShare')) {
-			jQuery('#menu-item-share a')
-				.ariaClick(ev => {
-					ev.preventDefault();
-					UI.buildShare();
-					Dialog.open();
-				})
-				.text(L10n.get('shareTitle'));
-		}
-		else {
-			jQuery('#menu-item-share').remove();
-		}
 
 		// Schedule routine updates of the dynamic page elements on `:passagedisplay`.
 		jQuery(document).on(':passagedisplay.ui-bar', () => {
