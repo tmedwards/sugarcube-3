@@ -1320,7 +1320,7 @@ const SimpleAudio = (() => {
 				throw new Error('fadeIn requires a parameter');
 			}
 
-			AudioRunner._run(this.trackIds, AudioTrack.prototype.fadeIn, duration, 1, fromVol);
+			AudioRunner._run(this.trackIds, AudioTrack.prototype.fadeIn, duration, fromVol);
 		}
 
 		fadeOut(duration, fromVol) {
@@ -1328,7 +1328,7 @@ const SimpleAudio = (() => {
 				throw new Error('fadeOut requires a parameter');
 			}
 
-			AudioRunner._run(this.trackIds, AudioTrack.prototype.fadeOut, duration, 0, fromVol);
+			AudioRunner._run(this.trackIds, AudioTrack.prototype.fadeOut, duration, fromVol);
 		}
 
 		fadeStop() {
