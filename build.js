@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /***********************************************************************************************************************
 
-	build.js (v1.5.6, 2020-11-10)
+	build.js (v1.5.7, 2020-11-30)
 		A Node.js-hosted build script for SugarCube.
 
 	Copyright © 2013–2020 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
@@ -34,16 +34,12 @@ const CONFIG = {
 	],
 	libs : [
 		// The ordering herein is significant.
-		'vendor/classList.min.js',
-		'vendor/es5-shim.min.js',
-		'vendor/es6-shim.min.js',
 		'vendor/jquery.min.js',
 		'vendor/jquery.ba-throttle-debounce.min.js',
 		'vendor/imagesloaded.pkgd.min.js',
 		'vendor/lz-string.min.js',
 		'vendor/FileSaver.min.js',
-		'vendor/seedrandom.min.js',
-		'vendor/console-hack.min.js'
+		'vendor/seedrandom.min.js'
 	],
 	twine1 : {
 		build : {
@@ -238,9 +234,8 @@ function compileJavaScript(options) {
 	log('compiling JavaScript...');
 	const rollup       = require('rollup');
 	const includepaths = require('rollup-plugin-includepaths');
-	// const replace      = require('@rollup/plugin-replace');
-	const babel        = require('rollup-plugin-babel');
-	const uglify       = require('rollup-plugin-uglify').uglify;
+	const babel        = require('@rollup/plugin-babel').babel;
+	const terser       = require('rollup-plugin-terser').terser;
 
 	const rollupInputOpts = {
 		input  : 'src/sugarcube.js',
@@ -260,7 +255,7 @@ function compileJavaScript(options) {
 			// Log everything else.
 			console.warn(`${warning.code}: ${warning.message}`);
 		},
-		treeshake : false, // FIXME: Can/should we make this no longer required?
+		treeshake : false,
 		plugins   : [
 			includepaths({
 				paths : [
@@ -272,13 +267,6 @@ function compileJavaScript(options) {
 					'src'
 				]
 			})
-			// // NOTE: Reenable `replace()` and remove the `uglify()` options
-			// // when the treeshaking issue is resolved.
-			// replace({
-			// 	BUILD_TWINE_2 : options.compiler === 'twine2',
-			// 	BUILD_TWINE_1 : options.compiler === 'twine1',
-			// 	BUILD_DEBUG   : _opt.options.debug || false
-			// })
 		]
 	};
 	const rollupOutputOpts = {
@@ -288,19 +276,18 @@ function compileJavaScript(options) {
 	if (!_opt.options.es6) {
 		rollupInputOpts.plugins.push(
 			babel({
-				code     : true,
-				compact  : false,
-				presets  : [['@babel/preset-env', { modules : false }]],
-				// plugins  : ['@babel/plugin-external-helpers'],
-				filename : 'sugarcube.bundle.js'
+				babelHelpers : 'bundled',
+				code         : true,
+				compact      : false,
+				presets      : [['@babel/preset-env']],
+				filename     : 'sugarcube.bundle.js'
 			})
 		);
 	}
 
-	// uglify-js (v2) does not support ES6, so bypass minification when `es6` is enabled.
-	if (!_opt.options.unminified && !_opt.options.es6) {
+	if (!_opt.options.unminified) {
 		rollupInputOpts.plugins.push(
-			uglify({
+			terser({
 				compress : {
 					global_defs : { // eslint-disable-line camelcase
 						BUILD_TWINE_2 : options.compiler === 'twine2',

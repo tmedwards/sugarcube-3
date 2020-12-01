@@ -1,6 +1,5 @@
-> 0.5%
-last 3 versions
-Edge 16-19
-Firefox ESR
-IE >= 9
-Opera 12-13
+# WARNING: The `defaults` query must be explicitly spelled out or various
+# plugins—e.g., `@babel/preset-env`—will not properly process the aggregate
+# query.
+
+> 0.5% or last 2 versions or Firefox ESR or not dead and supports object-entries and supports promises and supports es6-number and supports es6-string-includes

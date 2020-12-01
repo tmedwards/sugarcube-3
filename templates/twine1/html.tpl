@@ -40,7 +40,7 @@ Build Info:
 
 -->
 <script id="script-libraries" type="text/javascript">
-if(document.head&&document.addEventListener&&document.querySelector&&Object.create&&Object.freeze&&JSON){document.documentElement.setAttribute("data-init", "loading");
+if(Object.entries&&Promise&&Number.isSafeInteger&&String.prototype.includes){document.documentElement.setAttribute("data-init", "loading");
 '{{BUILD_LIB_SOURCE}}'
 /* User Lib */
 "USER_LIB"
@@ -50,8 +50,8 @@ if(document.head&&document.addEventListener&&document.querySelector&&Object.crea
 </head>
 <body>
 	<div id="init-screen">
-		<div id="init-no-js"><noscript>JavaScript is required. Please enable it to continue.</noscript></div>
-		<div id="init-lacking">Your browser lacks required capabilities. Please upgrade it or switch to another to continue.</div>
+		<div id="init-no-js"><noscript>JavaScript is required. Enable it to continue.</noscript></div>
+		<div id="init-lacking">Your browser lacks required capabilities.<br>Upgrade it or switch to another browser to continue.</div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
 	<div id="store-area" data-size="STORY_SIZE" hidden>"STORY"</div>
