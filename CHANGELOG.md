@@ -1,5 +1,15 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
+## 2020-12-01
+
+* Updated browser support target to ES2018.  I *may* decide to bump it to ES2020 in the future.
+
+## 2020-11-30
+
+* Updated browser support target.
+* Updated development dependencies and vendored libraries.
+* Ported recent changes from v2.
+
 ## 2020-11-10
 
 * Internal cleanup.
