@@ -907,22 +907,6 @@
 	})();
 
 	/*
-		Returns whether the given string was found within the string.
-	*/
-	Object.defineProperty(String.prototype, 'contains', {
-		configurable : true,
-		writable     : true,
-
-		value(/* needle [, fromIndex] */) {
-			if (this == null) { // lazy equality for null
-				throw new TypeError('String.prototype.contains called on null or undefined');
-			}
-
-			return String.prototype.indexOf.apply(this, arguments) !== -1;
-		}
-	});
-
-	/*
 		Returns the number of times the given substring was found within the string.
 	*/
 	Object.defineProperty(String.prototype, 'count', {

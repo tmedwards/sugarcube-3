@@ -2,4 +2,4 @@
 # plugins—e.g., `@babel/preset-env`—will not properly process the aggregate
 # query.
 
-> 0.5% or last 2 versions or Firefox ESR or not dead and supports object-entries and supports promises and supports es6-number and supports es6-string-includes
+> 0.5% or last 2 versions or Firefox ESR or not dead and supports indexeddb2 and supports intl-pluralrules and supports promise-finally

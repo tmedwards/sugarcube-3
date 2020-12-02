@@ -13,7 +13,8 @@ import Patterns from './lib/patterns';
 /*
 	ECMAScript Polyfills.
 
-	NOTE: The ES5 and ES6 polyfills come from the vendored `es5-shim.js` and `es6-shim.js` libraries.
+	TODO: (?) Replace the following polyfills with imports from the core-js library.
+		SEE: https://www.npmjs.com/package/core-js
 */
 (() => {
 	/*******************************************************************************
@@ -49,38 +50,6 @@ import Patterns from './lib/patterns';
 
 		return trimString;
 	})();
-
-	/*
-		Generates a pad string based upon the given string and length.
-	*/
-	function _createPadString(length, padding) {
-		const targetLength = Number.parseInt(length, 10) || 0;
-
-		if (targetLength < 1) {
-			return '';
-		}
-
-		let padString = typeof padding === 'undefined' ? '' : String(padding);
-
-		if (padString === '') {
-			padString = ' ';
-		}
-
-		while (padString.length < targetLength) {
-			const curPadLength    = padString.length;
-			const remainingLength = targetLength - curPadLength;
-
-			padString += curPadLength > remainingLength
-				? padString.slice(0, remainingLength)
-				: padString;
-		}
-
-		if (padString.length > targetLength) {
-			padString = padString.slice(0, targetLength);
-		}
-
-		return padString;
-	}
 
 
 	/*******************************************************************************
@@ -149,72 +118,10 @@ import Patterns from './lib/patterns';
 		});
 	}
 
-	/*
-		[ES2016] Returns whether the given element was found within the array.
-	*/
-	if (!Array.prototype.includes) {
-		Object.defineProperty(Array.prototype, 'includes', {
-			configurable : true,
-			writable     : true,
-
-			value(/* needle [, fromIndex] */) {
-				if (this == null) { // lazy equality for null
-					throw new TypeError('Array.prototype.includes called on null or undefined');
-				}
-
-				if (arguments.length === 0) {
-					return false;
-				}
-
-				const length = this.length >>> 0;
-
-				if (length === 0) {
-					return false;
-				}
-
-				const needle = arguments[0];
-				let i = Number(arguments[1]) || 0;
-
-				if (i < 0) {
-					i = Math.max(0, length + i);
-				}
-
-				for (/* empty */; i < length; ++i) {
-					const value = this[i];
-
-					if (value === needle || value !== value && needle !== needle) {
-						return true;
-					}
-				}
-
-				return false;
-			}
-		});
-	}
-
 
 	/*******************************************************************************
 		`Object` Polyfills.
 	*******************************************************************************/
-
-	/*
-		[ES2017] Returns a new array consisting of the given object's own enumerable property/value
-		pairs as `[key, value]` arrays.
-	*/
-	if (!Object.entries) {
-		Object.defineProperty(Object, 'entries', {
-			configurable : true,
-			writable     : true,
-
-			value(obj) {
-				if (typeof obj !== 'object' || obj === null) {
-					throw new TypeError('Object.entries object parameter must be an object');
-				}
-
-				return Object.keys(obj).map(key => [key, obj[key]]);
-			}
-		});
-	}
 
 	/*
 		[ES2019] Returns a new generic object consisting of the given list's key/value pairs.
@@ -251,127 +158,10 @@ import Patterns from './lib/patterns';
 		});
 	}
 
-	/*
-		[ES2017] Returns all own property descriptors of the given object.
-	*/
-	if (!Object.getOwnPropertyDescriptors) {
-		Object.defineProperty(Object, 'getOwnPropertyDescriptors', {
-			configurable : true,
-			writable     : true,
-
-			value(obj) {
-				if (obj == null) { // lazy equality for null
-					throw new TypeError('Object.getOwnPropertyDescriptors object parameter is null or undefined');
-				}
-
-				const O = Object(obj);
-
-				return Reflect.ownKeys(O).reduce(
-					(acc, key) => {
-						const desc = Object.getOwnPropertyDescriptor(O, key);
-
-						if (typeof desc !== 'undefined') {
-							if (key in acc) {
-								Object.defineProperty(acc, key, {
-									configurable : true,
-									enumerable   : true,
-									writable     : true,
-									value        : desc
-								});
-							}
-							else {
-								acc[key] = desc; // eslint-disable-line no-param-reassign
-							}
-						}
-
-						return acc;
-					},
-					{}
-				);
-			}
-		});
-	}
-
-	/*
-		[ES2017] Returns a new array consisting of the given object's own enumerable property values.
-	*/
-	if (!Object.values) {
-		Object.defineProperty(Object, 'values', {
-			configurable : true,
-			writable     : true,
-
-			value(obj) {
-				if (typeof obj !== 'object' || obj === null) {
-					throw new TypeError('Object.values object parameter must be an object');
-				}
-
-				return Object.keys(obj).map(key => obj[key]);
-			}
-		});
-	}
-
 
 	/*******************************************************************************
 		`String` Polyfills.
 	*******************************************************************************/
-
-	/*
-		[ES2017] Returns a string based on concatenating the given padding, repeated as necessary,
-		to the start of the string so that the given length is reached.
-
-		NOTE: This pads based upon Unicode code units, rather than code points.
-	*/
-	if (!String.prototype.padStart) {
-		Object.defineProperty(String.prototype, 'padStart', {
-			configurable : true,
-			writable     : true,
-
-			value(length, padding) {
-				if (this == null) { // lazy equality for null
-					throw new TypeError('String.prototype.padStart called on null or undefined');
-				}
-
-				const baseString   = String(this);
-				const baseLength   = baseString.length;
-				const targetLength = Number.parseInt(length, 10);
-
-				if (targetLength <= baseLength) {
-					return baseString;
-				}
-
-				return _createPadString(targetLength - baseLength, padding) + baseString;
-			}
-		});
-	}
-
-	/*
-		[ES2017] Returns a string based on concatenating the given padding, repeated as necessary,
-		to the end of the string so that the given length is reached.
-
-		NOTE: This pads based upon Unicode code units, rather than code points.
-	*/
-	if (!String.prototype.padEnd) {
-		Object.defineProperty(String.prototype, 'padEnd', {
-			configurable : true,
-			writable     : true,
-
-			value(length, padding) {
-				if (this == null) { // lazy equality for null
-					throw new TypeError('String.prototype.padEnd called on null or undefined');
-				}
-
-				const baseString   = String(this);
-				const baseLength   = baseString.length;
-				const targetLength = Number.parseInt(length, 10);
-
-				if (targetLength <= baseLength) {
-					return baseString;
-				}
-
-				return baseString + _createPadString(targetLength - baseLength, padding);
-			}
-		});
-	}
 
 	/*
 		[ES2019] Returns a string with all whitespace removed from the start of the string.

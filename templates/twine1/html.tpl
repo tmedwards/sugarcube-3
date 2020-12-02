@@ -40,7 +40,7 @@ Build Info:
 
 -->
 <script id="script-libraries" type="text/javascript">
-if(Object.entries&&Promise&&Number.isSafeInteger&&String.prototype.includes){document.documentElement.setAttribute("data-init", "loading");
+if(typeof IDBObjectStore==='function'&&typeof IDBObjectStore.prototype==='object'&&typeof IDBObjectStore.prototype.getKey==='function'&&typeof Intl==='object'&&typeof Intl.PluralRules==='function'&&typeof Intl.PluralRules.supportedLocalesOf==='function'&&typeof Promise==='function'&&typeof Promise.prototype==='object'&&typeof Promise.prototype.finally==='function'){document.documentElement.setAttribute("data-init", "loading");
 '{{BUILD_LIB_SOURCE}}'
 /* User Lib */
 "USER_LIB"
