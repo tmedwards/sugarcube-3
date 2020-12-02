@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns a sanitized version of the passed `KeyboardEvent.key` value from
+	Returns a sanitized version of the given `KeyboardEvent.key` value from
 	previous incarnations of the specification that should better reflect the
 	current incarnation.
 */

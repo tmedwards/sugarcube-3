@@ -160,14 +160,14 @@ class Lexer {
 		return false;
 	}
 
-	acceptRe(validRe) {
+	acceptRE(validRE) {
 		const ch = this.next();
 
 		if (ch === EOF) {
 			return false;
 		}
 
-		if (validRe.test(ch)) {
+		if (validRE.test(ch)) {
 			return true;
 		}
 
@@ -191,7 +191,7 @@ class Lexer {
 		this.backup();
 	}
 
-	acceptRunRe(validRe) {
+	acceptRunRE(validRE) {
 		for (;;) {
 			const ch = this.next();
 
@@ -199,7 +199,7 @@ class Lexer {
 				return;
 			}
 
-			if (!validRe.test(ch)) {
+			if (!validRE.test(ch)) {
 				break;
 			}
 		}

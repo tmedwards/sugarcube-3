@@ -419,8 +419,8 @@ import stringFrom from './utils/stringfrom';
 				'String',       // quoted string (single or double)
 				'SquareBracket' // [[…]] or [img[…]]
 			]);
-			const spaceRe    = new RegExp(Patterns.space);
-			const notSpaceRe = new RegExp(Patterns.notSpace);
+			const spaceRE    = new RegExp(Patterns.space);
+			const notSpaceRE = new RegExp(Patterns.notSpace);
 			const varTest    = new RegExp(`^${Patterns.variable}`);
 
 			// Lexing functions.
@@ -449,7 +449,7 @@ import stringFrom from './utils/stringfrom';
 			}
 
 			function lexSpace(lexer) {
-				const offset = lexer.source.slice(lexer.pos).search(notSpaceRe);
+				const offset = lexer.source.slice(lexer.pos).search(notSpaceRE);
 
 				if (offset === EOF) {
 					// no non-whitespace characters, so bail
@@ -563,7 +563,7 @@ import stringFrom from './utils/stringfrom';
 			}
 
 			function lexBareword(lexer) {
-				const offset = lexer.source.slice(lexer.pos).search(spaceRe);
+				const offset = lexer.source.slice(lexer.pos).search(spaceRE);
 				lexer.pos = offset === EOF ? lexer.source.length : lexer.pos + offset;
 				lexer.emit(Item.Bareword);
 				return offset === EOF ? null : lexSpace;
@@ -950,14 +950,14 @@ import stringFrom from './utils/stringfrom';
 		profiles   : ['core'],
 		match      : '@@',
 		terminator : '@@',
-		blockRe    : /\s*\n/gm,
+		blockRE    : /\s*\n/gm,
 
 		handler(w) {
 			const css = Wikifier.helpers.inlineCss(w);
 
-			this.blockRe.lastIndex = w.nextMatch; // must follow the call to `inlineCss()`
+			this.blockRE.lastIndex = w.nextMatch; // must follow the call to `inlineCss()`
 
-			const blockMatch = this.blockRe.exec(w.source);
+			const blockMatch = this.blockRE.exec(w.source);
 			const blockLevel = blockMatch && blockMatch.index === w.nextMatch;
 			const $el        = jQuery(document.createElement(blockLevel ? 'div' : 'span'))
 				.appendTo(w.output);
@@ -1195,15 +1195,15 @@ import stringFrom from './utils/stringfrom';
 		},
 
 		rowHandler(w, rowEl, prevColumns) {
-			const cellRe = new RegExp(this.cellPattern, 'gm');
+			const cellRE = new RegExp(this.cellPattern, 'gm');
 			let col         = 0;
 			let curColCount = 1;
 			let matched;
 
 			do {
-				cellRe.lastIndex = w.nextMatch;
+				cellRE.lastIndex = w.nextMatch;
 
-				const cellMatch = cellRe.exec(w.source);
+				const cellMatch = cellRE.exec(w.source);
 
 				matched = cellMatch && cellMatch.index === w.nextMatch;
 
@@ -1613,13 +1613,13 @@ import stringFrom from './utils/stringfrom';
 		name      : 'htmlTag',
 		profiles  : ['core'],
 		match     : `<${Patterns.htmlTagName}(?:\\s+[^\\u0000-\\u001F\\u007F-\\u009F\\s"'>\\/=]+(?:\\s*=\\s*(?:"[^"]*?"|'[^']*?'|[^\\s"'=<>\`]+))?)*\\s*\\/?>`,
-		tagRe     : new RegExp(`^<(${Patterns.htmlTagName})`),
+		tagRE     : new RegExp(`^<(${Patterns.htmlTagName})`),
 		mediaTags : ['audio', 'img', 'source', 'track', 'video'], // NOTE: The `<picture>` element should not be in this list.
 		nobrTags  : ['audio', 'colgroup', 'datalist', 'dl', 'figure', 'meter', 'ol', 'optgroup', 'picture', 'progress', 'ruby', 'select', 'table', 'tbody', 'tfoot', 'thead', 'tr', 'ul', 'video'],
 		voidTags  : ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'menuitem', 'meta', 'param', 'source', 'track', 'wbr'],
 
 		handler(w) {
-			const tagMatch = this.tagRe.exec(w.matchText);
+			const tagMatch = this.tagRE.exec(w.matchText);
 			const tag      = tagMatch && tagMatch[1];
 			const tagName  = tag && tag.toLowerCase();
 
@@ -1632,10 +1632,10 @@ import stringFrom from './utils/stringfrom';
 				if (!isVoid) {
 					terminator = `<\\/${tagName}\\s*>`;
 
-					const terminatorRe = new RegExp(terminator, 'gim'); // ignore case during match
+					const terminatorRE = new RegExp(terminator, 'gim'); // ignore case during match
 
-					terminatorRe.lastIndex = w.matchStart;
-					terminatorMatch = terminatorRe.exec(w.source);
+					terminatorRE.lastIndex = w.matchStart;
+					terminatorMatch = terminatorRE.exec(w.source);
 				}
 
 				if (isVoid || terminatorMatch) {

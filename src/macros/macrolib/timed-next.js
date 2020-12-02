@@ -23,7 +23,7 @@ Macro.add('timed', {
 	isAsync : true,
 	tags    : ['next'],
 	timers  : new Set(),
-	t8nRe   : /^(?:transition|t8n)$/,
+	t8nRE   : /^(?:transition|t8n)$/,
 
 	handler() {
 		if (this.args.length === 0) {
@@ -71,7 +71,7 @@ Macro.add('timed', {
 			this.debugView.modes({ block : true });
 		}
 
-		const transition = this.args.length > 1 && this.self.t8nRe.test(this.args[1]);
+		const transition = this.args.length > 1 && this.self.t8nRE.test(this.args[1]);
 		const $wrapper   = jQuery(document.createElement('span'))
 			.addClass(`macro-${this.name}`)
 			.appendTo(this.output);

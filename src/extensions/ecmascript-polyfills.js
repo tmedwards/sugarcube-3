@@ -26,8 +26,8 @@ import Patterns from './lib/patterns';
 	*/
 	const _trimString = (() => {
 		// Whitespace regular expressions.
-		const startWSRe = new RegExp(`^${Patterns.space}${Patterns.space}*`);
-		const endWSRe   = new RegExp(`${Patterns.space}${Patterns.space}*$`);
+		const startWSRE = new RegExp(`^${Patterns.space}${Patterns.space}*`);
+		const endWSRE   = new RegExp(`${Patterns.space}${Patterns.space}*$`);
 
 		function trimString(str, where) {
 			const val = String(str);
@@ -38,10 +38,10 @@ import Patterns from './lib/patterns';
 
 			switch (where) {
 				case 'start':
-					return startWSRe.test(val) ? val.replace(startWSRe, '') : val;
+					return startWSRE.test(val) ? val.replace(startWSRE, '') : val;
 
 				case 'end':
-					return endWSRe.test(val) ? val.replace(endWSRe, '') : val;
+					return endWSRE.test(val) ? val.replace(endWSRE, '') : val;
 
 				default:
 					throw new Error(`_trimString called with incorrect where parameter value: "${where}"`);

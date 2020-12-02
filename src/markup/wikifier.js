@@ -15,7 +15,7 @@ import State from './state';
 import Story from './story';
 import convertBreaks from './utils/convertbreaks';
 import cssPropToDOMProp from './utils/cssproptodomprop';
-import { errorPrologRegExp } from './lib/alert';
+import { errorPrologRE } from './lib/alert';
 import getTypeOf from './utils/gettypeof';
 
 
@@ -159,7 +159,7 @@ const Wikifier = (() => {
 				}
 
 				const parsersProfile   = Wikifier.Parser.Profile.get(this.options.profile);
-				const terminatorRegExp = terminator
+				const terminatorRE = terminator
 					? new RegExp(`(?:${terminator})`, this.options.ignoreTerminatorCase ? 'gim' : 'gm')
 					: null;
 				let terminatorMatch;
@@ -167,15 +167,15 @@ const Wikifier = (() => {
 
 				do {
 					// Prepare the RegExp match positions.
-					parsersProfile.parserRegExp.lastIndex = this.nextMatch;
+					parsersProfile.parserRE.lastIndex = this.nextMatch;
 
-					if (terminatorRegExp) {
-						terminatorRegExp.lastIndex = this.nextMatch;
+					if (terminatorRE) {
+						terminatorRE.lastIndex = this.nextMatch;
 					}
 
 					// Get the first matches.
-					parserMatch     = parsersProfile.parserRegExp.exec(this.source);
-					terminatorMatch = terminatorRegExp ? terminatorRegExp.exec(this.source) : null;
+					parserMatch     = parsersProfile.parserRE.exec(this.source);
+					terminatorMatch = terminatorRE ? terminatorRE.exec(this.source) : null;
 
 					// Try for a terminator match, unless there's a closer parser match.
 					if (terminatorMatch && (!parserMatch || terminatorMatch.index <= parserMatch.index)) {
@@ -188,7 +188,7 @@ const Wikifier = (() => {
 						this.matchStart  = terminatorMatch.index;
 						this.matchLength = terminatorMatch[0].length;
 						this.matchText   = terminatorMatch[0];
-						this.nextMatch   = terminatorRegExp.lastIndex;
+						this.nextMatch   = terminatorRE.lastIndex;
 
 						// Exit.
 						return;
@@ -205,7 +205,7 @@ const Wikifier = (() => {
 						this.matchStart  = parserMatch.index;
 						this.matchLength = parserMatch[0].length;
 						this.matchText   = parserMatch[0];
-						this.nextMatch   = parsersProfile.parserRegExp.lastIndex;
+						this.nextMatch   = parsersProfile.parserRE.lastIndex;
 
 						// Figure out which parser matched.
 						let matchingParser;
@@ -285,7 +285,7 @@ const Wikifier = (() => {
 			const errors = output.querySelector('.error');
 
 			if (errors !== null) {
-				throw new Error(errors.textContent.replace(errorPrologRegExp, ''));
+				throw new Error(errors.textContent.replace(errorPrologRE, ''));
 			}
 
 			return output;
@@ -446,12 +446,12 @@ const Wikifier = (() => {
 
 				_profiles = Object.freeze({
 					all : {
-						parsers      : all,
-						parserRegExp : new RegExp(all.map(parser => `(${parser.match})`).join('|'), 'gm')
+						parsers  : all,
+						parserRE : new RegExp(all.map(parser => `(${parser.match})`).join('|'), 'gm')
 					},
 					core : {
-						parsers      : core,
-						parserRegExp : new RegExp(core.map(parser => `(${parser.match})`).join('|'), 'gm')
+						parsers  : core,
+						parserRE : new RegExp(core.map(parser => `(${parser.match})`).join('|'), 'gm')
 					}
 				});
 
@@ -515,17 +515,17 @@ const Wikifier = (() => {
 	Object.defineProperties(Wikifier.helpers, {
 		inlineCss : {
 			value : (() => {
-				const lookaheadRe = new RegExp(Patterns.inlineCss, 'gm');
-				const idOrClassRe = new RegExp(Patterns.cssIdOrClass, 'g');
+				const lookaheadRE = new RegExp(Patterns.inlineCss, 'gm');
+				const idOrClassRE = new RegExp(Patterns.cssIdOrClass, 'g');
 
 				function helperInlineCss(w) {
 					const css = { classes : [], id : '', styles : {} };
 					let matched;
 
 					do {
-						lookaheadRe.lastIndex = w.nextMatch;
+						lookaheadRE.lastIndex = w.nextMatch;
 
-						const match = lookaheadRe.exec(w.source);
+						const match = lookaheadRE.exec(w.source);
 
 						matched = match && match.index === w.nextMatch;
 
@@ -536,9 +536,7 @@ const Wikifier = (() => {
 							else if (match[3]) {
 								let subMatch;
 
-								idOrClassRe.lastIndex = 0; // NOTE: Guard against buggy implementations.
-
-								while ((subMatch = idOrClassRe.exec(match[3])) !== null) {
+								while ((subMatch = idOrClassRE.exec(match[3])) !== null) {
 									if (subMatch[1] === '.') {
 										css.classes.push(subMatch[2]);
 									}
@@ -548,7 +546,7 @@ const Wikifier = (() => {
 								}
 							}
 
-							w.nextMatch = lookaheadRe.lastIndex; // eslint-disable-line no-param-reassign
+							w.nextMatch = lookaheadRE.lastIndex; // eslint-disable-line no-param-reassign
 						}
 					} while (matched);
 

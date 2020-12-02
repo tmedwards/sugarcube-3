@@ -19,8 +19,8 @@ const L10n = (() => {
 	const MAX_ITERATIONS = 50;
 
 	// Replacement target syntax regular expressions.
-	const targetRe    = /\{\w+\}/g;
-	const hasTargetRe = new RegExp(targetRe.source); // to drop the global flag
+	const targetRE    = /\{\w+\}/g;
+	const hasTargetRE = new RegExp(targetRE.source); // to drop the global flag
 
 
 	/*******************************************************************************
@@ -41,15 +41,12 @@ const L10n = (() => {
 		let processed = strings[id];
 		let iteration = 0;
 
-		while (hasTargetRe.test(processed)) {
+		while (hasTargetRE.test(processed)) {
 			if (++iteration > MAX_ITERATIONS) {
 				throw new Error('L10n.get exceeded maximum replacement iterations, probable infinite loop');
 			}
 
-			// Possibly required by some old buggy browsers.
-			targetRe.lastIndex = 0;
-
-			processed = processed.replace(targetRe, pat => {
+			processed = processed.replace(targetRE, pat => {
 				const replaceId = pat.slice(1, -1);
 
 				if (overrides && hasOwn(overrides, replaceId)) {

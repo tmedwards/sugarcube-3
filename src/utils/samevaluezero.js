@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns whether the passed values pass a SameValueZero comparison.
+	Returns whether the given values pass a SameValueZero comparison.
 
 	SEE: https://tc39.es/ecma262/#sec-samevaluezero
 */

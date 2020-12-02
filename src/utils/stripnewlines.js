@@ -12,12 +12,12 @@
 	and all internal sequences of newlines compacted into single spaces.
 */
 const stripNewlines = (() => {
-	const startEndRe = /^\n+|\n+$/g;
-	const internalRe = /\n+/g;
+	const startEndRE = /^\n+|\n+$/g;
+	const internalRE = /\n+/g;
 
 	function stripNewlines(source) {
-		startEndRe.lastIndex = internalRe.lastIndex = 0;
-		return String(source).replace(startEndRe, '').replace(internalRe, ' ');
+		startEndRE.lastIndex = internalRE.lastIndex = 0;
+		return String(source).replace(startEndRE, '').replace(internalRE, ' ');
 	}
 
 	return stripNewlines;

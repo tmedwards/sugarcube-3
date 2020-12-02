@@ -24,11 +24,11 @@ Macro.add('for', {
 	/* eslint-disable max-len */
 	skipArgs    : true,
 	tags        : [],
-	hasRangeRe  : new RegExp(`^\\S${Patterns.anyChar}*?\\s+range\\s+\\S${Patterns.anyChar}*?$`),
-	rangeRe     : new RegExp(`^(?:State\\.(variables|temporary)\\.(${Patterns.identifier})\\s*,\\s*)?State\\.(variables|temporary)\\.(${Patterns.identifier})\\s+range\\s+(\\S${Patterns.anyChar}*?)$`),
-	threePartRe : /^([^;]*?)\s*;\s*([^;]*?)\s*;\s*([^;]*?)$/,
-	forInRe     : /^\S+\s+in\s+\S+/i,
-	forOfRe     : /^\S+\s+of\s+\S+/i,
+	hasRangeRE  : new RegExp(`^\\S${Patterns.anyChar}*?\\s+range\\s+\\S${Patterns.anyChar}*?$`),
+	rangeRE     : new RegExp(`^(?:State\\.(variables|temporary)\\.(${Patterns.identifier})\\s*,\\s*)?State\\.(variables|temporary)\\.(${Patterns.identifier})\\s+range\\s+(\\S${Patterns.anyChar}*?)$`),
+	threePartRE : /^([^;]*?)\s*;\s*([^;]*?)\s*;\s*([^;]*?)$/,
+	forInRE     : /^\S+\s+in\s+\S+/i,
+	forOfRE     : /^\S+\s+of\s+\S+/i,
 	/* eslint-enable max-len */
 
 	handler() {
@@ -41,8 +41,8 @@ Macro.add('for', {
 		}
 
 		// Range form.
-		else if (this.self.hasRangeRe.test(argsStr)) {
-			const parts = argsStr.match(this.self.rangeRe);
+		else if (this.self.hasRangeRE.test(argsStr)) {
+			const parts = argsStr.match(this.self.rangeRE);
 
 			if (parts === null) {
 				return this.error('invalid range form syntax, format: [index ,] value range collection');
@@ -66,10 +66,10 @@ Macro.add('for', {
 			// Conditional-only form.
 			if (argsStr.indexOf(';') === -1) {
 				// Sanity checks.
-				if (this.self.forInRe.test(argsStr)) {
+				if (this.self.forInRE.test(argsStr)) {
 					return this.error('invalid syntax, for…in is not supported; see: for…range');
 				}
-				else if (this.self.forOfRe.test(argsStr)) {
+				else if (this.self.forOfRE.test(argsStr)) {
 					return this.error('invalid syntax, for…of is not supported; see: for…range');
 				}
 
@@ -78,7 +78,7 @@ Macro.add('for', {
 
 			// 3-part conditional form.
 			else {
-				const parts = argsStr.match(this.self.threePartRe);
+				const parts = argsStr.match(this.self.threePartRE);
 
 				if (parts === null) {
 					return this.error('invalid 3-part conditional form syntax, format: [init] ; [condition] ; [post]');

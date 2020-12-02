@@ -18,7 +18,7 @@ const Template = (() => {
 	const _templates = new Map();
 
 	// Valid template name regular expression.
-	const _validNameRe = new RegExp(`^(?:${Patterns.templateName})$`);
+	const _validNameRE = new RegExp(`^(?:${Patterns.templateName})$`);
 
 	// Valid template type predicate.
 	const _validType = template => {
@@ -40,7 +40,7 @@ const Template = (() => {
 		}
 
 		(name instanceof Array ? name : [name]).forEach(name => {
-			if (!_validNameRe.test(name)) {
+			if (!_validNameRE.test(name)) {
 				throw new Error(`invalid template name "${name}"`);
 			}
 			if (_templates.has(name)) {

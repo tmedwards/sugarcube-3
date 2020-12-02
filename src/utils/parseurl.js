@@ -11,7 +11,7 @@ import hasOwn from './utils/hasown';
 
 
 /*
-	Returns an immutable object containing the component properties parsed from the passed URL.
+	Returns an immutable object containing the component properties parsed from the given URL.
 */
 function parseURL(url) {
 	const parser       = document.createElement('a');

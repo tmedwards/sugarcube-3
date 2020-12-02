@@ -18,7 +18,7 @@ import Wikifier from './markup/wikifier';
 Macro.add(['linkappend', 'linkprepend', 'linkreplace'], {
 	isAsync : true,
 	tags    : [],
-	t8nRe   : /^(?:transition|t8n)$/,
+	t8nRE   : /^(?:transition|t8n)$/,
 
 	handler() {
 		if (this.args.length === 0) {
@@ -27,7 +27,7 @@ Macro.add(['linkappend', 'linkprepend', 'linkreplace'], {
 
 		const $link      = jQuery(document.createElement('a'));
 		const $insert    = jQuery(document.createElement('span'));
-		const transition = this.args.length > 1 && this.self.t8nRe.test(this.args[1]);
+		const transition = this.args.length > 1 && this.self.t8nRE.test(this.args[1]);
 
 		$link
 			.wikiWithOptions({ profile : 'core' }, this.args[0])

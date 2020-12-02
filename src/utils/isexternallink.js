@@ -15,11 +15,11 @@ import Story from './story';
 	Returns whether the given link source is external (probably).
 */
 const isExternalLink = (() => {
-	const externalUrlRe = new RegExp(`^${Patterns.externalUrl}`, 'gim');
-	const fingerprintRe = /[/.?#]/;
+	const externalUrlRE = new RegExp(`^${Patterns.externalUrl}`, 'gim');
+	const fingerprintRE = /[/.?#]/;
 
 	function isExternalLink(link) {
-		return !Story.has(link) && (externalUrlRe.test(link) || fingerprintRe.test(link));
+		return !Story.has(link) && (externalUrlRE.test(link) || fingerprintRE.test(link));
 	}
 
 	return isExternalLink;

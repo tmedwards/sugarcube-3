@@ -18,17 +18,17 @@ import State from './state';
 */
 Macro.add('unset', {
 	skipArgs : true,
-	jsVarRe  : new RegExp(`State\\.(variables|temporary)\\.(${Patterns.identifier})`, 'g'),
+	jsVarRE  : new RegExp(`State\\.(variables|temporary)\\.(${Patterns.identifier})`, 'g'),
 
 	handler() {
 		if (this.args.full.length === 0) {
 			return this.error('no story/temporary variable list specified');
 		}
 
-		const jsVarRe = this.self.jsVarRe;
+		const jsVarRE = this.self.jsVarRE;
 		let match;
 
-		while ((match = jsVarRe.exec(this.args.full)) !== null) {
+		while ((match = jsVarRE.exec(this.args.full)) !== null) {
 			const store = State[match[1]];
 			const name  = match[2];
 

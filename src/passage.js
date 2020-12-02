@@ -26,10 +26,10 @@ const Passage = (() => {
 	// Twine 1 build.
 	if (BUILD_TWINE_1) {
 		/*
-			Returns a decoded version of the passed Twine 1 passage store encoded string.
+			Returns a decoded version of the given Twine 1 passage store encoded string.
 		*/
-		const twine1EscapesRe    = /(?:\\n|\\t|\\s|\\|\r)/g;
-		const hasTwine1EscapesRe = new RegExp(twine1EscapesRe.source); // to drop the global flag
+		const twine1EscapesRE    = /(?:\\n|\\t|\\s|\\|\r)/g;
+		const hasTwine1EscapesRE = new RegExp(twine1EscapesRE.source); // to drop the global flag
 		const twine1EscapesTable = mappingFrom({
 			'\\n' : '\n',
 			'\\t' : '\t',
@@ -44,8 +44,8 @@ const Passage = (() => {
 			}
 
 			const val = String(str);
-			return val && hasTwine1EscapesRe.test(val)
-				? val.replace(twine1EscapesRe, esc => twine1EscapesTable[esc])
+			return val && hasTwine1EscapesRE.test(val)
+				? val.replace(twine1EscapesRE, esc => twine1EscapesTable[esc])
 				: val;
 		};
 	}
@@ -231,12 +231,12 @@ const Passage = (() => {
 			let excerpt = node.textContent.trim();
 
 			if (excerpt !== '') {
-				const excerptRe = new RegExp(`(\\S+(?:\\s+\\S+){0,${count > 0 ? count - 1 : 7}})`);
+				const excerptRE = new RegExp(`(\\S+(?:\\s+\\S+){0,${count > 0 ? count - 1 : 7}})`);
 				excerpt = excerpt
 					// Compact whitespace.
 					.replace(/\s+/g, ' ')
 					// Attempt to match the excerpt regexp.
-					.match(excerptRe);
+					.match(excerptRE);
 			}
 
 			return excerpt ? `${excerpt[1]}\u2026` : '\u2026'; // horizontal ellipsis
@@ -249,7 +249,7 @@ const Passage = (() => {
 				return '';
 			}
 
-			const excerptRe = new RegExp(`(\\S+(?:\\s+\\S+){0,${count > 0 ? count - 1 : 7}})`);
+			const excerptRE = new RegExp(`(\\S+(?:\\s+\\S+){0,${count > 0 ? count - 1 : 7}})`);
 			const excerpt   = text
 				// Strip macro tags (replace with a space).
 				.replace(/<<.*?>>/g, ' ')
@@ -272,7 +272,7 @@ const Passage = (() => {
 				// Compact whitespace.
 				.replace(/\s+/g, ' ')
 				// Attempt to match the excerpt regexp.
-				.match(excerptRe);
+				.match(excerptRE);
 			return excerpt ? `${excerpt[1]}\u2026` : '\u2026'; // horizontal ellipsis
 		}
 	}

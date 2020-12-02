@@ -519,27 +519,27 @@ const Scripting = (() => {
 			'ndef'  : '"undefined" === typeof'
 			/* eslint-enable quote-props */
 		});
-		const parseRe = new RegExp([
+		const parseRE = new RegExp([
 			'(""|\'\')',                                          // 1=Empty quotes
 			'("(?:\\\\.|[^"\\\\])+")',                            // 2=Double quoted, non-empty
 			"('(?:\\\\.|[^'\\\\])+')",                            // 3=Single quoted, non-empty
 			'([=+\\-*\\/%<>&\\|\\^~!?:,;\\(\\)\\[\\]{}]+)',       // 4=Operator delimiters
 			'([^"\'=+\\-*\\/%<>&\\|\\^~!?:,;\\(\\)\\[\\]{}\\s]+)' // 5=Barewords
 		].join('|'), 'g');
-		const notSpaceRe      = /\S/;
-		const variableTestRe  = new RegExp(`^${Patterns.variable}`);
-		const withColonTestRe = /^\s*:/;
-		const withNotTestRe   = /^\s+not\b/;
+		const notSpaceRE      = /\S/;
+		const variableTestRE  = new RegExp(`^${Patterns.variable}`);
+		const withColonTestRE = /^\s*:/;
+		const withNotTestRE   = /^\s+not\b/;
 
 		function parse(rawCodeString) {
-			if (parseRe.lastIndex !== 0) {
+			if (parseRE.lastIndex !== 0) {
 				throw new RangeError('Scripting.parse last index is non-zero at start');
 			}
 
 			let code  = rawCodeString;
 			let match;
 
-			while ((match = parseRe.exec(code)) !== null) {
+			while ((match = parseRE.exec(code)) !== null) {
 				// no-op: Empty quotes | Double quoted | Single quoted | Operator delimiters
 
 				// Barewords.
@@ -554,7 +554,7 @@ const Scripting = (() => {
 
 					// If the token is a story $variable or temporary _variable, reset it
 					// to just its sigil—for later mapping.
-					else if (variableTestRe.test(token)) {
+					else if (variableTestRE.test(token)) {
 						token = token[0];
 					}
 
@@ -564,11 +564,11 @@ const Scripting = (() => {
 					// NOTE: This is a safety feature, since `$a is not $b` probably sounds
 					// reasonable to most users.
 					else if (token === 'is') {
-						const start = parseRe.lastIndex;
+						const start = parseRE.lastIndex;
 						const ahead = code.slice(start);
 
-						if (withNotTestRe.test(ahead)) {
-							code = code.splice(start, ahead.search(notSpaceRe));
+						if (withNotTestRE.test(ahead)) {
+							code = code.splice(start, ahead.search(notSpaceRE));
 							token = 'isnot';
 						}
 					}
@@ -576,9 +576,9 @@ const Scripting = (() => {
 					// If the token is followed by a colon, then it's likely to be an object
 					// property, so skip it.
 					else {
-						const ahead = code.slice(parseRe.lastIndex);
+						const ahead = code.slice(parseRE.lastIndex);
 
-						if (withColonTestRe.test(ahead)) {
+						if (withColonTestRE.test(ahead)) {
 							continue;
 						}
 					}
@@ -591,7 +591,7 @@ const Scripting = (() => {
 							token.length,     // replace how many
 							tokenTable[token] // replacement string
 						);
-						parseRe.lastIndex += tokenTable[token].length - token.length;
+						parseRE.lastIndex += tokenTable[token].length - token.length;
 					}
 				}
 			}

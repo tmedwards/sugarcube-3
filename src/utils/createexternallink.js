@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns an external link created from the passed parameters.
+	Returns an external link created from the given parameters.
 */
 function createExternalLink(output, url, text) {
 	const $link = jQuery(document.createElement('a'))

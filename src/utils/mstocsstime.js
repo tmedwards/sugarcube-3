@@ -11,7 +11,7 @@ import getTypeOf from './utils/gettypeof';
 
 
 /*
-	Returns the CSS time string represented by the passed number of milliseconds.
+	Returns the CSS time string represented by the given number of milliseconds.
 */
 function msToCSSTime(msec) {
 	if (typeof msec !== 'number' || Number.isNaN(msec) || !Number.isFinite(msec)) {

@@ -17,7 +17,7 @@
 		Opera (Presto)           → `Uncaught exception: \w*(?:Error|Exception): …`
 		Safari (ca. v5.1)        → `\w*(?:Error|_ERR): …`
 */
-const errorPrologRegExp = /^(?:(?:uncaught\s+(?:exception:\s+)?)?\w*(?:error|exception|_err):\s+)+/i; // eslint-disable-line no-unused-vars, no-var
+const errorPrologRE = /^(?:(?:uncaught\s+(?:exception:\s+)?)?\w*(?:error|exception|_err):\s+)+/i; // eslint-disable-line no-unused-vars, no-var
 
 /*
 	Alert API static object.
@@ -41,7 +41,7 @@ const Alert = (() => {
 		const isObject = error !== null && typeof error === 'object';
 		const isExLike = isObject && 'message' in error;
 		const what     = (
-			isExLike ? String(error.message).replace(errorPrologRegExp, '') : String(error)
+			isExLike ? String(error.message).replace(errorPrologRE, '') : String(error)
 		).trim() || 'unknown error';
 
 		if (where != null) { // lazy equality for null
@@ -119,4 +119,4 @@ const Alert = (() => {
 /*
 	Module Exports.
 */
-export { Alert as default, errorPrologRegExp };
+export { Alert as default, errorPrologRE };

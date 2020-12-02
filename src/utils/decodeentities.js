@@ -11,14 +11,14 @@ import mappingFrom from './utils/mappingfrom';
 
 
 /*
-	Returns a decoded version of the passed entity encoded string.
+	Returns a decoded version of the given entity encoded string.
 
 	NOTE: The extended replacement set here, in contrast to `encodeEntities()`,
 	is required due to observed stupidity from various sources.
 */
 const decodeEntities = (() => {
-	const escapedHtmlRe    = /&(?:amp|#38|#x26|lt|#60|#x3c|gt|#62|#x3e|quot|#34|#x22|apos|#39|#x27|#96|#x60);/gi;
-	const hasEscapedHtmlRe = new RegExp(escapedHtmlRe.source, 'i'); // to drop the global flag
+	const escapedHtmlRE    = /&(?:amp|#38|#x26|lt|#60|#x3c|gt|#62|#x3e|quot|#34|#x22|apos|#39|#x27|#96|#x60);/gi;
+	const hasEscapedHtmlRE = new RegExp(escapedHtmlRE.source, 'i'); // to drop the global flag
 	const escapedHtmlTable = mappingFrom({
 		'&amp;'  : '&', // ampersand (HTML character entity, XML predefined entity)
 		'&#38;'  : '&', // ampersand (decimal numeric character reference)
@@ -45,8 +45,8 @@ const decodeEntities = (() => {
 		}
 
 		const val = String(str);
-		return val && hasEscapedHtmlRe.test(val)
-			? val.replace(escapedHtmlRe, entity => escapedHtmlTable[entity.toLowerCase()])
+		return val && hasEscapedHtmlRE.test(val)
+			? val.replace(escapedHtmlRE, entity => escapedHtmlTable[entity.toLowerCase()])
 			: val;
 	}
 

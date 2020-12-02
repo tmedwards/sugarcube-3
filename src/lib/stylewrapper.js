@@ -16,8 +16,8 @@ import Wikifier from './markup/wikifier';
 	StyleWrapper API class.
 */
 const StyleWrapper = (() => {
-	const imageMarkupRe    = new RegExp(Patterns.cssImage, 'g');
-	const hasImageMarkupRe = new RegExp(Patterns.cssImage);
+	const imageMarkupRE    = new RegExp(Patterns.cssImage, 'g');
+	const hasImageMarkupRE = new RegExp(Patterns.cssImage);
 
 
 	/*******************************************************************************
@@ -51,9 +51,9 @@ const StyleWrapper = (() => {
 			let css = rawCss;
 
 			// Check for wiki image transclusion.
-			if (hasImageMarkupRe.test(css)) {
-				imageMarkupRe.lastIndex = 0;
-				css = css.replace(imageMarkupRe, wikiImage => {
+			if (hasImageMarkupRE.test(css)) {
+				imageMarkupRE.lastIndex = 0;
+				css = css.replace(imageMarkupRE, wikiImage => {
 					const markup = Wikifier.helpers.parseSquareBracketedMarkup({
 						source     : wikiImage,
 						matchStart : 0

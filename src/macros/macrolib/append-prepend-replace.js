@@ -17,7 +17,7 @@ import Macro from './macros/macro';
 */
 Macro.add(['append', 'prepend', 'replace'], {
 	tags  : [],
-	t8nRe : /^(?:transition|t8n)$/,
+	t8nRE : /^(?:transition|t8n)$/,
 
 	handler() {
 		if (this.args.length === 0) {
@@ -31,7 +31,7 @@ Macro.add(['append', 'prepend', 'replace'], {
 		}
 
 		if (this.payload[0].contents !== '') {
-			const transition = this.args.length > 1 && this.self.t8nRe.test(this.args[1]);
+			const transition = this.args.length > 1 && this.self.t8nRE.test(this.args[1]);
 			let $insert;
 
 			if (transition) {

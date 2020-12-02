@@ -49,7 +49,6 @@ function stringFrom(value) {
 		case 'symbol': {
 			const desc = typeof value.description !== 'undefined' ? ` "${value.description}"` : '';
 			return `[symbol${desc}]`;
-			// return `[${String(value)}]`;
 		}
 
 		case 'undefined':

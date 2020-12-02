@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Converts <br> elements to <p> elements within the passed node tree.
+	Converts <br> elements to <p> elements within the given node tree.
 
 	TODO: Recheck all current elements (ca. Apr 2020) to see which are block-level
 	and which should be recurively processed—e.g., as `<div>` has been.  When doing

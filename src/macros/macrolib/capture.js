@@ -19,7 +19,7 @@ import Wikifier from './markup/wikifier';
 Macro.add('capture', {
 	skipArgs : true,
 	tags     : [],
-	tsVarRe  : new RegExp(`(${Patterns.variable})`,'g'),
+	tsVarRE  : new RegExp(`(${Patterns.variable})`,'g'),
 
 	handler() {
 		if (this.args.raw.length === 0) {
@@ -34,13 +34,13 @@ Macro.add('capture', {
 			`Wikifier` call.
 		*/
 		try {
-			const tsVarRe = this.self.tsVarRe;
+			const tsVarRE = this.self.tsVarRE;
 			let match;
 
 			/*
 				Cache the existing values of the variables and add a shadow.
 			*/
-			while ((match = tsVarRe.exec(this.args.raw)) !== null) {
+			while ((match = tsVarRE.exec(this.args.raw)) !== null) {
 				const varName = match[1];
 				const varKey  = varName.slice(1);
 				const store   = varName[0] === '$' ? State.variables : State.temporary;

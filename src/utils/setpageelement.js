@@ -12,7 +12,7 @@ import Wikifier from './markup/wikifier';
 
 
 /*
-	Wikifies a passage into a DOM element corresponding to the passed ID and returns the element.
+	Wikifies a passage into a DOM element corresponding to the given ID and returns the element.
 */
 function setPageElement(idOrElement, titles, defaultText) {
 	const el = typeof idOrElement === 'object'

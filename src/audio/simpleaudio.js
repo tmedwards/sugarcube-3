@@ -40,10 +40,10 @@ const SimpleAudio = (() => {
 	const _specialIds = Object.freeze([':not', ':all', ':looped', ':muted', ':paused', ':playing']);
 
 	// Format specifier regular expression.
-	const _formatSpecRe = /^([\w-]+)\s*\|\s*(\S.*)$/; // e.g., 'mp3|https://audiohost.tld/id'
+	const _formatSpecRE = /^([\w-]+)\s*\|\s*(\S.*)$/; // e.g., 'mp3|https://audiohost.tld/id'
 
 	// ID verification regular expressions.
-	const _badIdRe = /[:\s]/;
+	const _badIdRE = /[:\s]/;
 
 	// Supported audio formats object.
 	const _formats = Object.create(null);
@@ -149,8 +149,8 @@ const SimpleAudio = (() => {
 		}
 
 		_create(sourceList) {
-			const dataUriRe   = /^data:\s*audio\/(?:x-)?([^;,]+)\s*[;,]/i;
-			const extRe       = /\.([^./\\]+)$/;
+			const dataUriRE   = /^data:\s*audio\/(?:x-)?([^;,]+)\s*[;,]/i;
+			const extRE       = /\.([^./\\]+)$/;
 			const usedSources = [];
 			/*
 				HTMLAudioElement: DOM factory method vs. constructor
@@ -181,14 +181,14 @@ const SimpleAudio = (() => {
 						let match;
 
 						if (src.slice(0, 5) === 'data:') {
-							match = dataUriRe.exec(src);
+							match = dataUriRE.exec(src);
 
 							if (match === null) {
 								throw new Error('source data URI missing media type');
 							}
 						}
 						else {
-							match = extRe.exec(parseURL(src).pathname);
+							match = extRE.exec(parseURL(src).pathname);
 
 							if (match === null) {
 								throw new Error('source URL missing file extension');
@@ -1476,7 +1476,7 @@ const SimpleAudio = (() => {
 		const id   = String(arguments[0]).trim();
 		const what = `track ID "${id}"`;
 
-		if (_badIdRe.test(id)) {
+		if (_badIdRE.test(id)) {
 			throw new Error(`invalid ${what}: track IDs must not contain colons or whitespace`);
 		}
 
@@ -1551,7 +1551,7 @@ const SimpleAudio = (() => {
 		const id   = String(arguments[0]).trim();
 		const what = `group ID "${id}"`;
 
-		if (id[0] !== ':' || _badIdRe.test(id.slice(1))) {
+		if (id[0] !== ':' || _badIdRE.test(id.slice(1))) {
 			throw new Error(`invalid ${what}: group IDs must start with a colon and must not contain colons or whitespace`);
 		}
 
@@ -1638,7 +1638,7 @@ const SimpleAudio = (() => {
 		const id   = String(arguments[0]).trim();
 		const what = `list ID "${id}"`;
 
-		if (_badIdRe.test(id)) {
+		if (_badIdRE.test(id)) {
 			return this.error(`invalid ${what}: list IDs must not contain colons or whitespace`);
 		}
 
@@ -1795,25 +1795,25 @@ const SimpleAudio = (() => {
 	*******************************************************************************/
 
 	const _runnerParseSelector = (() => {
-		const notWsRe = /\S/g;
-		const parenRe = /[()]/g;
+		const notWsRE = /\S/g;
+		const parenRE = /[()]/g;
 
 		function processNegation(str, startPos) {
 			let match;
 
-			notWsRe.lastIndex = startPos;
-			match = notWsRe.exec(str);
+			notWsRE.lastIndex = startPos;
+			match = notWsRE.exec(str);
 
 			if (match === null || match[0] !== '(') {
 				throw new Error('invalid ":not()" syntax: missing parentheticals');
 			}
 
-			parenRe.lastIndex = notWsRe.lastIndex;
-			const start  = notWsRe.lastIndex;
+			parenRE.lastIndex = notWsRE.lastIndex;
+			const start  = notWsRE.lastIndex;
 			const result = { str : '', nextMatch : -1 };
 			let depth = 1;
 
-			while ((match = parenRe.exec(str)) !== null) {
+			while ((match = parenRE.exec(str)) !== null) {
 				if (match[0] === '(') {
 					++depth;
 				}
@@ -1822,7 +1822,7 @@ const SimpleAudio = (() => {
 				}
 
 				if (depth < 1) {
-					result.nextMatch = parenRe.lastIndex;
+					result.nextMatch = parenRE.lastIndex;
 					result.str = str.slice(start, result.nextMatch - 1);
 					break;
 				}
@@ -1833,10 +1833,10 @@ const SimpleAudio = (() => {
 
 		function parseSelector(idArg) {
 			const ids  = [];
-			const idRe = /:?[^\s:()]+/g;
+			const idRE = /:?[^\s:()]+/g;
 			let match;
 
-			while ((match = idRe.exec(idArg)) !== null) {
+			while ((match = idRE.exec(idArg)) !== null) {
 				const id = match[0];
 
 				// Group negation.
@@ -1851,13 +1851,13 @@ const SimpleAudio = (() => {
 						throw new Error(`invalid negation of track "${parent.id}": only groups may be negated with ":not()"`);
 					}
 
-					const negation = processNegation(idArg, idRe.lastIndex);
+					const negation = processNegation(idArg, idRE.lastIndex);
 
 					if (negation.nextMatch === -1) {
 						throw new Error('unknown error parsing ":not()"');
 					}
 
-					idRe.lastIndex = negation.nextMatch;
+					idRE.lastIndex = negation.nextMatch;
 					parent.not = parseSelector(negation.str);
 				}
 
@@ -2053,7 +2053,7 @@ const SimpleAudio = (() => {
 			}
 
 			// Handle URIs—possibly prefixed with a format specifier.
-			const match = _formatSpecRe.exec(source);
+			const match = _formatSpecRE.exec(source);
 			return match === null ? source : {
 				format : match[1],
 				src    : match[2]

@@ -26,7 +26,7 @@ const Macro = (() => {
 	const tagsParents = new Map();
 
 	// Valid macro name regular expression.
-	const validNameRe = new RegExp(`^(?:${Patterns.macroName})$`);
+	const validNameRE = new RegExp(`^(?:${Patterns.macroName})$`);
 
 
 	/*******************************************************************************
@@ -38,7 +38,7 @@ const Macro = (() => {
 			return name.forEach(name => macrosAdd(name, def));
 		}
 
-		if (!validNameRe.test(name)) {
+		if (!validNameRE.test(name)) {
 			throw new Error(`invalid macro name "${name}"`);
 		}
 

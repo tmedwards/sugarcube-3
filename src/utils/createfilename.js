@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns a sanitized version of the passed string that should be safe for use as
+	Returns a sanitized version of the given string that should be safe for use as
 	a filename under both Windows and Unix-based/-like operating systems.
 */
 const createFilename = (() => {
@@ -16,11 +16,11 @@ const createFilename = (() => {
 	// number, dollar, percent, ampersand, single quote, asterisk, plus, comma,
 	// forward slash, colon, semi-colon, less-than, equals, greater-than, question,
 	// backslash, caret, backquote/grave, pipe/vertical line, delete, C1 controls.
-	const illegalCharsRe = /[\x00-\x1f"#$%&'*+,/:;<=>?\\^`|\x7f-\x9f]+/g; // eslint-disable-line no-control-regex
+	const illegalCharsRE = /[\x00-\x1f"#$%&'*+,/:;<=>?\\^`|\x7f-\x9f]+/g; // eslint-disable-line no-control-regex
 
 	function createFilename(str) {
 		return String(str).trim()
-			.replace(illegalCharsRe, '');
+			.replace(illegalCharsRE, '');
 	}
 
 	return createFilename;

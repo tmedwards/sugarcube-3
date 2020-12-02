@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns whether the passed value has an iterator function.
+	Returns whether the given value has an iterator function.
 */
 const isIterable = (() => {
 	// If the browser does not support symbols, then return a version

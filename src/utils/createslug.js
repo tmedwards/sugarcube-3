@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns a sanitized version of the passed string that should be safe for use as
+	Returns a sanitized version of the given string that should be safe for use as
 	a DOM ID or class name.
 */
 const createSlug = (() => {
@@ -18,17 +18,17 @@ const createSlug = (() => {
 	// semi-colon, less-than, equals, greater-than, question, at, left bracket,
 	// backslash, right bracket, caret, backquote/grave, left brace, pipe/vertical
 	// line, right brace, tilde, delete, C1 controls.
-	const illegalCharsRe = /[\x00-\x20!-/:-@[-^`{-\x9f]+/g; // eslint-disable-line no-control-regex
+	const illegalCharsRE = /[\x00-\x20!-/:-@[-^`{-\x9f]+/g; // eslint-disable-line no-control-regex
 
 	// Special cases for story and temporary variables.
-	const storySigilRe = /^\$/;
-	const tempSigilRe  = /^_/;
+	const storySigilRE = /^\$/;
+	const tempSigilRE  = /^_/;
 
 	function createSlug(str) {
 		return String(str).trim()
-			.replace(storySigilRe, '')
-			.replace(tempSigilRe, '-')
-			.replace(illegalCharsRe, '-');
+			.replace(storySigilRE, '')
+			.replace(tempSigilRE, '-')
+			.replace(illegalCharsRE, '-');
 	}
 
 	return createSlug;

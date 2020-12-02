@@ -19,8 +19,8 @@ import Wikifier from './markup/wikifier';
 Macro.add('if', {
 	skipArgs   : true,
 	tags       : ['elseif', 'else'],
-	elseifWsRe : /^\s*if\b/i,
-	ifAssignRe : /[^!=&^|<>*/%+-]=[^=>]/,
+	elseifWsRE : /^\s*if\b/i,
+	ifAssignRE : /[^!=&^|<>*/%+-]=[^=>]/,
 
 	handler() {
 		let i;
@@ -29,15 +29,15 @@ Macro.add('if', {
 			const len = this.payload.length;
 
 			// Sanity checks.
-			const elseifWsRe = this.self.elseifWsRe;
-			const ifAssignRe = this.self.ifAssignRe;
+			const elseifWsRE = this.self.elseifWsRE;
+			const ifAssignRE = this.self.ifAssignRE;
 
 			for (/* declared previously */ i = 0; i < len; ++i) {
 				/* eslint-disable prefer-template */
 				switch (this.payload[i].name) {
 					case 'else':
 						if (this.payload[i].args.raw.length > 0) {
-							if (elseifWsRe.test(this.payload[i].args.raw)) {
+							if (elseifWsRE.test(this.payload[i].args.raw)) {
 								return this.error(`whitespace is not allowed between the "else" and "if" in <<elseif>> clause${i > 0 ? ' (#' + i + ')' : ''}`);
 							}
 
@@ -56,7 +56,7 @@ Macro.add('if', {
 						}
 						else if (
 							Config.macros.ifAssignmentError
-							&& ifAssignRe.test(this.payload[i].args.full)
+							&& ifAssignRE.test(this.payload[i].args.full)
 						) {
 							return this.error(`assignment operator found within <<${this.payload[i].name}>> clause${i > 0 ? ' (#' + i + ')' : ''} (perhaps you meant to use an equality operator: ==, ===, eq, is), invalid: ${this.payload[i].args.raw}`);
 						}

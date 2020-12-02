@@ -11,13 +11,13 @@ import mappingFrom from './utils/mappingfrom';
 
 
 /*
-	Returns an entity encoded version of the passed string.
+	Returns an entity encoded version of the given string.
 
 	NOTE: Only escapes the five primary special characters and the backquote.
 */
 const encodeEntities = (() => {
-	const htmlCharsRe    = /[&<>"'`]/g;
-	const hasHtmlCharsRe = new RegExp(htmlCharsRe.source); // to drop the global flag
+	const htmlCharsRE    = /[&<>"'`]/g;
+	const hasHtmlCharsRE = new RegExp(htmlCharsRE.source); // to drop the global flag
 	const htmlCharsTable = mappingFrom({
 		'&' : '&amp;',
 		'<' : '&lt;',
@@ -33,8 +33,8 @@ const encodeEntities = (() => {
 		}
 
 		const val = String(str);
-		return val && hasHtmlCharsRe.test(val)
-			? val.replace(htmlCharsRe, ch => htmlCharsTable[ch])
+		return val && hasHtmlCharsRE.test(val)
+			? val.replace(htmlCharsRE, ch => htmlCharsTable[ch])
 			: val;
 	}
 

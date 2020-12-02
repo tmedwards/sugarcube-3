@@ -20,7 +20,7 @@ const Diff = (() => {
 	*******************************************************************************/
 
 	/*
-		Returns whether the passed value is a finite number or a numeric string which
+		Returns whether the given value is a finite number or a numeric string which
 		yields a finite number when parsed.
 	*/
 	function isNumeric(O) {

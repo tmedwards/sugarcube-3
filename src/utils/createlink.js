@@ -14,7 +14,7 @@ import Story from './story';
 
 
 /*
-	Returns an internal link created from the passed parameters.
+	Returns an internal link created from the given parameters.
 */
 function createLink(output, passage, text, callback) {
 	const $link = jQuery(document.createElement('a'));

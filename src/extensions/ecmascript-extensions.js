@@ -813,8 +813,8 @@
 	*/
 	if (!RegExp.escape) {
 		(() => {
-			const _regExpMetaCharsRe    = /[\\^$*+?.()|[\]{}]/g;
-			const _hasRegExpMetaCharsRe = new RegExp(_regExpMetaCharsRe.source); // to drop the global flag
+			const _regExpMetaCharsRE    = /[\\^$*+?.()|[\]{}]/g;
+			const _hasRegExpMetaCharsRE = new RegExp(_regExpMetaCharsRE.source); // to drop the global flag
 
 			Object.defineProperty(RegExp, 'escape', {
 				configurable : true,
@@ -822,8 +822,8 @@
 
 				value(str) {
 					const val = String(str);
-					return val && _hasRegExpMetaCharsRe.test(val)
-						? val.replace(_regExpMetaCharsRe, '\\$&')
+					return val && _hasRegExpMetaCharsRE.test(val)
+						? val.replace(_regExpMetaCharsRE, '\\$&')
 						: val;
 				}
 			});

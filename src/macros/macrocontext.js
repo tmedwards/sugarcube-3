@@ -154,7 +154,7 @@ class MacroContext {
 			this._shadows = new Set();
 		}
 
-		const varRe = new RegExp(`^${Patterns.variable}$`);
+		const varRE = new RegExp(`^${Patterns.variable}$`);
 
 		names
 			.flat(Infinity)
@@ -163,7 +163,7 @@ class MacroContext {
 					throw new TypeError(`variable name must be a string; type: ${typeof name}`);
 				}
 
-				if (!varRe.test(name)) {
+				if (!varRE.test(name)) {
 					throw new Error(`invalid variable name "${name}"`);
 				}
 

@@ -18,7 +18,7 @@ import State from './state';
 import Story from './story';
 import Wikifier from './markup/wikifier';
 import createSlug from './utils/createslug';
-import { errorPrologRegExp } from './lib/alert';
+import { errorPrologRE } from './lib/alert';
 import setDisplayTitle from './utils/setdisplaytitle';
 
 
@@ -31,7 +31,7 @@ const UI = (() => {
 	*******************************************************************************/
 
 	function assembleLinkList(passage, listEl) {
-		console.log(`[UI/uiAssembleLinkList(passage: "${passage}", listEl: …)]`, listEl);
+		console.log(`[UI/assembleLinkList(passage: "${passage}", listEl: …)]`, listEl);
 
 		let list = listEl;
 
@@ -45,7 +45,7 @@ const UI = (() => {
 
 		// Gather the text of any error elements within the fragment…
 		const errors = Array.from(frag.querySelectorAll('.error'))
-			.map(errEl => errEl.textContent.replace(errorPrologRegExp, ''));
+			.map(errEl => errEl.textContent.replace(errorPrologRE, ''));
 
 		// …and throw an exception, if there were any errors.
 		if (errors.length > 0) {
@@ -112,7 +112,7 @@ const UI = (() => {
 	}
 
 	function buildAutoload() {
-		if (BUILD_DEBUG) { console.log('[UI/uiBuildAutoload()]'); }
+		if (BUILD_DEBUG) { console.log('[UI/buildAutoload()]'); }
 
 		Dialog
 			.setup(L10n.get('autoloadTitle'), 'autoload')
@@ -158,7 +158,7 @@ const UI = (() => {
 	}
 
 	function buildJumpto() {
-		if (BUILD_DEBUG) { console.log('[UI/uiBuildJumpto()]'); }
+		if (BUILD_DEBUG) { console.log('[UI/buildJumpto()]'); }
 
 		const list = document.createElement('ul');
 
@@ -195,7 +195,7 @@ const UI = (() => {
 	}
 
 	function buildRestart() {
-		if (BUILD_DEBUG) { console.log('[UI/uiBuildRestart()]'); }
+		if (BUILD_DEBUG) { console.log('[UI/buildRestart()]'); }
 
 		Dialog
 			.setup(L10n.get('restartTitle'), 'restart')
@@ -445,7 +445,7 @@ const UI = (() => {
 				.append($list);
 		}
 
-		if (BUILD_DEBUG) { console.log('[UI/uiBuildSaves()]'); }
+		if (BUILD_DEBUG) { console.log('[UI/buildSaves()]'); }
 
 		const slotsEnabled = Save.isEnabled();
 
@@ -592,7 +592,7 @@ const UI = (() => {
 	}
 
 	function buildSettings() {
-		if (BUILD_DEBUG) { console.log('[UI/uiBuildSettings()]'); }
+		if (BUILD_DEBUG) { console.log('[UI/buildSettings()]'); }
 
 		Dialog.setup(L10n.get('settingsTitle'), 'settings');
 

@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 import Wikifier from './markup/wikifier';
-import { errorPrologRegExp } from './lib/alert';
+import { errorPrologRE } from './lib/alert';
 import getActiveElement from './utils/getactiveelement';
 
 
@@ -270,7 +270,7 @@ import getActiveElement from './utils/getactiveelement';
 
 			// Gather the text of any error elements within the fragment…
 			const errors = Array.from(frag.querySelectorAll('.error'))
-				.map(errEl => errEl.textContent.replace(errorPrologRegExp, ''));
+				.map(errEl => errEl.textContent.replace(errorPrologRE, ''));
 
 			// …and throw an exception, if there were any errors.
 			if (errors.length > 0) {

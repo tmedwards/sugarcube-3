@@ -8,13 +8,13 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns the number of miliseconds represented by the passed CSS time string.
+	Returns the number of miliseconds represented by the given CSS time string.
 */
 const cssTimeToMS = (() => {
-	const cssTimeRe = /^([+-]?(?:\d*\.)?\d+)([Mm]?[Ss])$/;
+	const cssTimeRE = /^([+-]?(?:\d*\.)?\d+)([Mm]?[Ss])$/;
 
 	function cssTimeToMS(cssTime) {
-		const match = cssTimeRe.exec(String(cssTime));
+		const match = cssTimeRE.exec(String(cssTime));
 
 		if (match === null) {
 			throw new SyntaxError(`invalid time value syntax: "${cssTime}"`);

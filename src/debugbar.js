@@ -25,8 +25,8 @@ const DebugBar = (() => {
 	const WATCH_UPDATE_DELAY   = 200; // in milliseconds
 	const VARLIST_UPDATE_DELAY = 500; // in milliseconds
 
-	const variableRe   = new RegExp(`^${Patterns.variable}$`);
-	const numericKeyRe = /^\d+$/;
+	const variableRE   = new RegExp(`^${Patterns.variable}$`);
+	const numericKeyRE = /^\d+$/;
 	const watchList    = [];
 	let varList        = [];
 	let stowed         = true;
@@ -200,7 +200,7 @@ const DebugBar = (() => {
 	}
 
 	function debugBarWatchAdd(varName) {
-		if (!variableRe.test(varName)) {
+		if (!variableRE.test(varName)) {
 			return;
 		}
 
@@ -589,7 +589,7 @@ const DebugBar = (() => {
 
 			// own enumerable non-numeric expando properties
 			Object.keys(list)
-				.filter(key => !numericKeyRe.test(key))
+				.filter(key => !numericKeyRE.test(key))
 				.forEach(key => result.push(`${toWatchString(key)}: ${toWatchString(list[key])}`));
 
 			return `${objType}(${list.length})\u202F[${result.join(', ')}]`;

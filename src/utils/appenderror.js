@@ -11,7 +11,7 @@ import L10n from './l10n/l10n';
 
 
 /*
-	Appends an error view to the passed DOM element and logs a message to the console.
+	Appends an error view to the given DOM element and logs a message to the console.
 */
 function appendError(output, message, source) {
 	const $wrapper = jQuery(document.createElement('div'));

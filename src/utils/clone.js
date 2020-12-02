@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns a deep copy of the passed object.
+	Returns a deep copy of the given object.
 
 	NOTE:
 		1. `clone()` does not clone functions, however, since function definitions

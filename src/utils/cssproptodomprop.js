@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns the DOM property name represented by the passed CSS property name.
+	Returns the DOM property name represented by the given CSS property name.
 */
 function cssPropToDOMProp(cssName) {
 	if (!cssName.includes('-')) {
