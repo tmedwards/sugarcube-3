@@ -7,7 +7,6 @@
 
 ***********************************************************************************************************************/
 
-import Alert, { errorPrologRegExp } from './lib/alert';
 import Setting, { settings } from './setting';
 import Config from './config';
 import Dialog from './dialog';
@@ -19,6 +18,7 @@ import State from './state';
 import Story from './story';
 import Wikifier from './markup/wikifier';
 import createSlug from './utils/createslug';
+import { errorPrologRegExp } from './lib/alert';
 import setDisplayTitle from './utils/setdisplaytitle';
 
 
