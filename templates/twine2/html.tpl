@@ -33,7 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 -->
 <script id="script-libraries" type="text/javascript">
-if(typeof IDBObjectStore==='function'&&typeof IDBObjectStore.prototype==='object'&&typeof IDBObjectStore.prototype.getKey==='function'&&typeof Intl==='object'&&typeof Intl.PluralRules==='function'&&typeof Intl.PluralRules.supportedLocalesOf==='function'&&typeof Promise==='function'&&typeof Promise.prototype==='object'&&typeof Promise.prototype.finally==='function'){document.documentElement.setAttribute("data-init", "loading");
+if(typeof BigInt==='function'&&typeof customElements==='object'&&typeof IDBObjectStore==='function'&&typeof IDBObjectStore.prototype==='object'&&typeof IDBObjectStore.prototype.getKey==='function'&&typeof Intl==='object'&&typeof Intl.PluralRules==='function'&&typeof Intl.PluralRules.supportedLocalesOf==='function'){document.documentElement.setAttribute("data-init", "loading");
 '{{BUILD_LIB_SOURCE}}'
 }else{document.documentElement.setAttribute("data-init", "lacking");}
 </script>
