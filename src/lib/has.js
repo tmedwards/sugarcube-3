@@ -39,9 +39,7 @@ const Has = (() => {
 			return 'Blob' in window
 				&& 'File' in window
 				&& 'FileList' in window
-				&& 'FileReader' in window
-				&& !Browser.isMobile.any()
-				&& (!Browser.isOpera || Browser.operaVersion >= 15);
+				&& 'FileReader' in window;
 		}
 		catch (ex) { /* no-op */ }
 
