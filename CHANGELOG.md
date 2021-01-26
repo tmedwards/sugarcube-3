@@ -1,5 +1,14 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
+## 2021-01-26
+
+* Removed the Jump To menu.
+* Ported recent changes from v2.
+
+## 2020-12-04
+
+* Updated browser support target to ES2020.
+
 ## 2020-12-01
 
 * Updated browser support target to ES2018.  I *may* decide to bump it to ES2020 in the future.
