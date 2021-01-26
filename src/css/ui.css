@@ -31,7 +31,7 @@
 /*
 	Built-in dialog appearance styles.
 */
-/* List-based dialog styling (primarily for the Jumpto dialog). */
+/* List-based dialog styling. */
 #ui-dialog-body.list {
 	padding: 0;
 }

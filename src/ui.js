@@ -91,11 +91,6 @@ const UI = (() => {
 			.open(...args);
 	}
 
-	function openJumpto(...args) {
-		buildJumpto();
-		Dialog.open(...args);
-	}
-
 	function openRestart(...args) {
 		buildRestart();
 		Dialog.open(...args);
@@ -155,43 +150,6 @@ const UI = (() => {
 		});
 
 		return true;
-	}
-
-	function buildJumpto() {
-		if (BUILD_DEBUG) { console.log('[UI/buildJumpto()]'); }
-
-		const list = document.createElement('ul');
-
-		Dialog
-			.setup(L10n.get('jumptoTitle'), 'jumpto list')
-			.append(list);
-
-		const offset = 1 + State.expired.length;
-
-		for (let i = State.size - 1; i >= 0; --i) {
-			if (i === State.activeIndex) {
-				continue;
-			}
-
-			const passage = Story.get(State.history[i].title);
-
-			if (passage && passage.tags.includes('bookmark')) {
-				jQuery(document.createElement('li'))
-					.append(
-						jQuery(document.createElement('a'))
-							.ariaClick({ one : true }, (function (idx) {
-								return () => jQuery(document).one(':dialogclosed', () => Engine.goTo(idx));
-							})(i))
-							.addClass('ui-close')
-							.text(`${L10n.get('jumptoTurn')} ${offset + i}: ${passage.description()}`)
-					)
-					.appendTo(list);
-			}
-		}
-
-		if (!list.hasChildNodes()) {
-			jQuery(list).append(`<li><a><em>${L10n.get('jumptoUnavailable')}</em></a></li>`);
-		}
 	}
 
 	function buildRestart() {
@@ -811,12 +769,10 @@ const UI = (() => {
 
 		// UI Functions, Built-in Dialogs.
 		alert         : { value : openAlert },
-		jumpto        : { value : openJumpto },
 		restart       : { value : openRestart },
 		saves         : { value : openSaves },
 		settings      : { value : openSettings },
 		buildAutoload : { value : buildAutoload },
-		buildJumpto   : { value : buildJumpto },
 		buildRestart  : { value : buildRestart },
 		buildSaves    : { value : buildSaves },
 		buildSettings : { value : buildSettings }

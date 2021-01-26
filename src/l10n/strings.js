@@ -75,14 +75,6 @@ const strings = {
 	uiBarToggle   : 'Toggle the UI bar',
 	uiBarBackward : 'Go backward within the {identity} history',
 	uiBarForward  : 'Go forward within the {identity} history',
-	uiBarJumpto   : 'Jump to a specific point within the {identity} history',
-
-	/*
-		Jump To.
-	*/
-	jumptoTitle       : 'Jump To',
-	jumptoTurn        : 'Turn', // (noun) chance to act (in a game), moment, period
-	jumptoUnavailable : 'No jump points currently available\u2026',
 
 	/*
 		Saves.

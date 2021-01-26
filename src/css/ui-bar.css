@@ -116,9 +116,6 @@
 #ui-bar-history [id|="history"] {
 	padding: 0.2em 0.45em 0.35em;
 }
-#ui-bar-history #history-jumpto {
-	padding: 0.2em 0.665em 0.35em;
-}
 #ui-bar-history [id|="history"]:not(:first-child) {
 	margin-left: 1.2em;
 }

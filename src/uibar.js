@@ -82,7 +82,6 @@ const UIBar = (() => {
 		const $elems = (() => {
 			const toggleLabel   = L10n.get('uiBarToggle');
 			const backwardLabel = L10n.get('uiBarBackward');
-			const jumptoLabel   = L10n.get('uiBarJumpto');
 			const forwardLabel  = L10n.get('uiBarForward');
 
 			return jQuery(document.createDocumentFragment())
@@ -93,7 +92,6 @@ const UIBar = (() => {
 					+         `<button id="ui-bar-toggle" tabindex="0" title="${toggleLabel}" aria-label="${toggleLabel}"></button>`
 					+         '<div id="ui-bar-history">'
 					+             `<button id="history-backward" tabindex="0" title="${backwardLabel}" aria-label="${backwardLabel}">\uE821</button>`
-					+             `<button id="history-jumpto" tabindex="0" title="${jumptoLabel}" aria-label="${jumptoLabel}">\uE839</button>`
 					+             `<button id="history-forward" tabindex="0" title="${forwardLabel}" aria-label="${forwardLabel}">\uE822</button>`
 					+         '</div>'
 					+     '</div>'
@@ -187,16 +185,6 @@ const UIBar = (() => {
 				.ariaClick({
 					label : L10n.get('uiBarBackward')
 				}, () => Engine.backward());
-
-			if (Story.lookup('tags', 'bookmark').length > 0) {
-				jQuery('#history-jumpto')
-					.ariaClick({
-						label : L10n.get('uiBarJumpto')
-					}, () => UI.jumpto());
-			}
-			else {
-				jQuery('#history-jumpto').remove();
-			}
 
 			$forward
 				.ariaDisabled(State.length === State.size)
