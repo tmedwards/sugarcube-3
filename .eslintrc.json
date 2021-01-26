@@ -1,6 +1,6 @@
 {
     "parserOptions" : {
-        "ecmaVersion" : 2018,
+        "ecmaVersion" : 2020,
         "sourceType"  : "module"
     },
     "env" : {
@@ -129,6 +129,7 @@
         "prefer-const"                     : "error",
         "prefer-destructuring"             : ["off", { "array" : false, "object" : true }, { "enforceForRenamedProperties" : true }],
         "prefer-numeric-literals"          : "error",
+        "prefer-object-spread"             : "warn",
         "prefer-promise-reject-errors"     : "error",
         "prefer-rest-params"               : "off",
         "prefer-spread"                    : "warn",
