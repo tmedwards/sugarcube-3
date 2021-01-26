@@ -265,10 +265,7 @@ Macro.add('type', {
 
 				// Set up the typing interval and start/stop event firing.
 				const typeNode = function typeNode() {
-					// Fire the typing start event.
-					$wrapper.trigger(typingStartId);
-
-					const typeNodeId = setInterval(() => {
+					const typeNodeMember = function typeNodeMember(typeIntervalId) {
 						// Stop typing if….
 						if (
 							// …we've navigated away.
@@ -278,8 +275,10 @@ Macro.add('type', {
 							// …we're done typing.
 							|| !typer.type()
 						) {
-							// Terminate the timer.
-							clearInterval(typeNodeId);
+							// Terminate the timer, if it exists.
+							if (typeIntervalId) {
+								clearInterval(typeIntervalId);
+							}
 
 							// Remove this handler from the queue, if the queue still exists and the
 							// handler IDs match.
@@ -302,7 +301,16 @@ Macro.add('type', {
 								$wrapper.addClass(`${className}-cursor`);
 							}
 						}
-					}, speed);
+					};
+
+					// Fire the typing start event.
+					$wrapper.trigger(typingStartId);
+
+					// Type the initial node member.
+					typeNodeMember();
+
+					// Set up the interval to continue typing.
+					const typeNodeMemberId = setInterval(() => typeNodeMember(typeNodeMemberId), speed);
 				};
 
 				// Kick off typing the node.
