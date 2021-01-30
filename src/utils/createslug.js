@@ -8,8 +8,8 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns a sanitized version of the given string that should be safe for use as
-	a DOM ID or class name.
+	Returns a sanitized version of the given string that should be safe for use
+	as a DOM ID or class name.
 */
 const createSlug = (() => {
 	// The range of illegal characters consists of: C0 controls, space, exclamation,

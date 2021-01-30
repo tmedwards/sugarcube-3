@@ -40,6 +40,12 @@ function stringFrom(value) {
 			else if (value instanceof Date) {
 				return value.toLocaleString();
 			}
+			else if (value instanceof Element) {
+				return value.outerHTML;
+			}
+			else if (value instanceof Node) {
+				return value.textContent;
+			}
 			else if (typeof value.toString === 'function') {
 				return value.toString();
 			}

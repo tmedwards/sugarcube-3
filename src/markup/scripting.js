@@ -91,33 +91,6 @@ const Scripting = (() => {
 	}
 
 	/*
-		Returns the number of turns that have passed since the last instance of the given passage
-		occurred within the story history or `-1` if it does not exist.  If multiple passages are
-		given, returns the lowest count (which can be `-1`).
-	*/
-	function lastVisited(/* variadic */) {
-		if (arguments.length === 0) {
-			throw new Error('lastVisited called with insufficient parameters');
-		}
-
-		if (State.isEmpty()) {
-			return -1;
-		}
-
-		const needles = Array.prototype.concat.apply([], arguments);
-		const played  = State.passages;
-		const uBound  = played.length - 1;
-		let turns = State.turns;
-
-		for (let i = 0, iend = needles.length; i < iend && turns > -1; ++i) {
-			const lastIndex = played.lastIndexOf(needles[i]);
-			turns = Math.min(turns, lastIndex === -1 ? -1 : uBound - lastIndex);
-		}
-
-		return turns;
-	}
-
-	/*
 		Sets the given key/value pair within the story metadata store.
 	*/
 	function memorize(key, value) {

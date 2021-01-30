@@ -8,8 +8,8 @@
 ***********************************************************************************************************************/
 
 /*
-	Returns a sanitized version of the given string that should be safe for use as
-	a filename under both Windows and Unix-based/-like operating systems.
+	Returns a sanitized version of the given string that should be safe for use
+	as a filename under both Windows and Unix-based/-like operating systems.
 */
 const createFilename = (() => {
 	// The range of illegal characters consists of: C0 controls, double quote,

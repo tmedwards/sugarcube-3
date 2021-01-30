@@ -14,7 +14,6 @@ import Engine from './engine';
 import Has from './lib/has';
 import L10n from './l10n/l10n';
 import Save from './save';
-import State from './state';
 import Story from './story';
 import Wikifier from './markup/wikifier';
 import createSlug from './utils/createslug';
@@ -75,6 +74,50 @@ const UI = (() => {
 		}
 	}
 
+	function mainMenu() {
+		// if (Story.has('StoryMenu')) {
+		// 	// TODO: Display `StoryMenu` passage here.
+
+		// 	return;
+		// }
+
+		Engine.play(Config.navigation.start);
+
+		// TODO: Display default story menu here.
+
+		// // If there was no active session available, attempt to auto load the auto save.
+		// // Failing that, play the starting passage.
+		// return new Promise(resolve => {
+		// 	const autoLoadType = typeof Config.saves.autoLoad;
+		//
+		// 	if (
+		// 		autoLoadType === 'boolean' && Config.saves.autoLoad ||
+		// 		autoLoadType === 'function' && Config.saves.autoLoad()
+		// 	) {
+		// 		if (BUILD_DEBUG) { console.log('\tattempting auto load'); }
+		//
+		// 		Save.browser.auto.continue()
+		// 			.then(
+		// 				loaded => resolve(loaded ? !engineShow() : true),
+		// 				ex => {
+		// 					UI.alert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`);
+		// 					resolve(true);
+		// 				}
+		// 			);
+		// 	}
+		// 	else {
+		// 		resolve(true);
+		// 	}
+		// })
+		// 	.then(playStart => {
+		// 		if (playStart) {
+		// 			if (BUILD_DEBUG) { console.log(`\tstarting passage: "${Config.navigation.start}"`); }
+		//
+		// 			enginePlay(Config.navigation.start);
+		// 		}
+		// 	});
+	}
+
 
 	/*******************************************************************************
 		UI Functions, Built-in Dialogs.
@@ -106,51 +149,51 @@ const UI = (() => {
 		Dialog.open(...args);
 	}
 
-	function buildAutoload() {
-		if (BUILD_DEBUG) { console.log('[UI/buildAutoload()]'); }
-
-		Dialog
-			.setup(L10n.get('autoloadTitle'), 'autoload')
-			.append(
-				/* eslint-disable max-len */
-				  `<p>${L10n.get('autoloadPrompt')}</p><ul class="buttons">`
-				+ `<li><button id="autoload-ok" class="ui-close">${L10n.get(['autoloadOk', 'ok'])}</button></li>`
-				+ `<li><button id="autoload-cancel" class="ui-close">${L10n.get(['autoloadCancel', 'cancel'])}</button></li>`
-				+ '</ul>'
-				/* eslint-enable max-len */
-			);
-
-		// Add an additional delegated click handler for the `.ui-close` elements to handle autoloading.
-		jQuery(document).one('click.autoload', '.ui-close', ev => {
-			const isAutoloadOk = ev.target.id === 'autoload-ok';
-			jQuery(document).one(':dialogclosed', () => {
-				if (BUILD_DEBUG) { console.log(`\tattempting autoload: "${Save.autosave.get().title}"`); }
-
-				if (!isAutoloadOk) {
-					Engine.play(Config.navigation.start);
-				}
-				else {
-					Save.autosave.load()
-						.then(
-							loaded => loaded ? !Engine.show() : true,
-							ex => {
-								openAlert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`);
-								return true;
-							}
-						)
-						.then(playStart => {
-							if (playStart) {
-								if (BUILD_DEBUG) { console.log(`\tstarting passage: "${Config.navigation.start}"`); }
-
-								Engine.play(Config.navigation.start);
-							}
-						});
-				}
-			});
-		});
-
-		return true;
-	}
+	// function buildAutoload() {
+	// 	if (BUILD_DEBUG) { console.log('[UI/buildAutoload()]'); }
+	//
+	// 	Dialog
+	// 		.setup(L10n.get('autoLoadTitle'), 'auto load')
+	// 		.append(
+	// 			/* eslint-disable max-len */
+	// 			  `<p>${L10n.get('autoLoadPrompt')}</p><ul class="buttons">`
+	// 			+ `<li><button id="autoload-ok" class="ui-close">${L10n.get(['autoLoadOk', 'ok'])}</button></li>`
+	// 			+ `<li><button id="autoload-cancel" class="ui-close">${L10n.get(['autoLoadCancel', 'cancel'])}</button></li>`
+	// 			+ '</ul>'
+	// 			/* eslint-enable max-len */
+	// 		);
+	//
+	// 	// Add an additional delegated click handler for the `.ui-close` elements to handle auto loading.
+	// 	jQuery(document).one('click.autoload', '.ui-close', ev => {
+	// 		const isAutoLoadOk = ev.target.id === 'autoload-ok';
+	// 		jQuery(document).one(':dialogclosed', () => {
+	// 			if (BUILD_DEBUG) { console.log('\tattempting auto load'); }
+	//
+	// 			if (!isAutoLoadOk) {
+	// 				Engine.play(Config.navigation.start);
+	// 			}
+	// 			else {
+	// 				Save.browser.auto.continue()
+	// 					.then(
+	// 						loaded => loaded ? !Engine.show() : true,
+	// 						ex => {
+	// 							openAlert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`);
+	// 							return true;
+	// 						}
+	// 					)
+	// 					.then(playStart => {
+	// 						if (playStart) {
+	// 							if (BUILD_DEBUG) { console.log(`\tstarting passage: "${Config.navigation.start}"`); }
+	//
+	// 							Engine.play(Config.navigation.start);
+	// 						}
+	// 					});
+	// 			}
+	// 		});
+	// 	});
+	//
+	// 	return true;
+	// }
 
 	function buildRestart() {
 		if (BUILD_DEBUG) { console.log('[UI/buildRestart()]'); }
@@ -213,40 +256,26 @@ const UI = (() => {
 		}
 
 		function createSlotsList() {
-			function createButtonItem(bId, bClass, bLabel, bSlot, bAction) {
+			function createButtonItem(elId, elClass, elLabel, saveId, elAction) {
 				const $btn = jQuery(document.createElement('button'))
-					.attr('id', `saves-${bId}-${bSlot}`)
-					.addClass(bId);
+					.attr('id', `saves-${elId}-${saveId}`)
+					.addClass(elId);
 
-				if (bClass) {
-					$btn.addClass(bClass);
+				if (elClass) {
+					$btn.addClass(elClass);
 				}
 
-				if (bAction) {
-					if (bSlot === 'autosave') {
-						$btn.ariaClick({
-							label : `${bLabel} ${L10n.get('savesLabelAuto')}`
-						}, () => {
-							try {
-								bAction();
-							}
-							catch (ex) {
-								showAlert(ex.message);
-							}
-						});
-					}
-					else {
-						$btn.ariaClick({
-							label : `${bLabel} ${L10n.get('savesLabelSlot')} ${bSlot + 1}`
-						}, () => {
-							try {
-								bAction(bSlot);
-							}
-							catch (ex) {
-								showAlert(ex.message);
-							}
-						});
-					}
+				if (elAction) {
+					$btn.ariaClick({
+						label : `${elLabel} ${saveId + 1}`
+					}, () => {
+						try {
+							elAction(saveId);
+						}
+						catch (ex) {
+							showAlert(ex.message);
+						}
+					});
 				}
 				else {
 					$btn.ariaDisabled(true);
@@ -256,36 +285,40 @@ const UI = (() => {
 					.append($btn);
 			}
 
-			const saves = Save.get();
+			// const saves = Save.get();
 			const $list = jQuery(document.createElement('ol'))
 				.attr('id', 'saves-list');
 
-			if (Save.autosave.isEnabled()) {
-				const save  = saves.autosave;
+			const autoManifests = Save.browser.auto.manifests();
+
+			for (let i = 0, length = autoManifests.length; i < length; ++i) {
+				const { id, manifest } = autoManifests[i];
+
 				const $desc = jQuery(document.createElement('div'));
 				const $btns = jQuery(document.createElement('ul'))
 					.addClass('buttons');
 
-				if (save) {
+				if (manifest) {
 					// Add the description (title and datestamp).
 					jQuery(document.createElement('div'))
-						.text(save.title)
+						.text(manifest.desc)
 						.appendTo($desc);
 					jQuery(document.createElement('div'))
 						.addClass('details')
-						.text(`${L10n.get('savesLabelAuto')}\u00a0\u00a0\u2022\u00a0\u00a0`)
+						// .text(`${L10n.get('savesLabelAuto')}\u00a0\u00a0\u2022\u00a0\u00a0`)
+						.text(`${L10n.get('savesLabelAuto')}\u00a0${id + 1}\u00a0\u00a0\u2022\u00a0\u00a0`)
 						.append(
-							save.date
-								? `${new Date(save.date).toLocaleString()}`
+							manifest.date
+								? `${new Date(manifest.date).toLocaleString()}`
 								: `<em>${L10n.get('savesUnknownDate')}</em>`
 						)
 						.appendTo($desc);
 
 					// Add the load button.
 					$btns.append(
-						createButtonItem('load', 'ui-close', L10n.get('savesLabelLoad'), 'autosave', () => {
+						createButtonItem('load', 'ui-close', `${L10n.get('savesLabelLoad')} ${L10n.get('savesLabelAuto')}`, id, id => {
 							jQuery(document).one(':dialogclosed', () => {
-								Save.autosave.load()
+								Save.browser.auto.load(id)
 									.then(
 										Engine.show,
 										ex => showAlert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`)
@@ -296,8 +329,8 @@ const UI = (() => {
 
 					// Add the delete button.
 					$btns.append(
-						createButtonItem('delete', null, L10n.get('savesLabelDelete'), 'autosave', () => {
-							Save.autosave.delete();
+						createButtonItem('delete', null, `${L10n.get('savesLabelDelete')} ${L10n.get('savesLabelAuto')}`, id, id => {
+							Save.browser.auto.delete(id);
 							buildSaves();
 						})
 					);
@@ -308,12 +341,12 @@ const UI = (() => {
 
 					// Add the disabled load button.
 					$btns.append(
-						createButtonItem('load', null, L10n.get('savesLabelLoad'), 'autosave')
+						createButtonItem('load', null, `${L10n.get('savesLabelLoad')} ${L10n.get('savesLabelAuto')}`, id)
 					);
 
 					// Add the disabled delete button.
 					$btns.append(
-						createButtonItem('delete', null, L10n.get('savesLabelDelete'), 'autosave')
+						createButtonItem('delete', null, `${L10n.get('savesLabelDelete')} ${L10n.get('savesLabelAuto')}`, id)
 					);
 				}
 
@@ -323,31 +356,45 @@ const UI = (() => {
 					.appendTo($list);
 			}
 
-			saves.slots.forEach((save, i) => {
+			const slotManifests = Save.browser.slot.manifests()
+				.reduce((acc, { id, manifest }) => {
+					acc[id] = manifest; // eslint-disable-line no-param-reassign
+					return acc;
+				}, []);
+
+			for (
+				let i = 0, length = Math.max(slotManifests.length, Config.saves.maxSlotSaves);
+				i < length;
+				++i
+			) {
+				const manifest = slotManifests[i];
+
+				if (!manifest && i >= Config.saves.maxSlotSaves) { continue; }
+
 				const $desc = jQuery(document.createElement('div'));
 				const $btns = jQuery(document.createElement('ul'))
 					.addClass('buttons');
 
-				if (save) {
+				if (manifest) {
 					// Add the description (title and datestamp).
 					jQuery(document.createElement('div'))
-						.text(save.title)
+						.text(manifest.desc)
 						.appendTo($desc);
 					jQuery(document.createElement('div'))
 						.addClass('details')
 						.text(`${L10n.get('savesLabelSlot')}\u00a0${i + 1}\u00a0\u00a0\u2022\u00a0\u00a0`)
 						.append(
-							save.date
-								? `${new Date(save.date).toLocaleString()}`
+							manifest.date
+								? `${new Date(manifest.date).toLocaleString()}`
 								: `<em>${L10n.get('savesUnknownDate')}</em>`
 						)
 						.appendTo($desc);
 
 					// Add the load button.
 					$btns.append(
-						createButtonItem('load', 'ui-close', L10n.get('savesLabelLoad'), i, slot => {
+						createButtonItem('load', 'ui-close', `${L10n.get('savesLabelLoad')} ${L10n.get('savesLabelSlot')}`, i, id => {
 							jQuery(document).one(':dialogclosed', () => {
-								Save.slots.load(slot)
+								Save.browser.slot.load(id)
 									.then(
 										Engine.show,
 										ex => showAlert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`)
@@ -358,27 +405,30 @@ const UI = (() => {
 
 					// Add the delete button.
 					$btns.append(
-						createButtonItem('delete', null, L10n.get('savesLabelDelete'), i, slot => {
-							Save.slots.delete(slot);
+						createButtonItem('delete', null, `${L10n.get('savesLabelDelete')} ${L10n.get('savesLabelSlot')}`, i, id => {
+							Save.browser.slot.delete(id);
 							buildSaves();
 						})
 					);
 				}
-				else {
+				else if (i < Config.saves.maxSlotSaves) {
 					// Add the description.
 					$desc.addClass('empty');
+
+					// TODO: This is for the player assigned save description.
+					const saveDesc = 'TODO: Player assigned save desc here.';
 
 					// Add the save button.
 					$btns.append(
 						createButtonItem(
 							'save',
 							null,
-							L10n.get('savesLabelSave'),
+							`${L10n.get('savesLabelSave')} ${L10n.get('savesLabelSlot')}`,
 							i,
 							savesAllowed
 								// If saving is allowed, add the save action.
-								? slot => {
-									Save.slots.save(slot, Story.get(State.passage).description());
+								? id => {
+									Save.browser.slot.save(id, saveDesc);
 									buildSaves();
 								}
 								// Elsewise, disable the button.
@@ -388,7 +438,7 @@ const UI = (() => {
 
 					// Add the disabled delete button.
 					$btns.append(
-						createButtonItem('delete', null, L10n.get('savesLabelDelete'), i)
+						createButtonItem('delete', null, `${L10n.get('savesLabelDelete')} ${L10n.get('savesLabelSlot')}`, i)
 					);
 				}
 
@@ -396,7 +446,7 @@ const UI = (() => {
 					.append($desc)
 					.append($btns)
 					.appendTo($list);
-			});
+			}
 
 			return jQuery(document.createElement('div'))
 				.attr('id', 'saves-container')
@@ -405,10 +455,10 @@ const UI = (() => {
 
 		if (BUILD_DEBUG) { console.log('[UI/buildSaves()]'); }
 
-		const slotsEnabled = Save.isEnabled();
+		const browserEnabled = Save.browser.isEnabled();
 
 		// Bail out if both saves and the file API are disabled/missing.
-		if (!slotsEnabled && !Has.fileAPI) {
+		if (!browserEnabled && !Has.fileAPI) {
 			showAlert(L10n.get('warningNoSaves'));
 			return false;
 		}
@@ -417,9 +467,9 @@ const UI = (() => {
 		const $dialogBody = jQuery(Dialog.body());
 
 		// Add slots header, list, and button list.
-		if (slotsEnabled) {
+		if (browserEnabled) {
 			jQuery(document.createElement('h2'))
-				.text(L10n.get('savesHeaderSlot'))
+				.text(L10n.get('savesHeaderBrowser'))
 				.appendTo($dialogBody);
 
 			$dialogBody.append(createSlotsList());
@@ -435,7 +485,7 @@ const UI = (() => {
 					'disk-export',
 					null,
 					L10n.get('savesLabelDiskExport'),
-					() => Save.disk.export(`slots-${Story.domId}`)
+					() => Save.browser.export(`saves-export-${Story.name}`)
 				));
 				$slotButtons.append(createActionItem(
 					'disk-import',
@@ -460,7 +510,7 @@ const UI = (() => {
 						'aria-hidden' : true
 					})
 					.on('change', ev => {
-						Save.disk.import(ev)
+						Save.browser.import(ev)
 							.then(
 								buildSaves,
 								ex => {
@@ -477,9 +527,9 @@ const UI = (() => {
 				'clear',
 				null,
 				L10n.get('savesLabelClear'),
-				Save.autosave.has() || !Save.slots.isEmpty()
+				Save.browser.auto.size() > 0 || Save.browser.slot.size() > 0
 					? () => {
-						Save.clear();
+						Save.browser.clear();
 						buildSaves();
 					}
 					: null
@@ -504,7 +554,7 @@ const UI = (() => {
 				L10n.get('savesLabelDiskSave'),
 				savesAllowed
 					// If saving is allowed, add the save action.
-					? () => Save.disk.save(Story.domId)
+					? () => Save.disk.save(Story.name)
 					// Elsewise, disable the button.
 					: null
 			));
@@ -766,13 +816,14 @@ const UI = (() => {
 		// UI Functions, Core.
 		assembleLinkList : { value : assembleLinkList },
 		init             : { value : init },
+		mainMenu         : { value : mainMenu },
 
 		// UI Functions, Built-in Dialogs.
 		alert         : { value : openAlert },
 		restart       : { value : openRestart },
 		saves         : { value : openSaves },
 		settings      : { value : openSettings },
-		buildAutoload : { value : buildAutoload },
+		// buildAutoload : { value : buildAutoload },
 		buildRestart  : { value : buildRestart },
 		buildSaves    : { value : buildSaves },
 		buildSettings : { value : buildSettings }

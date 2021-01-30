@@ -10,9 +10,7 @@
 import Alert from './lib/alert';
 import Config from './config';
 import DebugView from './lib/debugview';
-import Dialog from './dialog';
 import Has from './lib/has';
-import L10n from './l10n/l10n';
 import LoadScreen from './loadscreen';
 import { MIN_DOM_ACTION_DELAY } from './constants';
 import Save from './save';
@@ -21,7 +19,6 @@ import Story from './story';
 import StyleWrapper from './lib/stylewrapper';
 import UI from './ui';
 import Wikifier from './markup/wikifier';
-import getTypeOf from './utils/gettypeof';
 import mappingFrom from './utils/mappingfrom';
 import now from './utils/now';
 
@@ -200,45 +197,14 @@ const Engine = (() => {
 		// Attempt to restore an active session.
 		if (State.restore()) {
 			engineShow();
-			return Promise.resolve();
 		}
 
-		// If there was no active session available, attempt to autoload the autosave.
-		// Failing that, play the starting passage.
-		return new Promise(resolve => {
-			const autoloadType = typeof Config.saves.autoload;
+		// Elsewise, display the main menu.
+		else {
+			UI.mainMenu();
+		}
 
-			if (
-				autoloadType === 'boolean' && Config.saves.autoload
-				|| autoloadType === 'function' && Config.saves.autoload()
-			) {
-				if (BUILD_DEBUG) { console.log(`\tattempting autoload: "${Save.autosave.get().title}"`); }
-
-				Save.autosave.load()
-					.then(
-						loaded => resolve(loaded ? !engineShow() : true),
-						ex => {
-							UI.alert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`);
-							resolve(true);
-						}
-					);
-			}
-			else if (autoloadType === 'string' && Config.saves.autoload === 'prompt') {
-				UI.buildAutoload();
-				Dialog.open();
-				resolve(false);
-			}
-			else {
-				resolve(true);
-			}
-		})
-			.then(playStart => {
-				if (playStart) {
-					if (BUILD_DEBUG) { console.log(`\tstarting passage: "${Config.navigation.start}"`); }
-
-					enginePlay(Config.navigation.start);
-				}
-			});
+		return Promise.resolve();
 	}
 
 	/*
@@ -354,17 +320,17 @@ const Engine = (() => {
 	}
 
 	/*
-		Renders and displays the passage referenced by the given title, optionally
-		without adding a new moment to the history.
+		Renders and displays the passage referenced by the given name, optionally
+		without merging the working state.
 	*/
-	function enginePlay(title, noHistory) {
+	function enginePlay(name, noMerge = false) {
 		if (state === States.Init) {
 			return false;
 		}
 
-		if (BUILD_DEBUG) { console.log(`[Engine/enginePlay(title: "${title}", noHistory: ${noHistory})]`); }
+		if (BUILD_DEBUG) { console.log(`[Engine/enginePlay(name: "${name}", noMerge: ${noMerge})]`); }
 
-		let passageTitle = title;
+		let passageName = String(name);
 
 		// Update the engine state.
 		state = States.Playing;
@@ -380,22 +346,19 @@ const Engine = (() => {
 		// Execute the navigation override callback.
 		if (typeof Config.navigation.override === 'function') {
 			try {
-				const overrideTitle = Config.navigation.override(passageTitle);
+				const overrideTitle = Config.navigation.override(passageName);
 
 				if (overrideTitle) {
-					passageTitle = overrideTitle;
+					passageName = overrideTitle;
 				}
 			}
 			catch (ex) { /* no-op */ }
 		}
 
-		// Retrieve the passage by the given title.
+		// Retrieve the passage by the given name.
 		//
-		// NOTE: The values of the `title` parameter and `passageTitle` variable
-		// may be empty, strings, or numbers (though using a number as reference
-		// to a numeric title should be discouraged), so after loading the passage,
-		// always refer to `passage.title` and never to the others.
-		const passage = Story.get(passageTitle);
+		// NOTE: Always refer to `passage.name` from this point forward.
+		const passage = Story.get(passageName);
 
 		// Trigger `:passageinit` events.
 		jQuery.event.trigger({
@@ -403,9 +366,9 @@ const Engine = (() => {
 			passage
 		});
 
-		// Create a new entry in the history.
-		if (!noHistory) {
-			State.create(passage.title);
+		// Merge the working state.
+		if (!noMerge) {
+			State.create(passage.name);
 		}
 
 		// Update the last play time.
@@ -435,8 +398,8 @@ const Engine = (() => {
 		const passageEl = document.createElement('div');
 		jQuery(passageEl)
 			.attr({
-				id             : passage.domId,
-				'data-passage' : passage.title,
+				id             : passage.id,
+				'data-passage' : passage.name,
 				'data-tags'    : dataTags
 			})
 			.addClass(`passage ${passage.className}`);
@@ -604,16 +567,8 @@ const Engine = (() => {
 			.not('[tabindex]')
 			.attr('tabindex', 0);
 
-		// Handle autosaves.
-		const autosaveType = getTypeOf(Config.saves.autosave);
-
-		if (
-			autosaveType === 'boolean' && Config.saves.autosave
-			|| autosaveType === 'Array' && passage.tags.some(tag => Config.saves.autosave.includes(tag))
-			|| autosaveType === 'function' && Config.saves.autosave()
-		) {
-			Save.autosave.save(Story.get(State.passage).description());
-		}
+		// Attempt to auto save.
+		Save.browser.auto.save();
 
 		// Trigger `:passageend` events.
 		jQuery.event.trigger({

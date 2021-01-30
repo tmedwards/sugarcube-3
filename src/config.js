@@ -23,9 +23,6 @@ const Config = (() => {
 	let audioPauseOnFadeToZero = true;
 	let audioPreloadMetadata   = true;
 
-	// State history settings.
-	let historyMaxStates = 50;
-
 	// Macros settings.
 	let macrosIfAssignmentError   = true;
 	let macrosForMaxIterations    = 5000;
@@ -34,29 +31,27 @@ const Config = (() => {
 
 	// Navigation settings.
 	let navigationOverride;
-	let navigationStart; // Initially set by `Story.load()`.
+	let navigationStart; // NOTE: Initially set by `Story.load()`.
 	let navigationTransitionOut;
 
 	// Passages settings.
-	let passagesDescriptions;
-	let passagesNobr         = false;
+	let passagesNobr      = false;
 	let passagesOnProcess;
 
 	// Saves settings.
-	let savesAutoload;
-	let savesAutosave;
-	let savesId        = 'untitled-story';
+	let savesDescriptions;
+	let savesId; // NOTE: Initially set by `Story.load()`.
 	let savesIsAllowed;
+	let savesMaxAuto      = 5;
+	let savesMaxSlot      = 10;
 	let savesOnLoad;
 	let savesOnSave;
-	let savesSlots     = 8;
 	let savesVersion;
 
 	// Startup settings.
 	let startupDelay = 0;
 
 	// UI settings.
-	let uiHistoryControls     = true;
 	let uiStowBarInitially    = 800;
 	let uiUpdateStoryElements = true;
 
@@ -90,20 +85,6 @@ const Config = (() => {
 
 			get preloadMetadata() { return audioPreloadMetadata; },
 			set preloadMetadata(value) { audioPreloadMetadata = Boolean(value); }
-		}),
-
-		/*
-			State history settings.
-		*/
-		history : Object.freeze({
-			get maxStates() { return historyMaxStates; },
-			set maxStates(value) {
-				if (!Number.isSafeInteger(value) || value < 1 || value > 100) {
-					throw new RangeError('Config.history.maxStates must be an integer in the range 1–100');
-				}
-
-				historyMaxStates = value;
-			}
 		}),
 
 		/*
@@ -176,19 +157,6 @@ const Config = (() => {
 			Passages settings.
 		*/
 		passages : Object.freeze({
-			get descriptions() { return passagesDescriptions; },
-			set descriptions(value) {
-				if (value != null) { // lazy equality for null
-					const valueType = getTypeOf(value);
-
-					if (valueType !== 'boolean' && valueType !== 'Object' && valueType !== 'function') {
-						throw new TypeError(`Config.passages.descriptions must be a boolean, object, function, or null/undefined (received: ${valueType})`);
-					}
-				}
-
-				passagesDescriptions = value;
-			},
-
 			get nobr() { return passagesNobr; },
 			set nobr(value) { passagesNobr = Boolean(value); },
 
@@ -210,34 +178,17 @@ const Config = (() => {
 			Saves settings.
 		*/
 		saves : Object.freeze({
-			get autoload() { return savesAutoload; },
-			set autoload(value) {
+			get descriptions() { return savesDescriptions; },
+			set descriptions(value) {
 				if (value != null) { // lazy equality for null
 					const valueType = getTypeOf(value);
 
-					if (valueType !== 'boolean' && valueType !== 'string' && valueType !== 'function') {
-						throw new TypeError(`Config.saves.autoload must be a boolean, string, function, or null/undefined (received: ${valueType})`);
+					if (valueType !== 'function') {
+						throw new TypeError(`Config.saves.descriptions must be a function or null/undefined (received: ${valueType})`);
 					}
 				}
 
-				savesAutoload = value;
-			},
-
-			get autosave() { return savesAutosave; },
-			set autosave(value) {
-				if (value != null) { // lazy equality for null
-					const valueType = getTypeOf(value);
-
-					if (
-						valueType !== 'boolean'
-						&& (valueType !== 'Array' || !value.every(item => typeof item === 'string'))
-						&& valueType !== 'function'
-					) {
-						throw new TypeError(`Config.saves.autosave must be a boolean, Array of strings, function, or null/undefined (received: ${valueType}${valueType === 'Array' ? ' of mixed' : ''})`);
-					}
-				}
-
-				savesAutosave = value;
+				savesDescriptions = value;
 			},
 
 			get id() { return savesId; },
@@ -258,6 +209,26 @@ const Config = (() => {
 				savesIsAllowed = value;
 			},
 
+			get maxAutoSaves() { return savesMaxAuto; },
+			set maxAutoSaves(value) {
+				// TODO: Limit this to MAX_SAVE_ID from Save somehow.
+				if (!Number.isSafeInteger(value) || value < 0) {
+					throw new TypeError(`Config.saves.maxAutoSaves must be a non-negative integer (received: ${getTypeOf(value)})`);
+				}
+
+				savesMaxAuto = value;
+			},
+
+			get maxSlotSaves() { return savesMaxSlot; },
+			set maxSlotSaves(value) {
+				// TODO: Limit this to MAX_SAVE_ID from Save somehow.
+				if (!Number.isSafeInteger(value) || value < 0) {
+					throw new TypeError(`Config.saves.maxSlotSaves must be a non-negative integer (received: ${getTypeOf(value)})`);
+				}
+
+				savesMaxSlot = value;
+			},
+
 			get onLoad() { return savesOnLoad; },
 			set onLoad(value) {
 				if (!(value == null || value instanceof Function)) { // lazy equality for null
@@ -274,15 +245,6 @@ const Config = (() => {
 				}
 
 				savesOnSave = value;
-			},
-
-			get slots() { return savesSlots; },
-			set slots(value) {
-				if (!Number.isSafeInteger(value) || value < 0) {
-					throw new TypeError(`Config.saves.slots must be a non-negative integer (received: ${getTypeOf(value)})`);
-				}
-
-				savesSlots = value;
 			},
 
 			get version() { return savesVersion; },
@@ -307,12 +269,6 @@ const Config = (() => {
 			UI settings.
 		*/
 		ui : Object.freeze({
-			get historyControls() {
-				// NOTE: Force `false` when `historyMaxStates` is `1`.
-				return historyMaxStates === 1 ? false : uiHistoryControls;
-			},
-			set historyControls(value) { uiHistoryControls = Boolean(value); },
-
 			get stowBarInitially() { return uiStowBarInitially; },
 			set stowBarInitially(value) {
 				const valueType = getTypeOf(value);

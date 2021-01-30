@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /***********************************************************************************************************************
 
-	build.js (v1.5.7, 2020-11-30)
+	build.js (v1.6.0, 2021-01-29)
 		A Node.js-hosted build script for SugarCube.
 
-	Copyright © 2013–2020 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
+	Copyright © 2013–2021 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
 	Use of this source code is governed by a BSD 2-clause "Simplified" License, which may be found in the LICENSE file.
 
 ***********************************************************************************************************************/
@@ -41,39 +41,21 @@ const CONFIG = {
 		'vendor/FileSaver.min.js',
 		'vendor/seedrandom.min.js'
 	],
-	twine1 : {
-		build : {
-			src  : 'templates/twine1/html.tpl',
-			dest : 'build/twine1/sugarcube-3/header.html'
-		},
-		copy : [
-			{
-				src  : 'templates/twine1/sugarcube-3.py',
-				dest : 'build/twine1/sugarcube-3/sugarcube-3.py'
-			},
-			{
-				src  : 'LICENSE',
-				dest : 'build/twine1/sugarcube-3/LICENSE'
-			}
-		]
+	build : {
+		src  : 'templates/html.tpl',
+		dest : 'build/sugarcube-3/format.js',
+		json : 'templates/config.json'
 	},
-	twine2 : {
-		build : {
-			src  : 'templates/twine2/html.tpl',
-			dest : 'build/twine2/sugarcube-3/format.js',
-			json : 'templates/twine2/config.json'
+	copy : [
+		{
+			src  : 'icon.svg',
+			dest : 'build/sugarcube-3/icon.svg'
 		},
-		copy : [
-			{
-				src  : 'icon.svg',
-				dest : 'build/twine2/sugarcube-3/icon.svg'
-			},
-			{
-				src  : 'LICENSE',
-				dest : 'build/twine2/sugarcube-3/LICENSE'
-			}
-		]
-	}
+		{
+			src  : 'LICENSE',
+			dest : 'build/sugarcube-3/LICENSE'
+		}
+	]
 };
 
 
@@ -89,7 +71,7 @@ const CONFIG = {
 
 const {
 	log,
-	die,
+	// die,
 	makePath,
 	copyFile,
 	readFileContents,
@@ -99,34 +81,13 @@ const {
 const _fs   = require('fs');
 const _path = require('path');
 const _opt  = require('node-getopt').create([
-	['b', 'build=VERSION', 'Build only for Twine major version: 1 or 2; default: build for all.'],
 	['d', 'debug',         'Keep debugging code; gated by DEBUG symbol.'],
 	['u', 'unminified',    'Suppress minification stages.'],
-	['6', 'es6',           'Suppress JavaScript transpilation stages.'],
+	['n', 'no-transpile',  'Suppress JavaScript transpilation stages.'],
 	['h', 'help',          'Print this help, then exit.']
 ])
 	.bindHelp()     // bind option 'help' to default action
 	.parseSystem(); // parse command line
-
-let _buildForTwine1 = true;
-let _buildForTwine2 = true;
-
-// build selection
-if (_opt.options.build) {
-	switch (_opt.options.build) {
-		case '1':
-			_buildForTwine2 = false;
-			break;
-
-		case '2':
-			_buildForTwine1 = false;
-			break;
-
-		default:
-			die(`unknown Twine major version: ${_opt.options.build}; valid values: 1 or 2`);
-			break;
-	}
-}
 
 // build the project
 (async () => {
@@ -159,59 +120,40 @@ if (_opt.options.build) {
 		};
 	})();
 
-	// Build for Twine 2.x.
-	if (_buildForTwine2 && CONFIG.twine2) {
-		console.log('\nBuilding Twine 2.x compatible release:');
+	// Build for Twine ≥2.1.x compatible compilers.
+	console.log('\nBuilding Twine ≥2.1.x compatible release:');
 
-		// Process the story format templates and write the outfiles.
-		projectBuild({
-			build     : CONFIG.twine2.build,
-			version   : version, // eslint-disable-line object-shorthand
-			libSource : assembleLibraries(CONFIG.libs),                   // combine the libraries
-			appSource : await compileJavaScript({ compiler : 'twine2' }), // combine and minify the app JS
-			cssSource : compileStyles(CONFIG.css),                        // combine and minify the app CSS
+	// Process the story format templates and write the outfiles.
+	projectBuild({
+		build     : CONFIG.build,
+		version   : version, // eslint-disable-line object-shorthand
+		libSource : assembleLibraries(CONFIG.libs), // combine the libraries
+		appSource : await compileJavaScript(),      // combine and minify the app JS
+		cssSource : compileStyles(CONFIG.css),      // combine and minify the app CSS
 
-			postProcess(sourceString) {
-				// Load the output format.
-				let output = require(`./${_path.normalize(this.build.json)}`); // relative path must be prefixed ('./')
+		postProcess(sourceString) {
+			// Load the output format.
+			let output = require(`./${_path.normalize(this.build.json)}`); // relative path must be prefixed ('./')
 
-				// Merge data into the output format.
-				output = Object.assign(output, {
-					description : output.description.replace(
-						/(['"`])\{\{BUILD_VERSION_MAJOR\}\}\1/g,
-						() => this.version.major
-					),
-					version : this.version.toString(),
-					source  : sourceString
-				});
+			// Merge data into the output format.
+			output = Object.assign(output, {
+				description : output.description.replace(
+					/(['"`])\{\{BUILD_VERSION_MAJOR\}\}\1/g,
+					() => this.version.major
+				),
+				version : this.version.toString(),
+				source  : sourceString
+			});
 
-				// Wrap the output in the `storyFormat()` function.
-				output = `window.storyFormat(${JSON.stringify(output)});`;
+			// Wrap the output in the `storyFormat()` function.
+			output = `window.storyFormat(${JSON.stringify(output)});`;
 
-				return output;
-			}
-		});
+			return output;
+		}
+	});
 
-		// Process the files that simply need copied into the build.
-		projectCopy(CONFIG.twine2.copy);
-	}
-
-	// Build for Twine 1.x.
-	if (_buildForTwine1 && CONFIG.twine1) {
-		console.log('\nBuilding Twine 1.x compatible release:');
-
-		// Process the header templates and write the outfiles.
-		projectBuild({
-			build     : CONFIG.twine1.build,
-			version   : version, // eslint-disable-line object-shorthand
-			libSource : assembleLibraries(CONFIG.libs),                   // combine the libraries
-			appSource : await compileJavaScript({ compiler : 'twine1' }), // combine and minify the app JS
-			cssSource : compileStyles(CONFIG.css)                         // combine and minify the app CSS
-		});
-
-		// Process the files that simply need copied into the build.
-		projectCopy(CONFIG.twine1.copy);
-	}
+	// Process the files that simply need copied into the build.
+	projectCopy(CONFIG.copy);
 
 	// Update the build ID.
 	writeFileContents('.build', String(version.build));
@@ -230,7 +172,7 @@ function assembleLibraries(filenames) {
 	return concatFiles(filenames, contents => contents.replace(/^\n+|\n+$/g, ''));
 }
 
-function compileJavaScript(options) {
+function compileJavaScript() {
 	log('compiling JavaScript...');
 	const rollup       = require('rollup');
 	const includepaths = require('rollup-plugin-includepaths');
@@ -273,7 +215,7 @@ function compileJavaScript(options) {
 		format : 'iife'
 	};
 
-	if (!_opt.options.es6) {
+	if (!_opt.options.noTranspile) {
 		rollupInputOpts.plugins.push(
 			babel({
 				babelHelpers : 'bundled',
@@ -290,9 +232,7 @@ function compileJavaScript(options) {
 			terser({
 				compress : {
 					global_defs : { // eslint-disable-line camelcase
-						BUILD_TWINE_2 : options.compiler === 'twine2',
-						BUILD_TWINE_1 : options.compiler === 'twine1',
-						BUILD_DEBUG   : _opt.options.debug || false
+						BUILD_DEBUG : _opt.options.debug || false
 					}
 				},
 				mangle : false
@@ -307,8 +247,6 @@ function compileJavaScript(options) {
 
 		if (_opt.options.unminified) {
 			return [
-				`window.BUILD_TWINE_2=${options.compiler === 'twine2'}`,
-				`window.BUILD_TWINE_1=${options.compiler === 'twine1'}`,
 				`window.BUILD_DEBUG=${_opt.options.debug || false}`,
 				code
 			].join(';\n');

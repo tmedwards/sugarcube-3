@@ -9,8 +9,6 @@
 
 import Config from './config';
 import Passage from './passage';
-import Wikifier from './markup/wikifier';
-import characterAndPosAt from './utils/characterandposat';
 import createSlug from './utils/createslug';
 import decodeEntities from './utils/decodeentities';
 import sameValueZero from './utils/samevaluezero';
@@ -32,14 +30,14 @@ const Story = (() => {
 	// Array of widget passages.
 	const _widgets = [];
 
-	// Story title.
-	let _title = '';
+	// Story name.
+	let _name = '';
 
 	// Story IFID.
 	let _ifId = '';
 
 	// DOM-compatible ID.
-	let _domId = '';
+	let _id = '';
 
 
 	/*******************************************************************************
@@ -49,10 +47,10 @@ const Story = (() => {
 	function storyLoad() {
 		if (BUILD_DEBUG) { console.log('[Story/storyLoad()]'); }
 
-		const validationCodeTags = [
+		const codeTags = Object.freeze([
 			'widget'
-		];
-		const validationNoCodeTagPassages = [
+		]);
+		const specialPassages = Object.freeze([
 			'PassageDone',
 			'PassageFooter',
 			'PassageHeader',
@@ -62,219 +60,100 @@ const Story = (() => {
 			'StoryCaption',
 			'StoryDisplayTitle',
 			'StoryInit',
+			'StoryInterface',
 			'StoryMenu',
 			'StorySubtitle'
-		];
-		const validateStartingPassage = function validateStartingPassage(passage) {
-			if (passage.tags.includesAny(validationCodeTags)) {
-				throw new Error(`starting passage "${passage.title}" contains illegal tags; invalid: "${passage.tags.filter(tag => validationCodeTags.includes(tag)).sort().join('", "')}"`);
-			}
-		};
-		const validateSpecialPassages = function validateSpecialPassages(passage) {
-			if (validationNoCodeTagPassages.includes(passage.title) && passage.tags.includesAny(validationCodeTags)) {
-				throw new Error(`special passage "${passage.title}" contains illegal tags; invalid: "${passage.tags.filter(tag => validationCodeTags.includes(tag)).sort().join('", "')}"`);
-			}
-		};
+		]);
 
-		// Twine 1 build.
-		if (BUILD_TWINE_1) {
-			// Additional Twine 1 validation setup.
-			validationCodeTags.unshift('script', 'stylesheet');
-			validationNoCodeTagPassages.push('StoryTitle');
+		const $storydata = jQuery('tw-storydata');
+		const startNode  = $storydata.attr('startnode') ?? '';
 
-			const validateTwine1CodePassages = function validateTwine1CodePassages(passage) {
-				const codeTags  = Array.from(validationCodeTags);
-				const foundTags = [];
+		// Set the default starting passage.
+		Config.navigation.start = null; // no default in Twine 2
 
-				passage.tags.forEach(tag => {
-					if (codeTags.includes(tag)) {
-						foundTags.push(...codeTags.delete(tag));
+		// Process story options.
+		//
+		// NOTE: Currently, the only option of interest is 'debug', so we
+		// simply use a regular expression to check for it.
+		Config.debug = /\bdebug\b/.test($storydata.attr('options'));
+
+		// Process stylesheet passages.
+		$storydata
+			.children('style') // alternatively: '[type="text/twine-css"]' or '#twine-user-stylesheet'
+			.each(function (i) {
+				_styles.push(new Passage(`tw-user-style-${i}`, this));
+			});
+
+		// Process script passages.
+		$storydata
+			.children('script') // alternatively: '[type="text/twine-javascript"]' or '#twine-user-script'
+			.each(function (i) {
+				_scripts.push(new Passage(`tw-user-script-${i}`, this));
+			});
+
+		// Process normal passages, excluding any tagged 'Twine.private' or 'annotation'.
+		$storydata
+			.children('tw-passagedata:not([tags~="Twine.private"],[tags~="annotation"])')
+			.each(function () {
+				const $this   = jQuery(this);
+				const pid     = $this.attr('pid') ?? '';
+				const passage = new Passage($this.attr('name'), this);
+
+				// Special cases.
+				if (pid === startNode && startNode !== '') {
+					if (passage.tags.includesAny(codeTags)) {
+						throw new Error(`starting passage "${passage.name}" contains illegal tags; invalid: "${passage.tags.filter(tag => codeTags.includes(tag)).sort().join('", "')}"`);
 					}
-				});
 
-				if (foundTags.length > 1) {
-					throw new Error(`code passage "${passage.title}" contains multiple code tags; invalid: "${foundTags.sort().join('", "')}"`);
+					Config.navigation.start = passage.name;
+					_passages.set(passage.name, passage);
 				}
-			};
-
-			// Set the default starting passage.
-			Config.navigation.start = (() => {
-				/*
-					Handle the Twine 1.4+ Test Play From Here feature.
-
-					WARNING: Do not remove the `String()` wrapper from or change the quote
-					style of the `"START_AT"` replacement target.  The former is there to
-					keep UglifyJS from pruning the code into oblivion—i.e. minifying the
-					code into something broken.  The latter is there because the Twine 1
-					pattern that matches it depends upon the double quotes.
-
-				*/
-				const testPlay = String("START_AT"); // eslint-disable-line quotes
-
-				if (testPlay !== '') {
-					if (BUILD_DEBUG) { console.log(`\tTest play; starting passage: "${testPlay}"`); }
-
-					Config.debug = true;
-					return testPlay;
+				else if (passage.tags.includes('widget')) {
+					_widgets.push(passage);
 				}
 
-				// In the absence of a `testPlay` value, return 'Start'.
-				return 'Start';
-			})();
-
-			// Process the passages, excluding any tagged 'Twine.private' or 'annotation'.
-			jQuery('#store-area')
-				.children(':not([tags~="Twine.private"],[tags~="annotation"])')
-				.each(function () {
-					const $this   = jQuery(this);
-					const passage = new Passage($this.attr('tiddler'), this);
-
-					// Special cases.
-					if (passage.title === Config.navigation.start) {
-						validateStartingPassage(passage);
-						_passages.set(passage.title, passage);
-					}
-					else if (passage.tags.includes('stylesheet')) {
-						validateTwine1CodePassages(passage);
-						_styles.push(passage);
-					}
-					else if (passage.tags.includes('script')) {
-						validateTwine1CodePassages(passage);
-						_scripts.push(passage);
-					}
-					else if (passage.tags.includes('widget')) {
-						validateTwine1CodePassages(passage);
-						_widgets.push(passage);
+				// All other passages.
+				else {
+					if (specialPassages.includes(passage.name) && passage.tags.includesAny(codeTags)) {
+						throw new Error(`special passage "${passage.name}" contains illegal tags; invalid: "${passage.tags.filter(tag => codeTags.includes(tag)).sort().join('", "')}"`);
 					}
 
-					// All other passages.
-					else {
-						validateSpecialPassages(passage);
-						_passages.set(passage.title, passage);
-					}
-				});
+					_passages.set(passage.name, passage);
+				}
+			});
 
-			// Set the story title or throw an exception.
-			if (_passages.has('StoryTitle')) {
-				const buf = document.createDocumentFragment();
-				new Wikifier(buf, _passages.get('StoryTitle').text.trim(), { noCleanup : true });
-				_storySetTitle(buf.textContent);
-			}
-			else {
-				throw new Error('cannot find the "StoryTitle" special passage');
-			}
+		// Get the story IFID.
+		_ifId = $storydata.attr('ifid');
 
-			// Set the default saves ID (must be done after the call to `_storySetTitle()`).
-			Config.saves.id = Story.domId;
+		// Set the story name.
+		_name = $storydata.attr('name');
+
+		if (_name == null) { // lazy equality for null
+			throw new Error('story name must not be null or undefined');
 		}
 
-		// Twine 2 build.
-		else {
-			const $storydata = jQuery('tw-storydata');
-			const startNode  = $storydata.attr('startnode') || '';
+		_name = decodeEntities(_name).trim();
 
-			// Set the default starting passage.
-			Config.navigation.start = null; // no default in Twine 2
-
-			// Process story options.
-			//
-			// NOTE: Currently, the only option of interest is 'debug', so we
-			// simply use a regular expression to check for it.
-			Config.debug = /\bdebug\b/.test($storydata.attr('options'));
-
-			// Process stylesheet passages.
-			$storydata
-				.children('style') // alternatively: '[type="text/twine-css"]' or '#twine-user-stylesheet'
-				.each(function (i) {
-					_styles.push(new Passage(`tw-user-style-${i}`, this));
-				});
-
-			// Process script passages.
-			$storydata
-				.children('script') // alternatively: '[type="text/twine-javascript"]' or '#twine-user-script'
-				.each(function (i) {
-					_scripts.push(new Passage(`tw-user-script-${i}`, this));
-				});
-
-			// Process normal passages, excluding any tagged 'Twine.private' or 'annotation'.
-			$storydata
-				.children('tw-passagedata:not([tags~="Twine.private"],[tags~="annotation"])')
-				.each(function () {
-					const $this   = jQuery(this);
-					const pid     = $this.attr('pid') || '';
-					const passage = new Passage($this.attr('name'), this);
-
-					// Special cases.
-					if (pid === startNode && startNode !== '') {
-						Config.navigation.start = passage.title;
-						validateStartingPassage(passage);
-						_passages.set(passage.title, passage);
-					}
-					else if (passage.tags.includes('widget')) {
-						_widgets.push(passage);
-					}
-
-					// All other passages.
-					else {
-						validateSpecialPassages(passage);
-						_passages.set(passage.title, passage);
-					}
-				});
-
-			// Get the story IFID.
-			_ifId = $storydata.attr('ifid');
-
-			// Set the story title.
-			//
-			// QUESTION: Maybe `$storydata.attr('name')` should be used instead of `'{{STORY_NAME}}'`?
-			// _storySetTitle($storydata.attr('name'));
-			_storySetTitle('{{STORY_NAME}}');
-
-			// Set the default saves ID (must be done after the call to `_storySetTitle()`).
-			//
-			// QUESTION: Maybe use `createSlug(_title)` instead of the DOM ID?
-			Config.saves.id = Story.domId;
+		if (_name === '') { // lazy equality for null
+			throw new Error('story name must not be empty or consist solely of whitespace');
 		}
+
+		// Generate the story ID from its name's slug and IFID.
+		_id = `${createSlug(_name)}_${_ifId.replace(/-/g, '')}`;
+
+		// Set the default saves ID to the story's ID.
+		Config.saves.id = _id;
+
+		// Set the document title.
+		document.title = _name;
 	}
 
-	function _storySetTitle(rawTitle) {
-		if (rawTitle == null) { // lazy equality for null
-			throw new Error('story title must not be null or undefined');
-		}
-
-		const title = decodeEntities(String(rawTitle)).trim();
-
-		if (title === '') { // lazy equality for null
-			throw new Error('story title must not be empty or consist solely of whitespace');
-		}
-
-		// Set the story title and initial document title.
-		document.title = _title = title;
-
-		// Generate the base DOM ID from the story title's slug.
-		_domId = `${createSlug(_title)}-`;
-
-		// In an attempt to help avoid collisions between stories whose titles
-		// alone generate identical IDs, we append either the IFID, if available,
-		// or the hexadecimal encoding of the story title's code points.
-		if (_ifId) {
-			_domId += _ifId.replace(/-/g, '');
-		}
-		else {
-			for (let i = 0, length = _title.length; i < length; ++i) {
-				const { char, start, end } = characterAndPosAt(_title, i);
-				_domId += char.codePointAt(0).toString(16);
-				i += end - start;
-			}
-		}
+	function storyName() {
+		return _name;
 	}
 
-	function storyTitle() {
-		return _title;
-	}
-
-	function storyDomId() {
-		return _domId;
+	function storyId() {
+		return _id;
 	}
 
 	function storyIfId() {
@@ -291,7 +170,7 @@ const Story = (() => {
 			throw new TypeError('Story.add passage parameter must be an instance of Passage');
 		}
 
-		const title = passage.title;
+		const title = passage.name;
 
 		if (!_passages.has(title)) {
 			_passages.set(title, passage);
@@ -397,7 +276,7 @@ const Story = (() => {
 
 		/* eslint-disable no-nested-ternary */
 		// QUESTION: Do we really need to sort the list?
-		results.sort((a, b) => a.title === b.title ? 0 : a.title < b.title ? -1 : +1);
+		results.sort((a, b) => a.name === b.name ? 0 : a.name < b.name ? -1 : +1);
 		/* eslint-enable no-nested-ternary */
 
 		return results;
@@ -418,7 +297,7 @@ const Story = (() => {
 
 		/* eslint-disable no-nested-ternary */
 		// QUESTION: Do we really need to sort the list?
-		results.sort((a, b) => a.title === b.title ? 0 : a.title < b.title ? -1 : +1);
+		results.sort((a, b) => a.name === b.name ? 0 : a.name < b.name ? -1 : +1);
 		/* eslint-enable no-nested-ternary */
 
 		return results;
@@ -431,10 +310,10 @@ const Story = (() => {
 
 	return Object.preventExtensions(Object.create(null, {
 		// Story Functions.
-		load  : { value : storyLoad },
-		title : { get : storyTitle },
-		domId : { get : storyDomId },
-		ifId  : { get : storyIfId },
+		load : { value : storyLoad },
+		name : { get : storyName },
+		id   : { get : storyId },
+		ifId : { get : storyIfId },
 
 		// Passage Functions.
 		add              : { value : passagesAdd },

@@ -13,6 +13,7 @@ import LoadScreen from './loadscreen';
 import Story from './story';
 import Visibility from './lib/visibility';
 import clone from './utils/clone';
+import hasOwn from '../utils/hasown';
 import parseURL from './utils/parseurl';
 
 
@@ -1412,7 +1413,7 @@ const SimpleAudio = (() => {
 	*******************************************************************************/
 
 	function formatCanPlay(id) {
-		return !!_formats[id];
+		return _formats[id] ?? false;
 	}
 
 	const formatRegister = (() => {
@@ -1426,7 +1427,7 @@ const SimpleAudio = (() => {
 				throw new TypeError('mimeTypes must be an Array of MIME-types');
 			}
 
-			if (!_formats[id]) {
+			if (!hasOwn(_formats, id)) {
 				const audio = document.createElement('audio');
 
 				// Some early implementations return 'no' instead of the empty string.
@@ -1435,7 +1436,7 @@ const SimpleAudio = (() => {
 						// Some early implementations return 'no' instead of the empty string.
 						mimeCache.set(mimeType, audio.canPlayType(mimeType).replace(/^no$/i, '') !== '');
 
-						console.log(`caching: "${mimeType}" as ${mimeCache.get(mimeType) ? '' : 'un'}supported`);
+						if (BUILD_DEBUG) { console.log(`[SimpleAudio/formatRegister()] caching: "${mimeType}" as ${mimeCache.get(mimeType) ? '' : 'un'}supported`); }
 					}
 
 					return mimeCache.get(mimeType);
@@ -1447,7 +1448,7 @@ const SimpleAudio = (() => {
 	})();
 
 	function formatTable() {
-		return Object.freeze(Object.assign({}, _formats));
+		return Object.freeze({ ..._formats });
 	}
 
 

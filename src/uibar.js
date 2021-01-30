@@ -80,9 +80,7 @@ const UIBar = (() => {
 
 		// Generate the UI bar elements.
 		const $elems = (() => {
-			const toggleLabel   = L10n.get('uiBarToggle');
-			const backwardLabel = L10n.get('uiBarBackward');
-			const forwardLabel  = L10n.get('uiBarForward');
+			const toggleLabel = L10n.get('uiBarToggle');
 
 			return jQuery(document.createDocumentFragment())
 				.append(
@@ -90,10 +88,6 @@ const UIBar = (() => {
 					  '<div id="ui-bar">'
 					+     '<div id="ui-bar-tray">'
 					+         `<button id="ui-bar-toggle" tabindex="0" title="${toggleLabel}" aria-label="${toggleLabel}"></button>`
-					+         '<div id="ui-bar-history">'
-					+             `<button id="history-backward" tabindex="0" title="${backwardLabel}" aria-label="${backwardLabel}">\uE821</button>`
-					+             `<button id="history-forward" tabindex="0" title="${forwardLabel}" aria-label="${forwardLabel}">\uE822</button>`
-					+         '</div>'
 					+     '</div>'
 					+     '<div id="ui-bar-body">'
 					+         '<header id="title" role="banner">'
@@ -163,52 +157,18 @@ const UIBar = (() => {
 			uiBarStow(true);
 		}
 
-		// Set up the #ui-bar-toggle and #ui-bar-history widgets.
+		// Set up the #ui-bar-toggle widgets.
 		jQuery('#ui-bar-toggle')
 			.ariaClick({
 				label : L10n.get('uiBarToggle')
 			}, () => $uiBar.toggleClass('stowed'));
-
-		if (Config.ui.historyControls) {
-			const $backward = jQuery('#history-backward');
-			const $forward  = jQuery('#history-forward');
-
-			// Set up a global handler for `:historyupdate` events.
-			jQuery(document)
-				.on(':historyupdate.ui-bar', () => {
-					$backward.ariaDisabled(State.length < 2);
-					$forward.ariaDisabled(State.length === State.size);
-				});
-
-			$backward
-				.ariaDisabled(State.length < 2)
-				.ariaClick({
-					label : L10n.get('uiBarBackward')
-				}, () => Engine.backward());
-
-			$forward
-				.ariaDisabled(State.length === State.size)
-				.ariaClick({
-					label : L10n.get('uiBarForward')
-				}, () => Engine.forward());
-		}
-		else {
-			jQuery('#ui-bar-history').remove();
-		}
 
 		// Set up the story display title.
 		if (Story.has('StoryDisplayTitle')) {
 			setDisplayTitle(Story.get('StoryDisplayTitle').text);
 		}
 		else {
-			// Twine 1 build.
-			if (BUILD_TWINE_1) {
-				setPageElement('story-title', 'StoryTitle', Story.title);
-			}
-			// Twine 2 build.
-			else {
-				jQuery('#story-title').text(Story.title);
-			}
+			jQuery('#story-title').text(Story.name);
 		}
 
 		// Set up the dynamic page elements.

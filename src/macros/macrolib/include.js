@@ -46,8 +46,8 @@ Macro.add('include', {
 
 		if (this.args[1]) {
 			$el = jQuery(document.createElement(this.args[1]))
-				.addClass(`${passage.domId} macro-${this.name}`)
-				.attr('data-passage', passage.title)
+				.addClass(`include-${passage.id} macro-${this.name}`)
+				.attr('data-passage', passage.name)
 				.appendTo(this.output);
 		}
 		else {

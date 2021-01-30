@@ -58,7 +58,7 @@ import Wikifier from './markup/wikifier';
 	Version object.
 */
 const version = Object.freeze(Object.assign(Object.create(null), {
-	title      : 'SugarCube',
+	name       : 'SugarCube',
 	major      : '{{BUILD_VERSION_MAJOR}}',
 	minor      : '{{BUILD_VERSION_MINOR}}',
 	patch      : '{{BUILD_VERSION_PATCH}}',
@@ -73,11 +73,11 @@ const version = Object.freeze(Object.assign(Object.create(null), {
 
 	short() {
 		const prerelease = this.prerelease ? `-${this.prerelease}` : '';
-		return `${this.title} (v${this.major}.${this.minor}.${this.patch}${prerelease})`;
+		return `${this.name} (v${this.major}.${this.minor}.${this.patch}${prerelease})`;
 	},
 
 	long() {
-		return `${this.title} v${this.toString()} (${this.date.toUTCString()})`;
+		return `${this.name} v${this.toString()} (${this.date.toUTCString()})`;
 	}
 }));
 
@@ -149,9 +149,9 @@ jQuery(() => {
 			Story.load();
 
 			// Initialize the databases and pass on the returned promise for the next step
-			// in the chain.  We do it this way to give the databases time to become fully
-			// ready—really only IndexedDB, asynchronous pig that it is.
-			return Db.init(Story.domId);
+			// in the chain.  We do it this way to give the asynchronous databases time to
+			// become fully ready—this is really only to accommodate IndexedDB.
+			return Db.init(Story.id);
 		})
 		.then(() => {
 			// Initialize the user interfaces.
@@ -183,7 +183,7 @@ jQuery(() => {
 					Scripting.evalJavaScript(script.source);
 				}
 				catch (ex) {
-					Alert.error(script.title, ex);
+					Alert.error(script.name, ex);
 				}
 			});
 
@@ -193,20 +193,9 @@ jQuery(() => {
 					Wikifier.wikifyEval(widget.text);
 				}
 				catch (ex) {
-					Alert.error(widget.title, ex);
+					Alert.error(widget.name, ex);
 				}
 			});
-
-			// Alert the player when the browser is degrading required capabilities.
-			//
-			// NOTE: Must be done after user scripts are loaded to allow for the
-			// modification of the L10N strings.
-			if (Db.storage.name === 'cookie' && !Db.session.has('rcWarn')) {
-				/* eslint-disable no-alert */
-				Db.session.set('rcWarn', 1);
-				window.alert(L10n.get('warningNoGoodStorage'));
-				/* eslint-enable no-alert */
-			}
 
 			// Initialize the saves.
 			Save.init();

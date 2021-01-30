@@ -1132,7 +1132,7 @@
 		value() {
 			// The enclosing parenthesis here are necessary to force the function expression code
 			// string, returned by `this.toString()`, to be evaluated as an expression during
-			// revival.  Without them, the function expression, which is likely nameless, will be
+			// revival.  Without them, the function expression, which may be nameless, will be
 			// evaluated as a function definition—which will throw a syntax error exception, since
 			// function definitions must have a name.
 			return ['(revive:eval)', `(${this.toString()})`];

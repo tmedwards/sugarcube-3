@@ -34,15 +34,9 @@ const strings = {
 	/*
 		Errors.
 	*/
-	_errorFromWrongId       : 'from the wrong {identity}',
-	_errorMissingData       : 'missing required data. Either the file has become corrupted or an incorrect file was loaded',
 	errorTitle              : 'Error',
 	errorToggle             : 'Toggle the error view',
 	errorNonexistentPassage : 'the passage "{passage}" does not exist', // NOTE: `passage` is supplied locally
-	errorSaveMissingData    : 'save is {_errorMissingData}',
-	errorSaveIdMismatch     : 'save is {_errorFromWrongId}',
-	errorSlotsMissingData   : 'save slots are {_errorMissingData}',
-	errorSlotsIdMismatch    : 'save slots are {_errorFromWrongId}',
 
 	/*
 		Warnings.
@@ -72,18 +66,16 @@ const strings = {
 	/*
 		UI bar.
 	*/
-	uiBarToggle   : 'Toggle the UI bar',
-	uiBarBackward : 'Go backward within the {identity} history',
-	uiBarForward  : 'Go forward within the {identity} history',
+	uiBarToggle : 'Toggle the UI bar',
 
 	/*
 		Saves.
 	*/
 	savesTitle           : 'Saves',
-	savesHeaderSlot      : 'Slot Saves',
+	savesHeaderBrowser   : 'Browser Saves',
 	savesHeaderDisk      : 'Disk Saves',
-	savesDisallowed      : 'Saving has been disallowed on this passage.',
-	savesLabelAuto       : 'Autosave',
+	savesDisallowed      : 'Saving is currently disallowed.',
+	savesLabelAuto       : 'Auto Save',
 	savesLabelClear      : 'Clear',
 	savesLabelDelete     : 'Delete',
 	savesLabelDiskExport : 'Export\u2026',
@@ -92,9 +84,13 @@ const strings = {
 	savesLabelDiskSave   : 'Save to Disk\u2026',
 	savesLabelLoad       : 'Load',
 	savesLabelSave       : 'Save',
-	savesLabelSlot       : 'Slot',
+	savesLabelSlot       : 'Slot Save',
 	savesUnavailable     : 'No save slots found\u2026',
 	savesUnknownDate     : 'unknown',
+	saveErrorDecodeFail  : 'unable to decode save, likely due to corruption',
+	saveErrorIdMismatch  : 'save is from the wrong {identity}',
+	saveErrorInvalidData : 'save is missing required data, likely due to corruption',
+	saveErrorNonexistent : 'save does not exist',
 
 	/*
 		Settings.
@@ -115,13 +111,13 @@ const strings = {
 	*/
 	alertTitle : 'Alert',
 
-	/*
-		Autoload.
-	*/
-	autoloadTitle  : 'Autoload',
-	autoloadCancel : 'Go to start',
-	autoloadOk     : 'Load autosave',
-	autoloadPrompt : 'An autosave exists. Load it now or go to the start?',
+	// /*
+	// 	Autoload.
+	// */
+	// autoLoadTitle  : 'Auto load',
+	// autoLoadCancel : 'Go to start',
+	// autoLoadOk     : 'Load auto save',
+	// autoLoadPrompt : 'An auto save exists. Load it now or go to the start?',
 
 	/*
 		Macros.

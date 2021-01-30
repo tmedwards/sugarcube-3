@@ -855,7 +855,7 @@ import stringFrom from './utils/stringfrom';
 				const passage = Story.get(source);
 
 				if (passage.tags.includes('Twine.image')) {
-					el.setAttribute('data-passage', passage.title);
+					el.setAttribute('data-passage', passage.name);
 					source = passage.source.trim();
 				}
 			}
