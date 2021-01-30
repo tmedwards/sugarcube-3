@@ -1,5 +1,24 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
+## 2021-01-30
+
+* Removed the `Db` API cookie adapter.
+* Removed the `lastVisited` user function.
+* Removed the Autoload dialog.
+* Removed the story history and supporting code.  To compensate, multiple auto saves are now available.
+* Removed Twine 1 compatibility and builds.
+* Reworked the `Save` API and Saves dialog.
+* Rework of the `Passage` and `Story` APIs.
+* Rework of the `Sate` API.
+* `Config` object API changes:
+	* `Config.history.maxStates` removed.
+	* `Config.passages.descriptions` → `Config.saves.descriptions`; acceptable value changed to *function*.
+	* `Config.saves.maxAutoSaves` added.
+	* `Config.saves.slots` → `Config.saves.maxSlotSaves`.
+	* `Config.ui.historyControls` removed.
+* Various cleanup.
+* Very basic *idea* for a main menu system laid.
+
 ## 2021-01-26
 
 * Removed the Jump To menu.
