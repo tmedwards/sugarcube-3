@@ -7,6 +7,7 @@
 
 ***********************************************************************************************************************/
 
+import { MAX_SAVE_ID } from './constants';
 import getTypeOf from './utils/gettypeof';
 
 
@@ -211,9 +212,11 @@ const Config = (() => {
 
 			get maxAutoSaves() { return savesMaxAuto; },
 			set maxAutoSaves(value) {
-				// TODO: Limit this to MAX_SAVE_ID from Save somehow.
-				if (!Number.isSafeInteger(value) || value < 0) {
-					throw new TypeError(`Config.saves.maxAutoSaves must be a non-negative integer (received: ${getTypeOf(value)})`);
+				if (!Number.isInteger(value)) {
+					throw new TypeError('Config.saves.maxAutoSaves must be an integer');
+				}
+				else if (value < 0 || value > MAX_SAVE_ID + 1) {
+					throw new RangeError(`Config.saves.maxAutoSaves out of bounds (range: 0–${MAX_SAVE_ID + 1}; received: ${value})`);
 				}
 
 				savesMaxAuto = value;
@@ -221,9 +224,11 @@ const Config = (() => {
 
 			get maxSlotSaves() { return savesMaxSlot; },
 			set maxSlotSaves(value) {
-				// TODO: Limit this to MAX_SAVE_ID from Save somehow.
-				if (!Number.isSafeInteger(value) || value < 0) {
-					throw new TypeError(`Config.saves.maxSlotSaves must be a non-negative integer (received: ${getTypeOf(value)})`);
+				if (!Number.isInteger(value)) {
+					throw new TypeError('Config.saves.maxSlotSaves must be an integer');
+				}
+				else if (value < 0 || value > MAX_SAVE_ID + 1) {
+					throw new RangeError(`Config.saves.maxSlotSaves out of bounds (range: 0–${MAX_SAVE_ID + 1}; received: ${value})`);
 				}
 
 				savesMaxSlot = value;

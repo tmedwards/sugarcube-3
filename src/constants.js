@@ -9,3 +9,6 @@
 
 // Minimum delay for DOM actions (in milliseconds).
 export const MIN_DOM_ACTION_DELAY = 40;
+
+// Maximum save ID (`0`-based).
+export const MAX_SAVE_ID = 49;

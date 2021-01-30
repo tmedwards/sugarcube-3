@@ -10,6 +10,7 @@
 import Config from './config';
 import Db from './db';
 import L10n from './l10n/l10n';
+import { MAX_SAVE_ID } from './constants';
 import State from './state';
 import createFilename from './utils/createfilename';
 import hasOwn from './utils/hasown';
@@ -33,9 +34,6 @@ const Save = (() => {
 	const KEY_SLOT_PREFIX     = 'save.slot.';
 	const KEY_DATA_SUFFIX     = '.data';
 	const KEY_MANIFEST_SUFFIX = '.manifest';
-
-	// Save ID Maximum.
-	const MAX_SAVE_ID = 2 ** 32 - 2;
 
 
 	/*******************************************************************************
