@@ -53,9 +53,7 @@ const Wikifier = (() => {
 
 				options : {
 					writable : true,
-					value    : Object.assign({
-						profile : 'all'
-					}, options)
+					value    : { profile : 'all', ...options }
 				},
 
 				nextMatch : {
@@ -155,7 +153,7 @@ const Wikifier = (() => {
 				// If new options exist, cache and temporarily replace the current options.
 				if (newOptions) {
 					origOptions = this.options;
-					this.options = Object.assign({}, this.options, newOptions);
+					this.options = { ...this.options, ...newOptions };
 				}
 
 				const parsersProfile   = Wikifier.Parser.Profile.get(this.options.profile);

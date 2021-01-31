@@ -12,7 +12,7 @@
 	object with such a property, or the value itself.
 */
 function getErrorMessage(O) {
-	return O !== null && typeof O === 'object' && 'message' in O ? O.message : O;
+	return typeof O === 'object' && O !== null && 'message' in O ? O.message : O;
 }
 
 

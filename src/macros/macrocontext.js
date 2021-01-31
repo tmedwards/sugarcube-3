@@ -20,7 +20,7 @@ import appendError from './utils/appenderror';
 */
 class MacroContext {
 	constructor(contextData) {
-		const context = Object.assign({
+		const context = {
 			parent      : null,
 			macro       : null,
 			name        : '',
@@ -28,8 +28,9 @@ class MacroContext {
 			args        : null,
 			payload     : null,
 			parser      : null,
-			source      : ''
-		}, contextData);
+			source      : '',
+			...contextData
+		};
 
 		if (context.macro === null || context.name === '' || context.parser === null) {
 			throw new TypeError('context object missing required properties');
