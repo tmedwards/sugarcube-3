@@ -42,14 +42,10 @@ const Scripting = (() => {
 	/* eslint-disable no-unused-vars */
 
 	/*
-		Returns a random value from its given arguments.
+		Returns a random value from its given parameters.
 	*/
-	function either(/* variadic */) {
-		if (arguments.length === 0) {
-			return;
-		}
-
-		return Array.prototype.concat.apply([], arguments).random();
+	function either(...params) {
+		return params.flat().random();
 	}
 
 	/*
