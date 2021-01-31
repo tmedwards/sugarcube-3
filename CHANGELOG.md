@@ -1,16 +1,26 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
+## 2021-01-31
+
+* All of the various visit*ed* (past-tense) APIs no longer count the current turn.
+* User functions API changes: `visited()` → `visits()`.
+* `State` API changes:
+	* `State.hasPlayed()` → `State.hasVisited()`.
+	* `State.previous` added (oops).
+	* `State.visited` → `State.visits`.
+* Various cleanup.
+
 ## 2021-01-30
 
 * Removed the `Db` API cookie adapter.
-* Removed the `lastVisited` user function.
 * Removed the Autoload dialog.
 * Removed the story history and supporting code.  To compensate, multiple auto saves are now available.
 * Removed Twine 1 compatibility and builds.
 * Reworked the `Save` API and Saves dialog.
 * Rework of the `Passage` and `Story` APIs.
-* Rework of the `Sate` API.
-* `Config` object API changes:
+* Rework of the `State` API.
+* User functions API changes: `lastVisited()` removed.
+* `Config` API changes:
 	* `Config.history.maxStates` removed.
 	* `Config.passages.descriptions` → `Config.saves.descriptions`; acceptable value changed to *function*.
 	* `Config.saves.maxAutoSaves` added.
@@ -51,7 +61,7 @@
 
 ## 2020-08-01
 
-* `Config` object API changes: `Config.startup.loadDelay` → `Config.startup.delay`.
+* `Config` API changes: `Config.startup.loadDelay` → `Config.startup.delay`.
 
 ## 2020-07-31
 
@@ -59,7 +69,7 @@
 
 ## 2020-07-30
 
-* `Config` object API changes: `Config.macros.maxLoopIterations` → `Config.macros.forMaxIterations`.
+* `Config` API changes: `Config.macros.maxLoopIterations` → `Config.macros.forMaxIterations`.
 * Ported recent changes from v2.
 
 ## 2020-06-07
@@ -105,7 +115,7 @@
 
 ## 2020-04-21
 
-* `Config` object API changes: `Config.loadDelay` → `Config.startup.loadDelay`.
+* `Config` API changes: `Config.loadDelay` → `Config.startup.loadDelay`.
 
 ## 2020-04-20
 
@@ -134,7 +144,7 @@
 * The `<<goto>>` macro now terminates the Wikifier call chain.
 * The loading screen is now blocking during startup—i.e., neither the engine nor interfaces will start until all non-own locks are released.
 * [Experimental] Added a caching IndexedDB storage adapter.
-* `Config` object API changes:
+* `Config` API changes:
 	* `Config.history.controls` → `Config.ui.historyControls`.
 	* `Config.history.maxStates` acceptable value changed to *integer in the range 1–100*.  History lengths >100, incl. infinite, are no longer allowed.
 	* `Config.passages.displayTitles` removed.
@@ -142,12 +152,12 @@
 	* `Config.passages.transitionOut` → `Config.navigation.transitionOut`.
 * Macro parser changes:
 	* In addition to their `this` being set, handlers are now passed the `MacroContext` instance and processed arguments of the main tag as parameters.
-* `Passage` object API changes:
+* `Passage` instance API changes:
 	* `<Passage>.processText()` → `<Passage>.text`.
 	* `<Passage>.text` → `<Passage>.source`.
-* `State` object API changes: `State.active` removed.
+* `State` API changes: `State.active` removed.
 * Task objects API changes: all task objects removed.
-* `Util` object API changes:
+* `Util` API changes:
 	* `Util.charAndPosAt()` → `characterAndPosAt()`.
 	* `Util.escape()` → `encodeEntities()`.
 	* `Util.fromCssProperty()` → `toDOMFromCSSProperty()`.
@@ -173,7 +183,7 @@
 	* `hasOwn()` added.
 	* `stripNewlines()` added.
 	* `throwError()` → `appendError()`.
-* `Wikifier` object API changes:
+* `Wikifier` API changes:
 	* `Wikifier.createExternalLink()` → `createExternalLink()`.
 	* `Wikifier.createInternalLink()` → `createLink()`.
 	* `Wikifier.isExternalLink()` → `isExternalLink()`.
