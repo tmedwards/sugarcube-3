@@ -13,7 +13,7 @@ import LoadScreen from './loadscreen';
 import Story from './story';
 import Visibility from './lib/visibility';
 import clone from './utils/clone';
-import hasOwn from '../utils/hasown';
+import hasOwn from './utils/hasown';
 import parseURL from './utils/parseurl';
 
 
@@ -207,10 +207,10 @@ const SimpleAudio = (() => {
 						if (src === null) {
 							throw new Error('source object cannot be null');
 						}
-						else if (!src.hasOwnProperty('src')) {
+						else if (!hasOwn(src, 'src')) {
 							throw new Error('source object missing required "src" property');
 						}
-						else if (!src.hasOwnProperty('format')) {
+						else if (!hasOwn(src, 'format')) {
 							throw new Error('source object missing required "format" property');
 						}
 
@@ -857,20 +857,20 @@ const SimpleAudio = (() => {
 					volume = trackObj.volume();
 				}
 				else {
-					if (!trackObj.hasOwnProperty('track')) {
+					if (!hasOwn(trackObj, 'track')) {
 						throw new Error('track object missing required "track" property');
 					}
 					else if (!(trackObj.track instanceof AudioTrack)) {
 						throw new Error('track object\'s "track" property must be an AudioTrack object');
 					}
-					// else if (!trackObj.hasOwnProperty('volume')) {
+					// else if (!hasOwn(trackObj, 'volume')) {
 					// 	throw new Error('track object missing required "volume" property');
 					// }
 
-					own    = trackObj.hasOwnProperty('own') && trackObj.own;
-					rate   = trackObj.hasOwnProperty('rate') ? trackObj.rate : trackObj.track.rate();
+					own    = hasOwn(trackObj, 'own') && trackObj.own;
+					rate   = hasOwn(trackObj, 'rate') ? trackObj.rate : trackObj.track.rate();
 					track  = trackObj.track;
-					volume = trackObj.hasOwnProperty('volume') ? trackObj.volume : trackObj.track.volume();
+					volume = hasOwn(trackObj, 'volume') ? trackObj.volume : trackObj.track.volume();
 				}
 
 				track.stop();
@@ -1661,10 +1661,10 @@ const SimpleAudio = (() => {
 						break;
 
 					case 'object':
-						if (!desc.hasOwnProperty('id') && !desc.hasOwnProperty('sources')) {
+						if (!hasOwn(desc, 'id') && !hasOwn(desc, 'sources')) {
 							throw new Error('track descriptor must contain one of either an "id" or a "sources" property');
 						}
-						else if (desc.hasOwnProperty('id') && desc.hasOwnProperty('sources')) {
+						else if (hasOwn(desc, 'id') && hasOwn(desc, 'sources')) {
 							throw new Error('track descriptor must contain either an "id" or a "sources" property, not both');
 						}
 
@@ -1679,7 +1679,7 @@ const SimpleAudio = (() => {
 				let track;
 				let volume;
 
-				if (desc.hasOwnProperty('id')) {
+				if (hasOwn(desc, 'id')) {
 					if (typeof desc.id !== 'string') {
 						throw new Error('"id" property must be a string');
 					}
@@ -1689,11 +1689,11 @@ const SimpleAudio = (() => {
 
 					track = _tracks.get(desc.id);
 				}
-				else if (desc.hasOwnProperty('sources')) {
+				else if (hasOwn(desc, 'sources')) {
 					if (!(desc.sources instanceof Array) || desc.sources.length === 0) {
 						throw new Error('"sources" property must be a non-empty array');
 					}
-					if (desc.hasOwnProperty('own')) {
+					if (hasOwn(desc, 'own')) {
 						throw new Error('"own" property is not allowed with the "sources" property');
 					}
 
@@ -1711,7 +1711,7 @@ const SimpleAudio = (() => {
 					}
 				}
 
-				if (desc.hasOwnProperty('own')) {
+				if (hasOwn(desc, 'own')) {
 					if (typeof desc.own !== 'boolean') {
 						throw new Error('"own" property must be a boolean');
 					}
@@ -1723,7 +1723,7 @@ const SimpleAudio = (() => {
 					}
 				}
 
-				// if (desc.hasOwnProperty('rate')) {
+				// if (hasOwn(desc, 'rate')) {
 				// 	if (
 				// 		typeof desc.rate !== 'number'
 				// 		|| Number.isNaN(desc.rate)
@@ -1735,7 +1735,7 @@ const SimpleAudio = (() => {
 				// 	rate = desc.rate;
 				// }
 
-				if (desc.hasOwnProperty('volume')) {
+				if (hasOwn(desc, 'volume')) {
 					if (
 						typeof desc.volume !== 'number'
 						|| Number.isNaN(desc.volume)
@@ -1907,7 +1907,7 @@ const SimpleAudio = (() => {
 					default:         ids = id[0] === ':' ? _groups.get(id) : [id]; break;
 				}
 
-				if (idObj.hasOwnProperty('not')) {
+				if (hasOwn(idObj, 'not')) {
 					const negated = idObj.not.map(idObj => renderIds(idObj)).flat(Infinity);
 					ids = ids.filter(id => !negated.includes(id));
 				}
