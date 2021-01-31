@@ -7,7 +7,7 @@
 
 ***********************************************************************************************************************/
 
-import L10n from './l10n/l10n';
+import I18n from './i18n/i18n';
 
 
 /*
@@ -17,12 +17,12 @@ function appendError(output, message, source) {
 	const $wrapper = jQuery(document.createElement('div'));
 	const $toggle  = jQuery(document.createElement('button'));
 	const $source  = jQuery(document.createElement('pre'));
-	const mesg     = `${L10n.get('errorTitle')}: ${message || 'unknown error'}`;
+	const mesg     = `${I18n.get('errorTitle')}: ${message || 'unknown error'}`;
 
 	$toggle
 		.addClass('error-toggle')
 		.ariaClick({
-			label : L10n.get('errorToggle')
+			label : I18n.get('errorToggle')
 		}, () => {
 			if ($toggle.hasClass('enabled')) {
 				$toggle.removeClass('enabled');

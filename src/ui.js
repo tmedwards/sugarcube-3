@@ -12,7 +12,7 @@ import Config from './config';
 import Dialog from './dialog';
 import Engine from './engine';
 import Has from './lib/has';
-import L10n from './l10n/l10n';
+import I18n from './i18n/i18n';
 import Save from './save';
 import Story from './story';
 import Wikifier from './markup/wikifier';
@@ -100,7 +100,7 @@ const UI = (() => {
 		// 			.then(
 		// 				loaded => resolve(loaded ? !engineShow() : true),
 		// 				ex => {
-		// 					UI.alert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`);
+		// 					UI.alert(`${ex.message.toUpperFirst()}.</p><p>${I18n.get('aborting')}.`);
 		// 					resolve(true);
 		// 				}
 		// 			);
@@ -125,10 +125,10 @@ const UI = (() => {
 
 	function openAlert(message, ...args) {
 		Dialog
-			.setup(L10n.get('alertTitle'), 'alert')
+			.setup(I18n.get('alertTitle'), 'alert')
 			.append(
 				  `<p role="alert">${message}</p><ul class="buttons">`
-				+ `<li><button id="alert-ok" class="ui-close">${L10n.get(['alertOk', 'ok'])}</button></li>`
+				+ `<li><button id="alert-ok" class="ui-close">${I18n.get(['alertOk', 'ok'])}</button></li>`
 				+ '</ul>'
 			)
 			.open(...args);
@@ -153,12 +153,12 @@ const UI = (() => {
 	// 	if (BUILD_DEBUG) { console.log('[UI/buildAutoload()]'); }
 	//
 	// 	Dialog
-	// 		.setup(L10n.get('autoLoadTitle'), 'auto load')
+	// 		.setup(I18n.get('autoLoadTitle'), 'auto load')
 	// 		.append(
 	// 			/* eslint-disable max-len */
-	// 			  `<p>${L10n.get('autoLoadPrompt')}</p><ul class="buttons">`
-	// 			+ `<li><button id="autoload-ok" class="ui-close">${L10n.get(['autoLoadOk', 'ok'])}</button></li>`
-	// 			+ `<li><button id="autoload-cancel" class="ui-close">${L10n.get(['autoLoadCancel', 'cancel'])}</button></li>`
+	// 			  `<p>${I18n.get('autoLoadPrompt')}</p><ul class="buttons">`
+	// 			+ `<li><button id="autoload-ok" class="ui-close">${I18n.get(['autoLoadOk', 'ok'])}</button></li>`
+	// 			+ `<li><button id="autoload-cancel" class="ui-close">${I18n.get(['autoLoadCancel', 'cancel'])}</button></li>`
 	// 			+ '</ul>'
 	// 			/* eslint-enable max-len */
 	// 		);
@@ -177,7 +177,7 @@ const UI = (() => {
 	// 					.then(
 	// 						loaded => loaded ? !Engine.show() : true,
 	// 						ex => {
-	// 							openAlert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`);
+	// 							openAlert(`${ex.message.toUpperFirst()}.</p><p>${I18n.get('aborting')}.`);
 	// 							return true;
 	// 						}
 	// 					)
@@ -199,12 +199,12 @@ const UI = (() => {
 		if (BUILD_DEBUG) { console.log('[UI/buildRestart()]'); }
 
 		Dialog
-			.setup(L10n.get('restartTitle'), 'restart')
+			.setup(I18n.get('restartTitle'), 'restart')
 			.append(
 				/* eslint-disable max-len */
-				  `<p>${L10n.get('restartPrompt')}</p><ul class="buttons">`
-				+ `<li><button id="restart-ok">${L10n.get(['restartOk', 'ok'])}</button></li>`
-				+ `<li><button id="restart-cancel" class="ui-close">${L10n.get(['restartCancel', 'cancel'])}</button></li>`
+				  `<p>${I18n.get('restartPrompt')}</p><ul class="buttons">`
+				+ `<li><button id="restart-ok">${I18n.get(['restartOk', 'ok'])}</button></li>`
+				+ `<li><button id="restart-cancel" class="ui-close">${I18n.get(['restartCancel', 'cancel'])}</button></li>`
 				+ '</ul>'
 				/* eslint-enable max-len */
 			);
@@ -258,8 +258,7 @@ const UI = (() => {
 		function createSlotsList() {
 			function createButtonItem(elId, elClass, elLabel, saveId, elAction) {
 				const $btn = jQuery(document.createElement('button'))
-					.attr('id', `saves-${elId}-${saveId}`)
-					.addClass(elId);
+					.attr('id', `saves-${elId}-${saveId}`);
 
 				if (elClass) {
 					$btn.addClass(elClass);
@@ -301,27 +300,27 @@ const UI = (() => {
 				if (manifest) {
 					// Add the description (title and datestamp).
 					jQuery(document.createElement('div'))
-						.text(manifest.desc)
+						.html(manifest.desc)
 						.appendTo($desc);
 					jQuery(document.createElement('div'))
 						.addClass('details')
-						// .text(`${L10n.get('savesLabelAuto')}\u00a0\u00a0\u2022\u00a0\u00a0`)
-						.text(`${L10n.get('savesLabelAuto')}\u00a0${id + 1}\u00a0\u00a0\u2022\u00a0\u00a0`)
+						// .text(`${I18n.get('savesLabelAuto')}\u00a0\u00a0\u2022\u00a0\u00a0`)
+						.text(`${I18n.get('savesLabelAuto')}\u00a0${id + 1}\u00a0\u00a0\u2022\u00a0\u00a0`)
 						.append(
 							manifest.date
 								? `${new Date(manifest.date).toLocaleString()}`
-								: `<em>${L10n.get('savesUnknownDate')}</em>`
+								: `<em>${I18n.get('savesUnknownDate')}</em>`
 						)
 						.appendTo($desc);
 
 					// Add the load button.
 					$btns.append(
-						createButtonItem('load', 'ui-close', `${L10n.get('savesLabelLoad')} ${L10n.get('savesLabelAuto')}`, id, id => {
+						createButtonItem('auto-load', 'load ui-close', `${I18n.get('savesLabelLoad')} ${I18n.get('savesLabelAuto')}`, id, id => {
 							jQuery(document).one(':dialogclosed', () => {
 								Save.browser.auto.load(id)
 									.then(
 										Engine.show,
-										ex => showAlert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`)
+										ex => showAlert(`${ex.message.toUpperFirst()}.</p><p>${I18n.get('aborting')}.`)
 									);
 							});
 						})
@@ -329,7 +328,7 @@ const UI = (() => {
 
 					// Add the delete button.
 					$btns.append(
-						createButtonItem('delete', null, `${L10n.get('savesLabelDelete')} ${L10n.get('savesLabelAuto')}`, id, id => {
+						createButtonItem('auto-delete', 'delete', `${I18n.get('savesLabelDelete')} ${I18n.get('savesLabelAuto')}`, id, id => {
 							Save.browser.auto.delete(id);
 							buildSaves();
 						})
@@ -341,12 +340,12 @@ const UI = (() => {
 
 					// Add the disabled load button.
 					$btns.append(
-						createButtonItem('load', null, `${L10n.get('savesLabelLoad')} ${L10n.get('savesLabelAuto')}`, id)
+						createButtonItem('auto-load', 'load', `${I18n.get('savesLabelLoad')} ${I18n.get('savesLabelAuto')}`, id)
 					);
 
 					// Add the disabled delete button.
 					$btns.append(
-						createButtonItem('delete', null, `${L10n.get('savesLabelDelete')} ${L10n.get('savesLabelAuto')}`, id)
+						createButtonItem('auto-delete', 'delete', `${I18n.get('savesLabelDelete')} ${I18n.get('savesLabelAuto')}`, id)
 					);
 				}
 
@@ -378,26 +377,26 @@ const UI = (() => {
 				if (manifest) {
 					// Add the description (title and datestamp).
 					jQuery(document.createElement('div'))
-						.text(manifest.desc)
+						.html(manifest.desc)
 						.appendTo($desc);
 					jQuery(document.createElement('div'))
 						.addClass('details')
-						.text(`${L10n.get('savesLabelSlot')}\u00a0${i + 1}\u00a0\u00a0\u2022\u00a0\u00a0`)
+						.text(`${I18n.get('savesLabelSlot')}\u00a0${i + 1}\u00a0\u00a0\u2022\u00a0\u00a0`)
 						.append(
 							manifest.date
 								? `${new Date(manifest.date).toLocaleString()}`
-								: `<em>${L10n.get('savesUnknownDate')}</em>`
+								: `<em>${I18n.get('savesUnknownDate')}</em>`
 						)
 						.appendTo($desc);
 
 					// Add the load button.
 					$btns.append(
-						createButtonItem('load', 'ui-close', `${L10n.get('savesLabelLoad')} ${L10n.get('savesLabelSlot')}`, i, id => {
+						createButtonItem('slot-load', 'load ui-close', `${I18n.get('savesLabelLoad')} ${I18n.get('savesLabelSlot')}`, i, id => {
 							jQuery(document).one(':dialogclosed', () => {
 								Save.browser.slot.load(id)
 									.then(
 										Engine.show,
-										ex => showAlert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`)
+										ex => showAlert(`${ex.message.toUpperFirst()}.</p><p>${I18n.get('aborting')}.`)
 									);
 							});
 						})
@@ -405,7 +404,7 @@ const UI = (() => {
 
 					// Add the delete button.
 					$btns.append(
-						createButtonItem('delete', null, `${L10n.get('savesLabelDelete')} ${L10n.get('savesLabelSlot')}`, i, id => {
+						createButtonItem('slot-delete', 'delete', `${I18n.get('savesLabelDelete')} ${I18n.get('savesLabelSlot')}`, i, id => {
 							Save.browser.slot.delete(id);
 							buildSaves();
 						})
@@ -421,9 +420,9 @@ const UI = (() => {
 					// Add the save button.
 					$btns.append(
 						createButtonItem(
+							'slot-save',
 							'save',
-							null,
-							`${L10n.get('savesLabelSave')} ${L10n.get('savesLabelSlot')}`,
+							`${I18n.get('savesLabelSave')} ${I18n.get('savesLabelSlot')}`,
 							i,
 							savesAllowed
 								// If saving is allowed, add the save action.
@@ -438,7 +437,7 @@ const UI = (() => {
 
 					// Add the disabled delete button.
 					$btns.append(
-						createButtonItem('delete', null, `${L10n.get('savesLabelDelete')} ${L10n.get('savesLabelSlot')}`, i)
+						createButtonItem('slot-delete', 'delete', `${I18n.get('savesLabelDelete')} ${I18n.get('savesLabelSlot')}`, i)
 					);
 				}
 
@@ -459,17 +458,17 @@ const UI = (() => {
 
 		// Bail out if both saves and the file API are disabled/missing.
 		if (!browserEnabled && !Has.fileAPI) {
-			showAlert(L10n.get('warningNoSaves'));
+			showAlert(I18n.get('warningNoSaves'));
 			return false;
 		}
 
-		Dialog.setup(L10n.get('savesTitle'), 'saves');
+		Dialog.setup(I18n.get('savesTitle'), 'saves');
 		const $dialogBody = jQuery(Dialog.body());
 
 		// Add slots header, list, and button list.
 		if (browserEnabled) {
 			jQuery(document.createElement('h2'))
-				.text(L10n.get('savesHeaderBrowser'))
+				.text(I18n.get('savesHeaderBrowser'))
 				.appendTo($dialogBody);
 
 			$dialogBody.append(createSlotsList());
@@ -484,13 +483,13 @@ const UI = (() => {
 				$slotButtons.append(createActionItem(
 					'disk-export',
 					null,
-					L10n.get('savesLabelDiskExport'),
+					I18n.get('savesLabelDiskExport'),
 					() => Save.browser.export(`saves-export-${Story.name}`)
 				));
 				$slotButtons.append(createActionItem(
 					'disk-import',
 					null,
-					L10n.get('savesLabelDiskImport'),
+					I18n.get('savesLabelDiskImport'),
 					() => $dialogBody.find('#saves-disk-import-handler').trigger('click')
 				));
 				jQuery(document.createElement('input'))
@@ -515,7 +514,7 @@ const UI = (() => {
 								buildSaves,
 								ex => {
 									Dialog.close();
-									showAlert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`);
+									showAlert(`${ex.message.toUpperFirst()}.</p><p>${I18n.get('aborting')}.`);
 								}
 							);
 					})
@@ -526,7 +525,7 @@ const UI = (() => {
 			$slotButtons.append(createActionItem(
 				'clear',
 				null,
-				L10n.get('savesLabelClear'),
+				I18n.get('savesLabelClear'),
 				Save.browser.auto.size() > 0 || Save.browser.slot.size() > 0
 					? () => {
 						Save.browser.clear();
@@ -539,7 +538,7 @@ const UI = (() => {
 		// Add disk saves header and button list.
 		if (Has.fileAPI) {
 			jQuery(document.createElement('h2'))
-				.text(L10n.get('savesHeaderDisk'))
+				.text(I18n.get('savesHeaderDisk'))
 				.appendTo($dialogBody);
 
 			const $diskButtons = jQuery(document.createElement('ul'))
@@ -551,7 +550,7 @@ const UI = (() => {
 			$diskButtons.append(createActionItem(
 				'disk-save',
 				null,
-				L10n.get('savesLabelDiskSave'),
+				I18n.get('savesLabelDiskSave'),
 				savesAllowed
 					// If saving is allowed, add the save action.
 					? () => Save.disk.save(Story.name)
@@ -561,7 +560,7 @@ const UI = (() => {
 			$diskButtons.append(createActionItem(
 				'disk-load',
 				null,
-				L10n.get('savesLabelDiskLoad'),
+				I18n.get('savesLabelDiskLoad'),
 				() => $dialogBody.find('#saves-disk-load-handler').trigger('click')
 			));
 			jQuery(document.createElement('input'))
@@ -587,7 +586,7 @@ const UI = (() => {
 								Engine.show,
 								ex => {
 									Dialog.close();
-									showAlert(`${ex.message.toUpperFirst()}.</p><p>${L10n.get('aborting')}.`);
+									showAlert(`${ex.message.toUpperFirst()}.</p><p>${I18n.get('aborting')}.`);
 								}
 							);
 					});
@@ -602,7 +601,7 @@ const UI = (() => {
 	function buildSettings() {
 		if (BUILD_DEBUG) { console.log('[UI/buildSettings()]'); }
 
-		Dialog.setup(L10n.get('settingsTitle'), 'settings');
+		Dialog.setup(I18n.get('settingsTitle'), 'settings');
 
 		const $dialogBody = jQuery(Dialog.body());
 
@@ -673,24 +672,24 @@ const UI = (() => {
 					if (settings[name]) {
 						$control
 							.addClass('enabled')
-							.text(L10n.get('settingsOn'));
+							.text(I18n.get('settingsOn'));
 					}
 					else {
 						$control
-							.text(L10n.get('settingsOff'));
+							.text(I18n.get('settingsOff'));
 					}
 
 					$control.ariaClick(function () {
 						if (settings[name]) {
 							jQuery(this)
 								.removeClass('enabled')
-								.text(L10n.get('settingsOff'));
+								.text(I18n.get('settingsOff'));
 							settings[name] = false;
 						}
 						else {
 							jQuery(this)
 								.addClass('enabled')
-								.text(L10n.get('settingsOn'));
+								.text(I18n.get('settingsOn'));
 							settings[name] = true;
 						}
 
@@ -786,8 +785,8 @@ const UI = (() => {
 		$dialogBody
 			.append(
 				  '<ul class="buttons">'
-				+     `<li><button id="settings-ok" class="ui-close">${L10n.get(['settingsOk', 'ok'])}</button></li>`
-				+     `<li><button id="settings-reset">${L10n.get('settingsReset')}</button></li>`
+				+     `<li><button id="settings-ok" class="ui-close">${I18n.get(['settingsOk', 'ok'])}</button></li>`
+				+     `<li><button id="settings-reset">${I18n.get('settingsReset')}</button></li>`
 				+ '</ul>'
 			)
 			.find('#settings-reset')

@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 import Has from './lib/has';
-import L10n from './l10n/l10n';
+import I18n from './i18n/i18n';
 import getActiveElement from './utils/getactiveelement';
 
 
@@ -105,6 +105,12 @@ const Dialog = (() => {
 		return Dialog;
 	}
 
+	function dialogFinalize() {
+		if (BUILD_DEBUG) { console.log('[Dialog/dialogFinalize()]'); }
+
+		$dialog.find('#ui-dialog-close').attr('aria-label', I18n.get('close'));
+	}
+
 	function dialogInit() {
 		if (BUILD_DEBUG) { console.log('[Dialog/dialogInit()]'); }
 
@@ -153,31 +159,30 @@ const Dialog = (() => {
 			return scrollbarWidth || 17; // 17px is a reasonable failover
 		})();
 
-		// Generate the dialog elements.
-		const $elems = jQuery(document.createDocumentFragment())
+		// Generate the dialog elements and insert them into the page before the
+		// main script.
+		jQuery(document.createDocumentFragment())
 			.append(
 				  '<div id="ui-overlay" class="ui-close"></div>'
 				+ '<div id="ui-dialog" tabindex="0" role="dialog" aria-labelledby="ui-dialog-title">'
 				+     '<div id="ui-dialog-titlebar">'
 				+         '<h1 id="ui-dialog-title"></h1>'
-				+         `<button id="ui-dialog-close" class="ui-close" tabindex="0" aria-label="${L10n.get('close')}">\uE804</button>`
+				+         '<button id="ui-dialog-close" class="ui-close" tabindex="0" aria-label="">\uE804</button>'
 				+     '</div>'
 				+     '<div id="ui-dialog-body"></div>'
 				+ '</div>'
-			);
+			)
+			.insertBefore('body>script#script-sugarcube');
 
 		// Cache the dialog elements, since they're going to be used often.
 		//
 		// NOTE: We rewrap the elements themselves, rather than simply using
 		// the results of `find()`, so that we cache uncluttered jQuery-wrappers
 		// (i.e. `context` refers to the elements and there is no `prevObject`).
-		$overlay     = jQuery($elems.find('#ui-overlay').get(0));
-		$dialog      = jQuery($elems.find('#ui-dialog').get(0));
-		$dialogTitle = jQuery($elems.find('#ui-dialog-title').get(0));
-		$dialogBody  = jQuery($elems.find('#ui-dialog-body').get(0));
-
-		// Insert the dialog elements into the page before the main script.
-		$elems.insertBefore('body>script#script-sugarcube');
+		$overlay     = jQuery('#ui-overlay');
+		$dialog      = jQuery('#ui-dialog');
+		$dialogTitle = jQuery($dialog.find('#ui-dialog-title').get(0));
+		$dialogBody  = jQuery($dialog.find('#ui-dialog-body').get(0));
 	}
 
 	function dialogIsOpen(classNames) {
@@ -380,15 +385,16 @@ const Dialog = (() => {
 	*******************************************************************************/
 
 	return Object.preventExtensions(Object.create(null, {
-		append : { value : dialogBodyAppend },
-		body   : { value : dialogBody },
-		close  : { value : dialogClose },
-		init   : { value : dialogInit },
-		isOpen : { value : dialogIsOpen },
-		open   : { value : dialogOpen },
-		resize : { value : dialogResize },
-		setup  : { value : dialogSetup },
-		wiki   : { value : dialogBodyWiki }
+		append   : { value : dialogBodyAppend },
+		body     : { value : dialogBody },
+		close    : { value : dialogClose },
+		finalize : { value : dialogFinalize },
+		init     : { value : dialogInit },
+		isOpen   : { value : dialogIsOpen },
+		open     : { value : dialogOpen },
+		resize   : { value : dialogResize },
+		setup    : { value : dialogSetup },
+		wiki     : { value : dialogBodyWiki }
 	}));
 })();
 

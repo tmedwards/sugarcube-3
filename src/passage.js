@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 import Config from './config';
-import L10n from './l10n/l10n';
+import I18n from './i18n/i18n';
 import Wikifier from './markup/wikifier';
 import createSlug from './utils/createslug';
 import decodeEntities from './utils/decodeentities';
@@ -64,7 +64,7 @@ const Passage = (() => {
 		get source() {
 			if (this.element == null) { // lazy equality for null
 				const passage = encodeEntities(this.name);
-				const mesg    = `${L10n.get('errorTitle')}: ${L10n.get('errorNonexistentPassage', { passage })}`;
+				const mesg    = `${I18n.get('errorTitle')}: ${I18n.get('errorNonexistentPassage', { passage })}`;
 				return `<div class="error-view"><span class="error">${mesg}</span></div>`;
 			}
 

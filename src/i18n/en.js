@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 
-	l10n/strings.js
+	i18n/en.js
 
 	Copyright © 2013–2021 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
 	Use of this source code is governed by a BSD 2-clause "Simplified" License, which may be found in the LICENSE file.
@@ -10,18 +10,19 @@
 /*
 	ATTENTION TRANSLATORS
 
-	Please use the `locale/l10n-template.js` file, from the root of the repository,
+	Please use the `locale/i18n-template.js` file, from the root of the repository,
 	as the template for your translation rather than this file.
 
-	SEE: https://github.com/tmedwards/sugarcube-2/tree/develop/locale
+	SEE: https://github.com/tmedwards/sugarcube-3/tree/develop/locale
 */
 
-/*
-	TODO: Update `locale/_template.js`!
-*/
+import I18n from './i18n/i18n';
 
-/* eslint-disable max-len */
-const strings = {
+
+// Strings for American English (`en-US`) and default fallback.
+I18n.StringsByLang.en = {
+	/* eslint-disable max-len */
+
 	/*
 		General.
 	*/
@@ -114,11 +115,6 @@ const strings = {
 	/*
 		Macros.
 	*/
+
+	/* eslint-enable max-len */
 };
-/* eslint-enable max-len */
-
-
-/*
-	Module Exports.
-*/
-export default strings;

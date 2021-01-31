@@ -5,6 +5,11 @@
 * Removed the `<<back>>` and `<<return>>` macros.
 * All of the various visit*ed* (past-tense) APIs no longer count the current turn.
 * User functions API changes: `visited()` → `visits()`.
+* `DebugBar` API changes: `DebugBar.start()` → `DebugBar.finalize()`.
+* `Dialog` API changes: `Dialog.finalize()` added.
+* `L10n` API changes: `L10n` → `I18n`.
+* `I18n` API changes: `I18n.get()` → `I18n()`.
+* `UIBar` API changes: `UIBar.start()` → `UIBar.finalize()`.
 * `State` API changes:
 	* `State.hasPlayed()` → `State.hasVisited()`.
 	* `State.previous` added (oops).

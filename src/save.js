@@ -9,7 +9,7 @@
 
 import Config from './config';
 import Db from './db';
-import L10n from './l10n/l10n';
+import I18n from './i18n/i18n';
 import { MAX_SAVE_ID } from './constants';
 import State from './state';
 import createFilename from './utils/createfilename';
@@ -111,7 +111,7 @@ const Save = (() => {
 		const id = autoGetLastId();
 
 		if (id == null) { // lazy equality for null
-			return Promise.reject(new Error(L10n.get('saveErrorNonexistent')));
+			return Promise.reject(new Error(I18n.get('saveErrorNonexistent')));
 		}
 
 		return autoLoad(id);
@@ -157,7 +157,7 @@ const Save = (() => {
 			const data = Db.storage.get(autoDataKeyFromId(id));
 
 			if (!data) {
-				throw new Error(L10n.get('saveErrorNonexistent'));
+				throw new Error(I18n.get('saveErrorNonexistent'));
 			}
 
 			unmarshal(data); // NOTE: May also throw exceptions.
@@ -296,7 +296,7 @@ const Save = (() => {
 			const data = Db.storage.get(slotDataKeyFromId(id));
 
 			if (!data) {
-				throw new Error(L10n.get('saveErrorNonexistent'));
+				throw new Error(I18n.get('saveErrorNonexistent'));
 			}
 
 			unmarshal(data); // NOTE: May also throw exceptions.
@@ -332,7 +332,7 @@ const Save = (() => {
 			typeof Config.saves.isAllowed === 'function' &&
 			!Config.saves.isAllowed(Type.Slot)
 		) {
-			throw new Error(L10n.get('savesDisallowed'));
+			throw new Error(I18n.get('savesDisallowed'));
 		}
 
 		const manifest = {
@@ -426,7 +426,7 @@ const Save = (() => {
 						bundle = JSON.parse(LZString.decompressFromBase64(ev.currentTarget.result));
 					}
 					catch (ex) {
-						throw new Error(L10n.get('saveErrorDecodeFail'));
+						throw new Error(I18n.get('saveErrorDecodeFail'));
 					}
 
 					if (
@@ -435,11 +435,11 @@ const Save = (() => {
 						!hasOwn(bundle, 'auto') || !(bundle.auto instanceof Array) || bundle.auto.some(badSave) ||
 						!hasOwn(bundle, 'slot') || !(bundle.slot instanceof Array) || bundle.slot.some(badSave)
 					) {
-						throw new Error(L10n.get('saveErrorInvalidData'));
+						throw new Error(I18n.get('saveErrorInvalidData'));
 					}
 
 					if (bundle.id !== Config.saves.id) {
-						throw new Error(L10n.get('saveErrorIdMismatch'));
+						throw new Error(I18n.get('saveErrorIdMismatch'));
 					}
 
 					autoClear();
@@ -494,7 +494,7 @@ const Save = (() => {
 
 	function diskSave(filename) {
 		if (typeof Config.saves.isAllowed === 'function' && !Config.saves.isAllowed(Type.Disk)) {
-			throw new Error(L10n.get('savesDisallowed'));
+			throw new Error(I18n.get('savesDisallowed'));
 		}
 
 		const bundle = LZString.compressToBase64(JSON.stringify({
@@ -517,18 +517,18 @@ const Save = (() => {
 						bundle = JSON.parse(LZString.decompressFromBase64(ev.currentTarget.result));
 					}
 					catch (ex) {
-						throw new Error(L10n.get('saveErrorDecodeFail'));
+						throw new Error(I18n.get('saveErrorDecodeFail'));
 					}
 
 					if (
 						bundle == null || typeof bundle !== 'object' || // lazy equality for null
 						!hasOwn(bundle, 'id') || !hasOwn(bundle, 'data')
 					) {
-						throw new Error(L10n.get('saveErrorInvalidData'));
+						throw new Error(I18n.get('saveErrorInvalidData'));
 					}
 
 					if (bundle.id !== Config.saves.id) {
-						throw new Error(L10n.get('saveErrorIdMismatch'));
+						throw new Error(I18n.get('saveErrorIdMismatch'));
 					}
 
 					unmarshal(bundle.data); // NOTE: May also throw exceptions.
@@ -551,7 +551,7 @@ const Save = (() => {
 
 	function serialize() {
 		if (typeof Config.saves.isAllowed === 'function' && !Config.saves.isAllowed(Type.Serialize)) {
-			throw new Error(L10n.get('savesDisallowed'));
+			throw new Error(I18n.get('savesDisallowed'));
 		}
 
 		return LZString.compressToBase64(JSON.stringify({
@@ -568,18 +568,18 @@ const Save = (() => {
 				bundle = JSON.parse(LZString.decompressFromBase64(base64Str));
 			}
 			catch (ex) {
-				throw new Error(L10n.get('saveErrorDecodeFail'));
+				throw new Error(I18n.get('saveErrorDecodeFail'));
 			}
 
 			if (
 				bundle == null || typeof bundle !== 'object' || // lazy equality for null
 				!hasOwn(bundle, 'id') || !hasOwn(bundle, 'data')
 			) {
-				throw new Error(L10n.get('saveErrorInvalidData'));
+				throw new Error(I18n.get('saveErrorInvalidData'));
 			}
 
 			if (bundle.id !== Config.saves.id) {
-				throw new Error(L10n.get('saveErrorIdMismatch'));
+				throw new Error(I18n.get('saveErrorIdMismatch'));
 			}
 
 			unmarshal(bundle.data); // NOTE: May also throw exceptions.
@@ -612,7 +612,7 @@ const Save = (() => {
 		if (BUILD_DEBUG) { console.log('[Save/unmarshal()]'); }
 
 		if (save == null || typeof save !== 'object' || !hasOwn(save, 'state')) { // lazy equality for null
-			throw new Error(L10n.get('saveErrorInvalid'));
+			throw new Error(I18n.get('saveErrorInvalid'));
 		}
 
 		if (typeof Config.saves.onLoad === 'function') {

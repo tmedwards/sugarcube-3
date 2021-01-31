@@ -10,11 +10,11 @@
 import Alert from './lib/alert';
 import Config from './config';
 import Dialog from './dialog';
-import Engine from './engine';
-import L10n from './l10n/l10n';
+// import Engine from './engine';
+import I18n from './i18n/i18n';
 import { MIN_DOM_ACTION_DELAY } from './constants';
 import Setting from './setting';
-import State from './state';
+// import State from './state';
 import Story from './story';
 import UI from './ui';
 import setDisplayTitle from './utils/setdisplaytitle';
@@ -78,51 +78,40 @@ const UIBar = (() => {
 			return;
 		}
 
-		// Generate the UI bar elements.
-		const $elems = (() => {
-			const toggleLabel = L10n.get('uiBarToggle');
+		// Generate the UI bar elements and insert them into the page before the
+		// main script.
+		jQuery(document.createDocumentFragment())
+			.append(
+				/* eslint-disable max-len */
+				  '<div id="ui-bar">'
+				+     '<div id="ui-bar-tray">'
+				+         '<button id="ui-bar-toggle" tabindex="0" title="" aria-label=""></button>'
+				+     '</div>'
+				+     '<div id="ui-bar-body">'
+				+         '<header id="title" role="banner">'
+				+             '<div id="story-banner"></div>'
+				+             '<h1 id="story-title"></h1>'
+				+             '<div id="story-subtitle"></div>'
+				+             '<div id="story-title-separator"></div>'
+				+             '<p id="story-author"></p>'
+				+         '</header>'
+				+         '<div id="story-caption"></div>'
+				+         '<nav id="menu" role="navigation">'
+				+             '<ul id="menu-story"></ul>'
+				+             '<ul id="menu-core">'
+				+                 '<li id="menu-item-saves"><a tabindex="0"></a></li>'
+				+                 '<li id="menu-item-settings"><a tabindex="0"></a></li>'
+				+                 '<li id="menu-item-restart"><a tabindex="0"></a></li>'
+				+             '</ul>'
+				+         '</nav>'
+				+     '</div>'
+				+ '</div>'
+				/* eslint-enable max-len */
+			)
+			.insertBefore('body>script#script-sugarcube');
 
-			return jQuery(document.createDocumentFragment())
-				.append(
-					/* eslint-disable max-len */
-					  '<div id="ui-bar">'
-					+     '<div id="ui-bar-tray">'
-					+         `<button id="ui-bar-toggle" tabindex="0" title="${toggleLabel}" aria-label="${toggleLabel}"></button>`
-					+     '</div>'
-					+     '<div id="ui-bar-body">'
-					+         '<header id="title" role="banner">'
-					+             '<div id="story-banner"></div>'
-					+             '<h1 id="story-title"></h1>'
-					+             '<div id="story-subtitle"></div>'
-					+             '<div id="story-title-separator"></div>'
-					+             '<p id="story-author"></p>'
-					+         '</header>'
-					+         '<div id="story-caption"></div>'
-					+         '<nav id="menu" role="navigation">'
-					+             '<ul id="menu-story"></ul>'
-					+             '<ul id="menu-core">'
-					+                 `<li id="menu-item-saves"><a tabindex="0">${L10n.get('savesTitle')}</a></li>`
-					+                 `<li id="menu-item-settings"><a tabindex="0">${L10n.get('settingsTitle')}</a></li>`
-					+                 `<li id="menu-item-restart"><a tabindex="0">${L10n.get('restartTitle')}</a></li>`
-					+             '</ul>'
-					+         '</nav>'
-					+     '</div>'
-					+ '</div>'
-					/* eslint-enable max-len */
-				);
-		})();
-
-		/*
-			Cache the UI bar element, since its going to be used often.
-
-			NOTE: We rewrap the element itself, rather than simply using the result
-			of `find()`, so that we cache an uncluttered jQuery-wrapper (i.e. `context`
-			refers to the element and there is no `prevObject`).
-		*/
-		$uiBar = jQuery($elems.find('#ui-bar').get(0));
-
-		// Insert the UI bar elements into the page before the main script.
-		$elems.insertBefore('body>script#script-sugarcube');
+		// Cache the UI bar element, since it's going to be used often.
+		$uiBar = jQuery('#ui-bar');
 	}
 
 	function uiBarIsHidden() {
@@ -141,8 +130,8 @@ const UIBar = (() => {
 		return this;
 	}
 
-	function uiBarStart() {
-		if (BUILD_DEBUG) { console.log('[UIBar/uiBarStart()]'); }
+	function uiBarFinalize() {
+		if (BUILD_DEBUG) { console.log('[UIBar/uiBarFinalize()]'); }
 
 		if (!$uiBar) {
 			return;
@@ -160,7 +149,7 @@ const UIBar = (() => {
 		// Set up the #ui-bar-toggle widgets.
 		jQuery('#ui-bar-toggle')
 			.ariaClick({
-				label : L10n.get('uiBarToggle')
+				label : I18n.get('uiBarToggle')
 			}, () => $uiBar.toggleClass('stowed'));
 
 		// Set up the story display title.
@@ -187,7 +176,7 @@ const UIBar = (() => {
 				UI.buildSaves();
 				Dialog.open();
 			})
-			.text(L10n.get('savesTitle'));
+			.text(I18n.get('savesTitle'));
 
 		// Set up the Settings menu item.
 		if (!Setting.isEmpty()) {
@@ -197,7 +186,7 @@ const UIBar = (() => {
 					UI.buildSettings();
 					Dialog.open();
 				})
-				.text(L10n.get('settingsTitle'));
+				.text(I18n.get('settingsTitle'));
 		}
 		else {
 			jQuery('#menu-item-settings').remove();
@@ -210,7 +199,7 @@ const UIBar = (() => {
 				UI.buildRestart();
 				Dialog.open();
 			})
-			.text(L10n.get('restartTitle'));
+			.text(I18n.get('restartTitle'));
 
 		// Schedule routine updates of the dynamic page elements on `:passagedisplay`.
 		jQuery(document).on(':passagedisplay.ui-bar', () => {
@@ -317,7 +306,7 @@ const UIBar = (() => {
 		isHidden : { value : uiBarIsHidden },
 		isStowed : { value : uiBarIsStowed },
 		show     : { value : uiBarShow },
-		start    : { value : uiBarStart },
+		finalize : { value : uiBarFinalize },
 		stow     : { value : uiBarStow },
 		unstow   : { value : uiBarUnstow },
 		update   : { value : uiBarUpdate }

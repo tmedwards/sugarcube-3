@@ -17,6 +17,9 @@ import './extensions/ecmascript-polyfills';
 import './extensions/ecmascript-extensions';
 import './extensions/jquery-plugins';
 
+// Non-binding imports for languages.
+import './i18n/en';
+
 // Non-binding imports for utility functions to guarantee availability for users.
 // TODO: Add imports for any utility functions we want to be public.
 // import './utils/createdeferred';
@@ -38,7 +41,7 @@ import Dialog from './dialog';
 import Engine from './engine';
 import Fullscreen from './lib/fullscreen';
 import Has from './lib/has';
-import L10n from './l10n/l10n';
+import I18n from './i18n/i18n';
 import LoadScreen from './loadscreen';
 import { MIN_DOM_ACTION_DELAY } from './constants';
 import Macro from './macros/macro';
@@ -99,7 +102,7 @@ Object.defineProperty(window, 'SugarCube', {
 		Engine,
 		Fullscreen,
 		Has,
-		L10n,
+		I18n,
 		Macro,
 		Passage,
 		Save,
@@ -209,6 +212,9 @@ jQuery(() => {
 			// Pre-start the engine.
 			Engine.prestart();
 
+			// Initialize the user language.
+			I18n.init();
+
 			// Initialize the debug bar interface.
 			DebugBar.init();
 
@@ -226,16 +232,17 @@ jQuery(() => {
 			});
 		})
 		.then(() => {
-			// Start the UI bar interface.
-			UIBar.start();
+			// Finalize user interface.
+			Dialog.finalize();
+			UIBar.finalize();
 
 			// Start the engine and pass on the returned promise for the next step in the
 			// chain.
 			return Engine.start();
 		})
 		.then(() => {
-			// Start the debug bar interface.
-			DebugBar.start();
+			// Finalize the debug bar interface.
+			DebugBar.finalize();
 
 			// Trigger the `:storyready` global synthetic event and release
 			// our loading screen lock after a short delay.

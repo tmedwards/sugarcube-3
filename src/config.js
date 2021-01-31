@@ -17,6 +17,7 @@ import getTypeOf from './utils/gettypeof';
 const Config = (() => {
 	// General settings.
 	let debug                 = false;
+	let language;
 	let addVisitedLinkClass   = false;
 	let cleanupWikifierOutput = false;
 
@@ -67,6 +68,19 @@ const Config = (() => {
 		*/
 		get debug() { return debug; },
 		set debug(value) { debug = Boolean(value); },
+
+		get language() { return language; },
+		set language(value) {
+			if (value != null) { // lazy equality for null
+				const valueType = getTypeOf(value);
+
+				if (valueType !== 'string' || value.trim() === '') {
+					throw new TypeError(`Config.language must be a non-empty string or null/undefined (received: ${valueType})`);
+				}
+			}
+
+			language = value;
+		},
 
 		// QUESTION: Make a `Config.links` hierarchy: `Config.links.addVisitedClass`?
 		get addVisitedLinkClass() { return addVisitedLinkClass; },
