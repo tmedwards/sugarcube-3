@@ -195,14 +195,12 @@ Macro.add('type', {
 				new Wikifier($wrapper, contents);
 
 				// Cache info about the current turn.
-				const passage = State.passage;
-				const turn    = State.turns;
+				const turn = State.turns;
 
 				// Skip typing if….
 				if (
 					// …we've visited the passage before.
-					!Config.macros.typeVisitedPassages
-					&& State.passages.slice(0, -1).some(title => title === passage)
+					!Config.macros.typeVisitedPassages && State.hasVisited(State.passage)
 
 					// …there were any content errors.
 					|| $wrapper.find('.error').length > 0

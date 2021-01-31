@@ -25,7 +25,7 @@ function createLink(output, passage, text, callback) {
 		if (Story.has(passage)) {
 			$link.addClass('link-internal');
 
-			if (Config.addVisitedLinkClass && State.hasPlayed(passage)) {
+			if (Config.addVisitedLinkClass && State.hasVisited(passage)) {
 				$link.addClass('link-visited');
 			}
 		}

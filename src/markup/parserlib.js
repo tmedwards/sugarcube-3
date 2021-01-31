@@ -1583,7 +1583,7 @@ import stringFrom from './utils/stringfrom';
 					if (Story.has(passage)) {
 						el.classList.add('link-internal');
 
-						if (Config.addVisitedLinkClass && State.hasPlayed(passage)) {
+						if (Config.addVisitedLinkClass && State.hasVisited(passage)) {
 							el.classList.add('link-visited');
 						}
 					}
@@ -1792,7 +1792,7 @@ import stringFrom from './utils/stringfrom';
 					if (Story.has(passage)) {
 						el.classList.add('link-internal');
 
-						if (Config.addVisitedLinkClass && State.hasPlayed(passage)) {
+						if (Config.addVisitedLinkClass && State.hasVisited(passage)) {
 							el.classList.add('link-visited');
 						}
 					}

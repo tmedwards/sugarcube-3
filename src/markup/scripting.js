@@ -36,11 +36,10 @@ const setup = {};
 	Scripting API static object.
 */
 const Scripting = (() => {
-	/* eslint-disable no-unused-vars */
-
 	/*******************************************************************************
 		User Functions.
 	*******************************************************************************/
+	/* eslint-disable no-unused-vars */
 
 	/*
 		Returns a random value from its given arguments.
@@ -65,29 +64,16 @@ const Scripting = (() => {
 	}
 
 	/*
-		Returns whether a passage with the given title exists within the story
-		history.  If multiple passage titles are given, returns the logical-AND
-		aggregate of the set.
+		Returns whether a passage with the given name has been visited.  If multiple
+		passage names are given, returns the logical-AND aggregate of the set.
 	*/
-	function hasVisited(/* variadic */) {
-		if (arguments.length === 0) {
+	function hasVisited(...passageNames) {
+		if (passageNames.length === 0) {
 			throw new Error('hasVisited called with insufficient parameters');
 		}
 
-		if (State.isEmpty()) {
-			return false;
-		}
-
-		const needles = Array.prototype.concat.apply([], arguments);
-		const played  = State.passages;
-
-		for (let i = 0, iend = needles.length; i < iend; ++i) {
-			if (!played.includes(needles[i])) {
-				return false;
-			}
-		}
-
-		return true;
+		const has = State.hasVisited;
+		return passageNames.flat().every(name => has(name));
 	}
 
 	/*
@@ -109,24 +95,15 @@ const Scripting = (() => {
 	}
 
 	/*
-		Returns the title of a previous passage, either the most recent one whose title does not
-		match that of the active passage or the one at the optional offset, or an empty string,
-		if there is no such passage.
+		Returns the name of the previous passage or an empty string, if there is no
+		such passage.
 	*/
 	function previous() {
-		const passages = State.passages;
-
-		for (let i = passages.length - 2; i >= 0; --i) {
-			if (passages[i] !== State.passage) {
-				return passages[i];
-			}
-		}
-
-		return '';
+		return State.previous;
 	}
 
 	/*
-		Returns a pseudo-random whole number (integer) within the range of the given bounds.
+		Returns a pseudo-random integer within the range of the given bounds.
 	*/
 	function random(/* [min ,] max */) {
 		let min;
@@ -162,7 +139,7 @@ const Scripting = (() => {
 	}
 
 	/*
-		Returns a pseudo-random real number (floating-point) within the range of the given bounds.
+		Returns a pseudo-random floating-point number within the range of the given bounds.
 
 		NOTE: Unlike with its sibling function `random()`, the `max` parameter
 		is exclusive, not inclusive—i.e. the range goes to, but does not include,
@@ -214,21 +191,17 @@ const Scripting = (() => {
 	}
 
 	/*
-		Returns a new array consisting of all of the tags of the given passages.
+		Returns a new array consisting of all of the tags of the given passage names.
 	*/
-	function tags(/* variadic */) {
-		if (arguments.length === 0) {
-			return Story.get(State.passage).tags.slice(0);
+	function tags(...passageNames) {
+		if (passageNames.length === 0) {
+			return Story.get(State.passage).tags;
 		}
 
-		const passages = Array.prototype.concat.apply([], arguments);
-		let tags = [];
-
-		for (let i = 0, iend = passages.length; i < iend; ++i) {
-			tags = tags.concat(Story.get(passages[i]).tags);
-		}
-
-		return tags;
+		return Array.from(new Set(
+			passageNames.flat()
+				.reduce((tags, name) => tags = [...tags, ...Story.get(name).tags], []) // eslint-disable-line no-param-reassign
+		));
 	}
 
 	/*
@@ -246,12 +219,7 @@ const Scripting = (() => {
 	}
 
 	/*
-		Returns the number of passages that the player has visited.
-
-		NOTE: Passages which were visited but have been undone—e.g. via the backward
-		button or the `<<back>>` macro—are no longer part of the in-play story
-		history and thus are not tallied.  Passages which were visited but have
-		expired from the story history, on the other hand, are tallied.
+		Returns the total number of played turns.
 	*/
 	function turns() {
 		return State.turns;
@@ -265,75 +233,55 @@ const Scripting = (() => {
 	}
 
 	/*
-		Returns the number of times that the passage with the given title exists within the story
-		history.  If multiple passage titles are given, returns the lowest count.
+		Returns the number of visits that the passage with the given name has received.
+		If multiple passage names are given, returns the lowest count.
 	*/
-	function visited(/* variadic */) {
-		if (State.isEmpty()) {
+	function visits(...passageNames) {
+		let count = State.turns;
+
+		if (count === 0) {
 			return 0;
 		}
 
-		const needles = Array.prototype.concat.apply([], arguments.length === 0 ? [State.passage] : arguments);
-		const played  = State.passages;
-		let count = State.turns;
+		const needles = passageNames.length === 0 ? [State.passage] : passageNames.flat();
+		const visits  = State.visits;
 
-		for (let i = 0, iend = needles.length; i < iend && count > 0; ++i) {
-			count = Math.min(count, played.count(needles[i]));
+		for (let i = 0, length = needles.length; i < length && count > 0; ++i) {
+			count = Math.min(count, visits[needles[i]] ?? 0);
 		}
 
 		return count;
 	}
 
 	/*
-		Returns the number of passages within the story history which are tagged with all of the given tags.
+		Returns the number of visited passages that are tagged with all of the given tags.
 	*/
-	function visitedTags(/* variadic */) {
-		if (arguments.length === 0) {
+	function visitedTags(...tagNames) {
+		if (tagNames.length === 0) {
 			throw new Error('visitedTags called with insufficient parameters');
 		}
 
-		if (State.isEmpty()) {
+		if (State.turns === 0) {
 			return 0;
 		}
 
-		const needles = Array.prototype.concat.apply([], arguments);
-		const nLength = needles.length;
-		const played  = State.passages;
-		const seen    = new Map();
-		let count = 0;
+		const current = State.passage;
+		const visits  = State.visits;
 
-		for (let i = 0, iend = played.length; i < iend; ++i) {
-			const title = played[i];
-
-			if (seen.has(title)) {
-				if (seen.get(title)) {
-					++count;
-				}
-			}
-			else {
-				const tags = Story.get(title).tags;
-
-				if (tags.length > 0) {
-					let found = 0;
-
-					for (let j = 0; j < nLength; ++j) {
-						if (tags.includes(needles[j])) {
-							++found;
-						}
-					}
-
-					if (found === nLength) {
-						++count;
-						seen.set(title, true);
-					}
-					else {
-						seen.set(title, false);
-					}
-				}
-			}
+		// Decrement the visit count for the current passage and delete it if
+		// its new value is less-than `1`.
+		if (--visits[current] < 1) {
+			delete visits[current];
 		}
 
-		return count;
+		const searchTags = tagNames.flat();
+		return Object.keys(visits).reduce((count, name) => {
+			const curTags = Story.get(name).tags;
+			const success = searchTags.length > curTags.length
+				? false
+				: searchTags.every(needle => curTags.includes(needle));
+			return success ? count + 1 : count;
+		}, 0);
 	}
 
 	/* eslint-enable no-unused-vars */

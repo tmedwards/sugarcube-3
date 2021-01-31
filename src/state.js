@@ -25,8 +25,10 @@ const State = (() => {
 	// Previous passage name.
 	let _previous = '';
 
-	// Visited passage mapping (name → count).
-	let _visited = Object.create(null);
+	// Passage visits mapping (name → count).
+	//
+	// NOTE: This mapping must never include counts less-than `1`.
+	let _visits = Object.create(null);
 
 	// Base story variables.
 	let _variables = Object.create(null);
@@ -63,7 +65,7 @@ const State = (() => {
 		// Reset the properties.
 		_name      = '';
 		_previous  = '';
-		_visited   = Object.create(null);
+		_visits    = Object.create(null);
 		_variables = Object.create(null);
 		_working   = Object.create(null);
 		_turns     = 0;
@@ -115,7 +117,7 @@ const State = (() => {
 
 		const state = {
 			name      : _name,
-			visited   : _visited,
+			visits    : _visits,
 			variables : _variables
 		};
 
@@ -145,8 +147,8 @@ const State = (() => {
 			throw new Error('state object has no name');
 		}
 
-		if (!hasOwn(state, 'visited')) {
-			throw new Error('state object has no visited mapping');
+		if (!hasOwn(state, 'visits')) {
+			throw new Error('state object has no visits mapping');
 		}
 
 		if (!hasOwn(state, 'variables')) {
@@ -164,10 +166,10 @@ const State = (() => {
 		// Restore the state.
 		_name      = state.name;
 		_previous  = state?.previous ?? '';
-		_visited   = Object.assign(Object.create(null), state.visited);
+		_visits   = Object.assign(Object.create(null), state.visits);
 		_variables = Object.assign(Object.create(null), state.variables);
 		_working   = clone(_variables);
-		_turns     = Object.keys(_visited).reduce((sum, key) => sum += _visited[key], 0); // eslint-disable-line no-param-reassign
+		_turns     = Object.keys(_visits).reduce((sum, key) => sum += _visits[key], 0); // eslint-disable-line no-param-reassign
 		_temporary = Object.create(null);
 
 		if (hasOwn(state, 'seed')) {
@@ -189,16 +191,16 @@ const State = (() => {
 	/*
 		Creates a new state.
 	*/
-	function stateCreate(name) {
-		if (BUILD_DEBUG) { console.log(`[State/stateCreate(name: "${name}")]`); }
+	function stateCreate(passageName) {
+		if (BUILD_DEBUG) { console.log(`[State/stateCreate(passageName: "${passageName}")]`); }
 
-		if (typeof name !== 'string' || name === '') {
-			throw Error('State.create name parameter must be a non-empty string');
+		if (typeof passageName !== 'string' || passageName === '') {
+			throw Error('State.create passageName parameter must be a non-empty string');
 		}
 
 		_previous = _name;
-		_name = name;
-		_visited[_name] = 1 + (_visited[_name] ?? 0);
+		_name = passageName;
+		_visits[_name] = 1 + (_visits[_name] ?? 0);
 		_variables = clone(_working);
 
 		// QUESTION: Do I need this here?
@@ -217,25 +219,36 @@ const State = (() => {
 	}
 
 	/*
-		Returns whether a passage with the given name has been played.
+		Returns whether a passage with the given name has been visited.
+
+		NOTE: Does not count the current turn as the visit is still in progress.
 	*/
-	function stateHasPlayed(name) {
-		if (name == null || name === '') { // lazy equality for null
-			return false;
+	function stateHasVisited(passageName) {
+		if (typeof passageName !== 'string' || passageName === '') {
+			throw Error('State.hasVisited passageName parameter must be a non-empty string');
 		}
 
-		return hasOwn(_visited, name);
+		return passageName === _name
+			? (_visits[passageName] ?? 0) > 1
+			: hasOwn(_visits, passageName);
 	}
 
 	/*
 		Returns the name of the current passage.
 	*/
-	function stateName() {
+	function statePassage() {
 		return _name;
 	}
 
 	/*
-		Returns the total number of played passages.
+		Returns the name of the previous passage.
+	*/
+	function statePrevious() {
+		return _previous;
+	}
+
+	/*
+		Returns the total number of played turns.
 	*/
 	function stateTurns() {
 		return _turns;
@@ -249,10 +262,10 @@ const State = (() => {
 	}
 
 	/*
-		Returns a frozen mapping of visited passages.
+		Returns a new mapping of passage visit counts.
 	*/
-	function stateVisited() {
-		return Object.freeze(Object.assign(Object.create(null), _visited));
+	function stateVisits() {
+		return Object.assign(Object.create(null), _visits);
 	}
 
 
@@ -413,16 +426,17 @@ const State = (() => {
 
 	return Object.preventExtensions(Object.create(null, {
 		// State Functions.
-		reset     : { value : stateReset },
-		restore   : { value : stateRestore },
-		marshal   : { value : stateMarshal },
-		unmarshal : { value : stateUnmarshal },
-		create    : { value : stateCreate },
-		hasPlayed : { value : stateHasPlayed },
-		passage   : { get : stateName },
-		turns     : { get : stateTurns },
-		variables : { get : stateVariables },
-		visited   : { get : stateVisited },
+		reset      : { value : stateReset },
+		restore    : { value : stateRestore },
+		marshal    : { value : stateMarshal },
+		unmarshal  : { value : stateUnmarshal },
+		create     : { value : stateCreate },
+		hasVisited : { value : stateHasVisited },
+		passage    : { get : statePassage },
+		previous   : { get : statePrevious },
+		turns      : { get : stateTurns },
+		variables  : { get : stateVariables },
+		visits     : { get : stateVisits },
 
 		// PRNG Functions.
 		prng : {
