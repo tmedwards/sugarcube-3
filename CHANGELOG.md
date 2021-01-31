@@ -2,6 +2,7 @@
 
 ## 2021-01-31
 
+* Removed the `<<back>>` and `<<return>>` macros.
 * All of the various visit*ed* (past-tense) APIs no longer count the current turn.
 * User functions API changes: `visited()` → `visits()`.
 * `State` API changes:

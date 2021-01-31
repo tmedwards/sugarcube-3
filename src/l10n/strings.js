@@ -109,21 +109,11 @@ const strings = {
 	/*
 		Alert.
 	*/
-	alertTitle : 'Alert',
-
-	// /*
-	// 	Autoload.
-	// */
-	// autoLoadTitle  : 'Auto load',
-	// autoLoadCancel : 'Go to start',
-	// autoLoadOk     : 'Load auto save',
-	// autoLoadPrompt : 'An auto save exists. Load it now or go to the start?',
+	alertTitle : 'Alert'
 
 	/*
 		Macros.
 	*/
-	macroBackText   : 'Back',  // (verb) rewind, revert
-	macroReturnText : 'Return' // (verb) go/send back
 };
 /* eslint-enable max-len */
 
