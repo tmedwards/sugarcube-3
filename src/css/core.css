@@ -18,16 +18,6 @@ html {
 	font: 16px/1 Helmet, Freesans, sans-serif;
 }
 
-/* Story data styling. */
-#store-area, tw-storydata {
-	display: none !important;
-	z-index: 0;
-}
-
-/* Special no transition styling. */
-.no-transition {
-	transition: none !important;
-}
 
 
 /*
@@ -74,6 +64,13 @@ body::-ms-backdrop { /* Prevent IE 11 from hiding the `body` element's backgroun
 *:disabled {
 	cursor: not-allowed !important;
 }
+
+/* Story data styling. */
+tw-storydata {
+	display: none !important;
+	z-index: 0;
+}
+
 body {
 	color: #eee;
 	background-color: #111;
@@ -246,6 +243,11 @@ hr {
 audio, canvas, progress, video {
 	max-width: 100%;
 	vertical-align: middle;
+}
+
+/* Special no transition styling. */
+.no-transition {
+	transition: none !important;
 }
 
 .error-view {

@@ -156,7 +156,6 @@ const Dialog = (() => {
 		// Generate the dialog elements.
 		const $elems = jQuery(document.createDocumentFragment())
 			.append(
-				/* eslint-disable max-len */
 				  '<div id="ui-overlay" class="ui-close"></div>'
 				+ '<div id="ui-dialog" tabindex="0" role="dialog" aria-labelledby="ui-dialog-title">'
 				+     '<div id="ui-dialog-titlebar">'
@@ -165,7 +164,6 @@ const Dialog = (() => {
 				+     '</div>'
 				+     '<div id="ui-dialog-body"></div>'
 				+ '</div>'
-				/* eslint-enable max-len */
 			);
 
 		// Cache the dialog elements, since they're going to be used often.
@@ -191,8 +189,8 @@ const Dialog = (() => {
 		// Trigger a `:dialogopening` event on the dialog body.
 		$dialogBody.trigger(':dialogopening');
 
-		// Grab the options we care about.
-		const { top } = jQuery.extend({ top : 50 }, options);
+		// Merge the options onto our defaults and grab the ones we care about.
+		const { top } = { top : 50, ...options };
 
 		// Record the last active/focused non-dialog element.
 		if (!dialogIsOpen()) {
@@ -223,7 +221,7 @@ const Dialog = (() => {
 
 		// Add `aria-hidden=true` to all direct non-dialog-children of <body> to
 		// hide the underlying page from screen readers while the dialog is open.
-		jQuery('body>:not(script,#store-area,tw-storydata,#ui-bar,#ui-overlay,#ui-dialog)')
+		jQuery('body>:not(script,tw-storydata,#ui-bar,#ui-overlay,#ui-dialog)')
 			.attr('tabindex', -3)
 			.attr('aria-hidden', true);
 		jQuery('#ui-bar,#story')
@@ -296,15 +294,12 @@ const Dialog = (() => {
 			.removeClass();
 		$dialogTitle
 			.empty()
-			.append((title != null ? String(title) : '') || '\u00A0'); // lazy equality for null
+			.append(title ?? '\u00A0'); // lazy equality for null
 		$dialogBody
-			.empty()
-			.removeClass();
+			.empty();
 
 		if (classNames != null) { // lazy equality for null
-			// TODO: Consider only adding classes to `$dialog`.
 			$dialog.addClass(classNames);
-			$dialogBody.addClass(classNames);
 		}
 
 		return Dialog;
