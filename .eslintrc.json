@@ -13,6 +13,7 @@
         "BUILD_DEBUG"   : false,
         "BUILD_TWINE_1" : false,
         "BUILD_TWINE_2" : true,
+        "Flatted"       : false,
         "LZString"      : false,
         "saveAs"        : false
     },

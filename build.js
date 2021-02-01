@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /***********************************************************************************************************************
 
-	build.js (v1.6.0, 2021-01-29)
+	build.js (v1.6.1, 2021-02-01)
 		A Node.js-hosted build script for SugarCube.
 
 	Copyright © 2013–2021 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
@@ -34,12 +34,13 @@ const CONFIG = {
 	],
 	libs : [
 		// The ordering herein is significant.
+		'vendor/lz-string.min.js',
+		'vendor/seedrandom.min.js',
+		'vendor/flatted.min.js',
+		'vendor/FileSaver.min.js',
 		'vendor/jquery.min.js',
 		'vendor/jquery.ba-throttle-debounce.min.js',
-		'vendor/imagesloaded.pkgd.min.js',
-		'vendor/lz-string.min.js',
-		'vendor/FileSaver.min.js',
-		'vendor/seedrandom.min.js'
+		'vendor/imagesloaded.pkgd.min.js'
 	],
 	build : {
 		src  : 'templates/html.tpl',
