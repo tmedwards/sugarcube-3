@@ -1,5 +1,12 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
+## 2021-02-01
+
+* Reference integrity and circular references are now supported when cloning and serializing.
+* Utils functions API changes: `clone()` refactored.
+* `Serial` API added.
+* Updated vendored libraries and added `flatted`.
+
 ## 2021-01-31
 
 * Removed the `<<back>>` and `<<return>>` macros.

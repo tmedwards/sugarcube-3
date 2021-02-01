@@ -22,8 +22,8 @@ const Visibility = (() => {
 
 		NOTE: Generally, all supported browsers change the visibility state when either switching tabs
 		within the browser or minimizing the browser window.  Exceptions are noted below:
-			* IE 9 doesn't support either version of the Page Visibility API.
-			* Opera 12 (Presto) doesn't change the visibility state when the browser is minimized.
+			* Opera doesn't fire the change event when either the browser is minimized or the state
+			  is set to `hidden`.
 	*/
 
 	// Vendor properties object.
@@ -82,8 +82,10 @@ const Visibility = (() => {
 	}
 
 	function isHidden() {
-		// return Boolean(vendor && document[vendor.stateProperty] === 'hidden');
-		return Boolean(vendor && document[vendor.hiddenProperty]); // NOTE: Historical, but probably better for 1st edition.
+		// NOTE: Historical, but probably better for 1st edition.
+		// return Boolean(vendor && document[vendor.hiddenProperty]);
+
+		return Boolean(vendor && document[vendor.stateProperty] === 'hidden');
 	}
 
 
