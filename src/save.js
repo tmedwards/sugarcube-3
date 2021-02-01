@@ -11,6 +11,7 @@ import Config from './config';
 import Db from './db';
 import I18n from './i18n/i18n';
 import { MAX_SAVE_ID } from './constants';
+import Serial from './lib/serial';
 import State from './state';
 import createFilename from './utils/createfilename';
 import hasOwn from './utils/hasown';
@@ -404,7 +405,7 @@ const Save = (() => {
 
 			return { id, data, manifest };
 		});
-		const bundle = LZString.compressToBase64(JSON.stringify({
+		const bundle = LZString.compressToBase64(Serial.stringify({
 			id : Config.saves.id,
 			auto,
 			slot
@@ -423,7 +424,7 @@ const Save = (() => {
 					let bundle;
 
 					try {
-						bundle = JSON.parse(LZString.decompressFromBase64(ev.currentTarget.result));
+						bundle = Serial.parse(LZString.decompressFromBase64(ev.currentTarget.result));
 					}
 					catch (ex) {
 						throw new Error(I18n.get('saveErrorDecodeFail'));
@@ -497,7 +498,7 @@ const Save = (() => {
 			throw new Error(I18n.get('savesDisallowed'));
 		}
 
-		const bundle = LZString.compressToBase64(JSON.stringify({
+		const bundle = LZString.compressToBase64(Serial.stringify({
 			id   : Config.saves.id,
 			data : marshal(Type.Disk)
 		}));
@@ -514,7 +515,7 @@ const Save = (() => {
 					let bundle;
 
 					try {
-						bundle = JSON.parse(LZString.decompressFromBase64(ev.currentTarget.result));
+						bundle = Serial.parse(LZString.decompressFromBase64(ev.currentTarget.result));
 					}
 					catch (ex) {
 						throw new Error(I18n.get('saveErrorDecodeFail'));
@@ -554,7 +555,7 @@ const Save = (() => {
 			throw new Error(I18n.get('savesDisallowed'));
 		}
 
-		return LZString.compressToBase64(JSON.stringify({
+		return LZString.compressToBase64(Serial.stringify({
 			id   : Config.saves.id,
 			data : marshal(Type.Serialize)
 		}));
@@ -565,7 +566,7 @@ const Save = (() => {
 			let bundle;
 
 			try {
-				bundle = JSON.parse(LZString.decompressFromBase64(base64Str));
+				bundle = Serial.parse(LZString.decompressFromBase64(base64Str));
 			}
 			catch (ex) {
 				throw new Error(I18n.get('saveErrorDecodeFail'));

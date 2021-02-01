@@ -8,6 +8,7 @@
 ***********************************************************************************************************************/
 
 import KVStore from './kvstore/kvstore';
+import Serial from './lib/serial';
 // TODO: All errors are instances of `DOMException`, so we should probably
 // convert them to instances of `Error` via `exceptionFrom()`.
 //
@@ -197,11 +198,11 @@ KVStore.adapters.add((() => {
 		}
 
 		static serialize(obj) {
-			return LZString.compressToUTF16(JSON.stringify(obj));
+			return LZString.compressToUTF16(Serial.stringify(obj));
 		}
 
 		static deserialize(str) {
-			return JSON.parse(LZString.decompressFromUTF16(str));
+			return Serial.parse(LZString.decompressFromUTF16(str));
 		}
 	}
 

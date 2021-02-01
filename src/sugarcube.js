@@ -47,6 +47,7 @@ import { MIN_DOM_ACTION_DELAY } from './constants';
 import Macro from './macros/macro';
 import Passage from './passage';
 import Save from './save';
+import Serial from './lib/serial';
 import SimpleAudio from './audio/simpleaudio';
 import State from './state';
 import Story from './story';
@@ -107,6 +108,7 @@ Object.defineProperty(window, 'SugarCube', {
 		Passage,
 		Save,
 		Scripting,
+		Serial,
 		Setting,
 		SimpleAudio,
 		State,

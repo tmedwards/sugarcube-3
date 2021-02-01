@@ -20,95 +20,119 @@
 			equivalent objects; i.e. each reference will receive its own clone
 			of the original object.
 */
-function clone(orig) {
-	// Immediately return the primitives and functions.
-	if (typeof orig !== 'object' || orig === null) {
-		return orig;
-	}
+const clone = (() => {
+	function _clone(orig, cache) {
+		// Immediately return the primitives and functions.
+		if (typeof orig !== 'object' || orig === null) {
+			return orig;
+		}
 
-	// Unbox instances of the primitive exemplar objects.
-	if (orig instanceof Boolean) {
-		return Boolean(orig);
-	}
-	if (orig instanceof Number) {
-		return Number(orig);
-	}
-	if (orig instanceof String) {
-		return String(orig);
-	}
+		// Check the cache.  If we get a hit, return the existing copy.
+		if (cache.has(orig)) {
+			return cache.get(orig);
+		}
 
-	// Honor native clone methods.
-	if (typeof orig.clone === 'function') {
-		return orig.clone(true);
-	}
-	if (orig.nodeType && typeof orig.cloneNode === 'function') {
-		return orig.cloneNode(true);
-	}
-
-	// Create a copy of the original object.
-	//
-	// NOTE: Each non-generic object that we wish to support must be
-	// explicitly handled below.
-	let copy;
-
-	// Handle instances of the core supported object types.
-	if (orig instanceof Array) {
-		copy = new Array(orig.length);
-	}
-	else if (orig instanceof Date) {
-		copy = new Date(orig.getTime());
-	}
-	else if (orig instanceof Error) {
-		// NOTE: It's impossible to perfectly clone `…Error` objects,
-		// but this should work well enough.
-		copy = Object.create(orig);
-		// WARNING: If we ever change the property duplication code further below
-		// to handle property descriptors, then this may also need to change.
-		Object.defineProperties(copy, Object.getOwnPropertyDescriptors(orig));
-	}
-	else if (orig instanceof Map) {
-		copy = new Map();
-		orig.forEach((val, key) => copy.set(clone(key), clone(val)));
-	}
-	else if (orig instanceof Promise) {
-		// NOTE: It's impossible to perfectly clone `Promise` objects,
-		// but this should work well enough.
-		copy = new Promise(
-			(resolve, reject) => orig.then(
-				value => resolve(clone(value)),
-				error => reject(clone(error))
-			)
-		);
-	}
-	else if (orig instanceof RegExp) {
-		copy = new RegExp(orig);
-		copy.lastIndex = orig.lastIndex;
-	}
-	else if (orig instanceof Set) {
-		copy = new Set();
-		orig.forEach(val => copy.add(clone(val)));
-	}
-
-	// Handle instances of unknown or generic objects.
-	else {
-		// We try to ensure that the returned copy has the same prototype as
-		// the original, but this will probably produce less than satisfactory
-		// results on non-generics.
+		// Unbox instances of the primitive exemplar objects.
 		//
-		// TODO: This can probably be improved.
-		copy = Object.create(Object.getPrototypeOf(orig));
+		// QUESTION: Do we really want to do this?
+		if (orig instanceof Boolean) {
+			return Boolean(orig);
+		}
+		if (orig instanceof Number) {
+			return Number(orig);
+		}
+		if (orig instanceof String) {
+			return String(orig);
+		}
+
+		// Honor native clone methods.
+		if (typeof orig.clone === 'function') {
+			return orig.clone(true);
+		}
+		if (orig.nodeType && typeof orig.cloneNode === 'function') {
+			return orig.cloneNode(true);
+		}
+
+		// Create a copy of the original object.
+		//
+		// NOTE: Each non-generic object that we wish to support must be
+		// explicitly handled below.
+		let copy;
+
+		// Handle instances of the core supported object types.
+		if (orig instanceof Array) {
+			copy = new Array(orig.length);
+		}
+		else if (orig instanceof Date) {
+			copy = new Date(orig.getTime());
+		}
+		else if (orig instanceof Error) {
+			// NOTE: It's impossible to perfectly clone `…Error` objects,
+			// but this should work well enough.
+			copy = Object.create(orig);
+			// WARNING: If we ever change the property duplication code further below
+			// to handle property descriptors, then this may also need to change.
+			Object.defineProperties(copy, Object.getOwnPropertyDescriptors(orig));
+		}
+		else if (orig instanceof Map) {
+			copy = new Map();
+			orig.forEach((val, key) => copy.set(_clone(key, cache), _clone(val, cache)));
+		}
+		else if (orig instanceof Promise) {
+			// NOTE: It's impossible to perfectly clone `Promise` objects,
+			// but this should work well enough.
+			copy = new Promise(
+				(resolve, reject) => orig.then(
+					value => resolve(_clone(value, cache)),
+					error => reject(_clone(error, cache))
+				)
+			);
+		}
+		else if (orig instanceof RegExp) {
+			copy = new RegExp(orig);
+			copy.lastIndex = orig.lastIndex;
+		}
+		else if (orig instanceof Set) {
+			copy = new Set();
+			orig.forEach(val => copy.add(_clone(val, cache)));
+		}
+
+		// Handle instances of unknown or generic objects.
+		else {
+			// We try to ensure that the returned copy has the same prototype as
+			// the original, but this will probably produce less than satisfactory
+			// results on non-generics.
+			//
+			// TODO: This can probably be improved.
+			copy = Object.create(Object.getPrototypeOf(orig));
+		}
+
+		// Duplicate the original object's own enumerable properties, which will
+		// include expando properties on non-generic objects.
+		//
+		// NOTE: This preserves neither symbol properties nor property attributes.
+		// Neither does the serialization code, however, so it's not really an issue
+		// at the moment.
+		Object.keys(orig).forEach(name => copy[name] = _clone(orig[name], cache));
+
+		// Add an entry for the orig→copy pair to the reference cache.
+		cache.set(orig, copy);
+
+		return copy;
 	}
 
-	// Duplicate the original object's own enumerable properties, which will
-	// include expando properties on non-generic objects.
-	//
-	// NOTE: This preserves neither symbol properties nor ES5 property attributes.
-	// Neither does the delta coding or serialization code, however, so it's not
-	// really an issue at the moment.
-	Object.keys(orig).forEach(name => copy[name] = clone(orig[name]));
+	function clone(orig, refCache) {
+		const cache = refCache ?? new Map();
 
-	return copy;
-}
+		if (!(cache instanceof Map)) {
+			throw new TypeError('clone refCache parameter must be an instance of Map');
+		}
+
+		return _clone(orig, cache);
+	}
+
+	return clone;
+})();
 
 
 /*
