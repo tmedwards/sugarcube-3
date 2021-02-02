@@ -4,6 +4,7 @@
 
 * Reference integrity and circular references are now supported when cloning and serializing.
 * Utils functions API changes: `clone()` refactored.
+* `PRNGWrapper` API removed; code migrated into `State`.
 * `Serial` API added.
 * Updated vendored libraries and added `flatted`.
 
