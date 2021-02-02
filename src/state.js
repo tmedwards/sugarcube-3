@@ -7,7 +7,6 @@
 
 ***********************************************************************************************************************/
 
-// import Config from './config';
 import Db from './db';
 import Scripting from './markup/scripting';
 import clone from './utils/clone';
@@ -29,8 +28,8 @@ const State = (() => {
 	// NOTE: This mapping must never include counts less-than `1`.
 	let _visits = Object.create(null);
 
-	// Base story variables.
-	let _variables = Object.create(null);
+	// Settled story variables.
+	let _settled = Object.create(null);
 
 	// Working story variables.
 	let _working = Object.create(null);
@@ -65,7 +64,7 @@ const State = (() => {
 		_name      = '';
 		_previous  = '';
 		_visits    = Object.create(null);
-		_variables = Object.create(null);
+		_settled   = Object.create(null);
 		_working   = Object.create(null);
 		_turns     = 0;
 		_prng      = _prng !== null ? prngCreate(_prng.seed) : null;
@@ -117,7 +116,7 @@ const State = (() => {
 		const state = {
 			name      : _name,
 			visits    : _visits,
-			variables : _variables
+			variables : _settled
 		};
 
 		if (_previous !== '') {
@@ -165,9 +164,9 @@ const State = (() => {
 		// Restore the state.
 		_name      = state.name;
 		_previous  = state?.previous ?? '';
-		_visits   = Object.assign(Object.create(null), state.visits);
-		_variables = Object.assign(Object.create(null), state.variables);
-		_working   = clone(_variables);
+		_visits    = Object.assign(Object.create(null), state.visits);
+		_settled   = Object.assign(Object.create(null), state.variables);
+		_working   = clone(_settled);
 		_turns     = Object.keys(_visits).reduce((sum, key) => sum += _visits[key], 0); // eslint-disable-line no-param-reassign
 		_temporary = Object.create(null);
 
@@ -198,7 +197,7 @@ const State = (() => {
 		_previous = _name;
 		_name = passageName;
 		_visits[_name] = 1 + (_visits[_name] ?? 0);
-		_variables = clone(_working);
+		_settled = clone(_working);
 
 		// QUESTION: Do I need this here?
 		// _working = clone(_variables);
