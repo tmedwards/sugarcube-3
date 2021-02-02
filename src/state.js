@@ -379,7 +379,7 @@ const State = (() => {
 	*/
 	function variableSet(varExpression, value) {
 		try {
-			Scripting.evalTwineScript(`${varExpression} = evalTwineScript$Data$`, null, value);
+			Scripting.evalTwineScript(`${varExpression} = SCRIPT$DATA$`, null, value);
 			return true;
 		}
 		catch (ex) { /* no-op */ }

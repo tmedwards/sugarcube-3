@@ -94,7 +94,7 @@ const Serial = (() => {
 					case '(revive:eval)':
 						try {
 							/* eslint-disable no-eval */
-							const $REVIVE_DATA$ = value[1][1]; // eslint-disable-line no-unused-vars
+							const REVIVE$DATA$ = value[1][1]; // eslint-disable-line no-unused-vars
 							value = eval(value[1][0]);
 							/* eslint-enable no-eval */
 						}
