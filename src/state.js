@@ -9,7 +9,6 @@
 
 // import Config from './config';
 import Db from './db';
-import PRNGWrapper from './lib/prngwrapper';
 import Scripting from './markup/scripting';
 import clone from './utils/clone';
 import hasOwn from './utils/hasown';
@@ -69,7 +68,7 @@ const State = (() => {
 		_variables = Object.create(null);
 		_working   = Object.create(null);
 		_turns     = 0;
-		_prng      = _prng === null ? null : new PRNGWrapper(_prng.seed, false);
+		_prng      = _prng !== null ? prngCreate(_prng.seed) : null;
 		_pull      = 0;
 		_temporary = Object.create(null);
 	}
@@ -174,13 +173,11 @@ const State = (() => {
 
 		if (hasOwn(state, 'seed')) {
 			if (_prng !== null) {
-				_pull = state.pull;
-
-				// NOTE: This is necessary to properly restore the PRNG's internal state.
-				_prng = PRNGWrapper.unmarshal({
+				_prng = prngUnmarshal({
 					seed : state.seed,
-					pull : _pull
+					pull : state.pull
 				});
+				_pull = _prng.pull;
 			}
 		}
 
@@ -273,15 +270,54 @@ const State = (() => {
 		PRNG Functions.
 	*******************************************************************************/
 
-	// QUESTION: Move this to `Config`?
-	function prngInit(seed, useEntropy) {
-		if (BUILD_DEBUG) { console.log(`[State/prngInit(seed: ${seed}, useEntropy: ${useEntropy})]`); }
+	function prngCreate(seed, mixEntropy = false) {
+		const newPrng = new Math.seedrandom(seed, { // eslint-disable-line new-cap
+			entropy : mixEntropy,
+			pass    : (prng, seed) => ({ prng, seed })
+		});
 
-		if (_turns === 0) {
-			throw new Error('State.initPRNG must be called during initialization, within either the Story JavaScript or the StoryInit special passage');
+		return Object.create(null, {
+			prng : {
+				value : newPrng.prng
+			},
+
+			seed : {
+				value : newPrng.seed
+			},
+
+			pull : {
+				writable : true,
+				value    : 0
+			},
+
+			random() {
+				++this.pull;
+				return this.prng();
+			}
+		});
+	}
+
+	function prngUnmarshal(state) {
+		// Create a new PRNG using the original seed, then pull values from it
+		// until it has reached the original pull count.
+		const prng = prngCreate(state.seed);
+
+		for (let i = state.pull; i > 0; --i) {
+			prng.random();
 		}
 
-		_prng = new PRNGWrapper(seed, useEntropy);
+		return prng;
+	}
+
+	// QUESTION: Move this to `Config`?
+	function prngInit(seed, mixEntropy = false) {
+		if (BUILD_DEBUG) { console.log(`[State/prngInit(seed: ${seed}, mixEntropy: ${mixEntropy})]`); }
+
+		if (_turns > 0) {
+			throw new Error('State.prng.init must be called during initialization, within either the Story JavaScript or the StoryInit special passage');
+		}
+
+		_prng = prngCreate(seed, mixEntropy);
 		_pull = _prng.pull;
 	}
 
@@ -290,17 +326,17 @@ const State = (() => {
 	}
 
 	function prngPull() {
-		return _prng ? _prng.pull : NaN;
+		return _prng !== null ? _prng.pull : NaN;
 	}
 
 	function prngSeed() {
-		return _prng ? _prng.seed : null;
+		return _prng !== null ? _prng.seed : null;
 	}
 
 	function prngRandom() {
 		if (BUILD_DEBUG) { console.log('[State/prngRandom()]'); }
 
-		return _prng ? _prng.random() : Math.random();
+		return _prng !== null ? _prng.random() : Math.random();
 	}
 
 
