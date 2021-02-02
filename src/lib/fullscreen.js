@@ -7,8 +7,6 @@
 
 ***********************************************************************************************************************/
 
-import Browser from './lib/browser';
-
 
 /*
 	Fullscreen API static object.
@@ -118,28 +116,6 @@ const Fullscreen = (() => {
 
 
 	/*******************************************************************************
-		Utility Functions.
-	*******************************************************************************/
-
-	function selectElement(requestedEl) {
-		let selectedEl = requestedEl || document.documentElement;
-
-		// Document element scrolling workaround for older browsers.
-		if (
-			selectedEl === document.documentElement
-			&& (
-				vendor.requestFn === 'msRequestFullscreen'   // IE 11
-				|| Browser.isOpera && Browser.operaVersion < 15 // Opera 12 (Presto)
-			)
-		) {
-			selectedEl = document.body;
-		}
-
-		return selectedEl;
-	}
-
-
-	/*******************************************************************************
 		API Functions.
 	*******************************************************************************/
 
@@ -164,7 +140,7 @@ const Fullscreen = (() => {
 			return Promise.reject(new Error('fullscreen not supported'));
 		}
 
-		const element = selectElement(requestedEl);
+		const element = requestedEl ?? document.documentElement;
 
 		if (typeof element[vendor.requestFn] !== 'function') {
 			return Promise.reject(new Error('fullscreen not supported'));
@@ -238,7 +214,7 @@ const Fullscreen = (() => {
 			return;
 		}
 
-		const element = selectElement(requestedEl);
+		const element = requestedEl ?? document.documentElement;
 
 		$(element).on(vendor.changeEvent, handlerFn);
 	}
@@ -248,7 +224,7 @@ const Fullscreen = (() => {
 			return;
 		}
 
-		const element = selectElement(requestedEl);
+		const element = requestedEl ?? document.documentElement;
 
 		if (handlerFn) {
 			$(element).off(vendor.changeEvent, handlerFn);
@@ -263,7 +239,7 @@ const Fullscreen = (() => {
 			return;
 		}
 
-		const element = selectElement(requestedEl);
+		const element = requestedEl ?? document.documentElement;
 
 		$(element).on(vendor.errorEvent, handlerFn);
 	}
@@ -273,7 +249,7 @@ const Fullscreen = (() => {
 			return;
 		}
 
-		const element = selectElement(requestedEl);
+		const element = requestedEl ?? document.documentElement;
 
 		if (handlerFn) {
 			$(element).off(vendor.errorEvent, handlerFn);

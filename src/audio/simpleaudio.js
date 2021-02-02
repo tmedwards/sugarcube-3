@@ -309,10 +309,6 @@ const SimpleAudio = (() => {
 						elements on their parent media element, rather than the source element.
 						To enable error handling in all browsers, we set the error handler on the
 						audio element and have the final source element forward its `error` event.
-
-						IE does not trigger, at least some, `error` events from source elements at
-						all, not on the source element or its parent media element.  AFAIK, nothing
-						can be done about this lossage.
 				*/
 				.on('error.AudioTrack', () => this._error = true)
 				/*
@@ -640,8 +636,8 @@ const SimpleAudio = (() => {
 
 				NOTE (ca. Aug 2016): The specification allows negative values for reverse playback,
 				however, most browsers either completely ignore negative values or clamp them to
-				some positive value.  In some (notably, IE & Edge), setting a negative playback
-				rate breaks the associated controls, if displayed.
+				some positive value.  In some, setting a negative playback rate breaks the associated
+				controls, if displayed.
 			*/
 			/*
 			this._rate = rate < 0
@@ -1953,7 +1949,6 @@ const SimpleAudio = (() => {
 	}
 
 	function masterMuteOnHidden(mute) {
-		// NOTE: Some older browsers—notably: IE 9—do not support the Page Visibility API.
 		if (!Visibility.isEnabled()) {
 			return false;
 		}

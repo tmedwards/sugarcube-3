@@ -32,7 +32,6 @@ import './markup/parserlib';
 import Scripting, { setup } from './markup/scripting';
 import Setting, { settings } from './setting';
 import Alert from './lib/alert';
-import Browser from './lib/browser';
 import Config from './config';
 import Db from './db';
 import DebugBar from './debugbar';
@@ -94,7 +93,6 @@ const version = Object.freeze(Object.assign(Object.create(null), {
 Object.defineProperty(window, 'SugarCube', {
 	// WARNING: We need to assign new values at points, so seal it, do not freeze it.
 	value : Object.seal(Object.assign(Object.create(null), {
-		Browser,
 		Config,
 		Db,
 		DebugBar,

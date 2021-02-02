@@ -81,27 +81,11 @@ const StyleWrapper = (() => {
 				});
 			}
 
-			// For IE ≤ 10.
-			if (this.style.styleSheet) {
-				this.style.styleSheet.cssText += css;
-			}
-
-			// For all other browsers (incl. IE ≥ 11).
-			else {
-				this.style.appendChild(document.createTextNode(css));
-			}
+			this.style.appendChild(document.createTextNode(css));
 		}
 
 		clear() {
-			// For IE ≤10.
-			if (this.style.styleSheet) {
-				this.style.styleSheet.cssText = '';
-			}
-
-			// For all other browsers (incl. IE ≥11).
-			else {
-				jQuery(this.style).empty();
-			}
+			this.style.textContent = '';
 		}
 	}
 

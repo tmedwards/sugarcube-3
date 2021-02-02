@@ -67,8 +67,6 @@ Macro.add('textarea', {
 
 		// Set the variable and textarea element to the default value.
 		State.setVar(varName, defaultValue);
-		// NOTE: Ideally, we should be setting `.defaultValue` here, but IE doesn't
-		// support it, so we have to use `.textContent`, which is equivalent.
 		el.textContent = defaultValue;
 
 		// Autofocus the textarea element, if requested.
