@@ -114,7 +114,7 @@ KVStore.adapters.add((() => {
 		}
 
 		set(key, value) {
-			if (BUILD_DEBUG) { console.log(`[<KVStore:${this.name}>.set(key: "${key}", value: \u2026) : boolean]`); }
+			if (BUILD_DEBUG) { console.log(`[<KVStore:${this.name}>.set(key: "${key}", value: …) : boolean]`); }
 
 			if (typeof key !== 'string' || !key) {
 				return false;
@@ -126,14 +126,10 @@ KVStore.adapters.add((() => {
 			catch (ex) {
 				// If the exception is a quota exceeded error, massage it into something a bit
 				// nicer for the player.
-				//
-				// NOTE: Ideally, we could simply check `ex.code` or `ex.name`, but neither of
-				// those properties have, traditionally, been well standardized or supported in
-				// all browsers.  Thus, we have to resort to pattern matching a combination of
-				// `ex.name` and `ex.message`—the latter being required by Opera (Presto).
-				//
-				// I hate the parties responsible for this snafu so much.
-				if (/quota.?(?:exceeded|reached)/i.test(ex.name + ex.message)) {
+				if (
+					ex.code === DOMException.QUOTA_EXCEEDED_ERR ||
+					ex.name === 'QuotaExceededError'
+				) {
 					throw exceptionFrom(ex, Error, `${this.name} quota exceeded`);
 				}
 

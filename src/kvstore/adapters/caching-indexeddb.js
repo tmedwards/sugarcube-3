@@ -131,7 +131,7 @@ KVStore.adapters.add((() => {
 		}
 
 		set(key, value) {
-			if (BUILD_DEBUG) { console.log(`[<KVStore:${this.name}>.set(key: "${key}", value: \u2026) : boolean]`); }
+			if (BUILD_DEBUG) { console.log(`[<KVStore:${this.name}>.set(key: "${key}", value: …) : boolean]`); }
 
 			if (typeof key !== 'string' || !key) {
 				return false;
@@ -170,7 +170,7 @@ KVStore.adapters.add((() => {
 		}
 
 		static updateStore(dbPromise, storeName, action, key, value) {
-			dbPromise.then(db => new Promise((resolve, reject) => {
+			return dbPromise.then(db => new Promise((resolve, reject) => {
 				const tx    = db.transaction(storeName, READ_WRITE);
 				const store = tx.objectStore(storeName);
 				let request;

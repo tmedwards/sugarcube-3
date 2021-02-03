@@ -2,6 +2,10 @@
 
 ## 2021-02-01
 
+* Various cleanup.
+
+## 2021-02-01
+
 * Reference integrity and circular references are now supported when cloning and serializing.
 * Utils functions API changes: `clone()` refactored.
 * `PRNGWrapper` API removed; code migrated into `State`.

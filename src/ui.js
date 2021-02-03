@@ -30,7 +30,7 @@ const UI = (() => {
 	*******************************************************************************/
 
 	function assembleLinkList(passage, listEl) {
-		console.log(`[UI/assembleLinkList(passage: "${passage}", listEl: …)]`, listEl);
+		if (BUILD_DEBUG) { console.log(`[UI/assembleLinkList(passage: "${passage}", listEl: …)]`, listEl); }
 
 		let list = listEl;
 

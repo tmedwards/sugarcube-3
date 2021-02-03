@@ -65,13 +65,19 @@ const exceptionFrom = (() => {
 		}
 
 		// Create the new exception and copy the property values to it.
-		const ex = new exceptionType(original.message); // eslint-disable-line new-cap
+		const ex = new exceptionType(propValues.get('message')); // eslint-disable-line new-cap
+		propValues.delete('message');
 		propValues.forEach((value, name) => {
-			Object.defineProperty(ex, name, {
-				value,
-				configurable : true,
-				writable     : true
-			});
+			if (typeof ex[name] === 'undefined') {
+				Object.defineProperty(ex, name, {
+					value,
+					configurable : true,
+					writable     : true
+				});
+			}
+			else {
+				ex[name] = value;
+			}
 		});
 
 		return ex;
