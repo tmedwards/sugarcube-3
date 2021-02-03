@@ -1,6 +1,16 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
-## 2021-02-01
+## 2021-02-03
+
+* `WebStorageAdapter` cleanup.  Finally able to tidy the `QuotaExceededError` code.
+* `String` API changes:
+	* `String.format()` refactored a bit.  Is it still useful?
+	* `String.outdent` and `String.oneline` template string tag functions added.
+* Utils functions API changes:
+	* `assert()` refactored.
+	* `exceptionFrom()` refactored.
+
+## 2021-02-02
 
 * Various cleanup.
 

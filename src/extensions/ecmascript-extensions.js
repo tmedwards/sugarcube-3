@@ -7,6 +7,9 @@
 
 ***********************************************************************************************************************/
 
+import stringFrom from './utils/stringfrom';
+
+
 /*
 	ECMAScript Extensions.
 */
@@ -838,70 +841,129 @@
 	/*
 		Returns a formatted string, after replacing each format item in the given
 		format string with the text equivalent of the corresponding argument's value.
+
+		QUESTION: With template strings available, is this even still useful?
 	*/
 	(() => {
-		const _formatRegExp    = /{(\d+)(?:,([+-]?\d+))?}/g;
-		const _hasFormatRegExp = new RegExp(_formatRegExp.source); // to drop the global flag
+		const _formatItemRE    = /\{\{|\}\}|\{(\d+)(?:,([+-]?\d+))?(?::([0-9A-Za-z]+))?\}/g;
+		const _hasFormatItemRE = new RegExp(_formatItemRE.source); // to drop the global flag
+		const _formatValue     = (format, value) => {
+			if (!format) {
+				return stringFrom(value);
+			}
+
+			// TODO: Make this actually do something.
+			return stringFrom(value);
+		};
+		const _padString = (str, align, pad) => {
+			if (!align) {
+				return str;
+			}
+
+			const plen = Math.abs(align) - str.length;
+
+			if (plen < 1) {
+				return str;
+			}
+
+			const padding = String(pad).repeat(plen);
+			return align < 0 ? str + padding : padding + str;
+		};
 
 		Object.defineProperty(String, 'format', {
 			configurable : true,
 			writable     : true,
 
-			value(format) {
-				function padString(str, align, pad) {
-					if (!align) {
-						return str;
-					}
-
-					const plen = Math.abs(align) - str.length;
-
-					if (plen < 1) {
-						return str;
-					}
-
-					// const padding = Array(plen + 1).join(pad);
-					const padding = String(pad).repeat(plen);
-					return align < 0 ? str + padding : padding + str;
+			value(formatString, ...params) {
+				if (!_hasFormatItemRE.test(formatString)) {
+					return formatString ?? '';
 				}
 
-				if (arguments.length < 2) {
-					return arguments.length === 0 ? '' : format;
+				const replacements = [...params[0] instanceof Array ? params[0] : params];
+
+				if (replacements.length === 0) {
+					return formatString ?? '';
 				}
 
-				const args = arguments.length === 2 && arguments[1] instanceof Array
-					? Array.from(arguments[1])
-					: Array.prototype.slice.call(arguments, 1);
-
-				if (args.length === 0) {
-					return format;
-				}
-
-				if (!_hasFormatRegExp.test(format)) {
-					return format;
-				}
-
-				// Possibly required by some old buggy browsers.
-				_formatRegExp.lastIndex = 0;
-
-				return format.replace(_formatRegExp, (match, index, align) => {
-					let retval = args[index];
-
-					if (retval == null) { // lazy equality for null
-						return '';
+				return formatString.replace(_formatItemRE, (match, index, align, format) => {
+					switch (match) {
+						case '{{': return '{';
+						case '}}': return '}';
 					}
 
-					while (typeof retval === 'function') {
-						retval = retval();
+					let value = replacements[index];
+
+					while (typeof value === 'function') {
+						value = value();
 					}
 
-					switch (typeof retval) {
-						case 'string': /* no-op */ break;
-						case 'object': retval = JSON.stringify(retval); break;
-						default:       retval = String(retval); break;
-					}
-
-					return padString(retval, !align ? 0 : Number.parseInt(align, 10), ' ');
+					return _padString(
+						_formatValue(format, value),
+						!align ? 0 : Number.parseInt(align, 10), ' '
+					);
 				});
+			}
+		});
+	})();
+
+	/*
+		Various template string tag functions.
+	*/
+	(() => {
+		function assembleTemplate(strings, ...values) {
+			return values.reduce(
+				(str, val, i) => str += `${stringFrom(val)}${strings[i + 1]}`, // eslint-disable-line no-param-reassign
+				strings[0]
+			);
+		}
+
+		const endWsRE     = /\s+$/;
+		const indentsRE   = /^([ \t])*/gm;
+		const runWsRE     = /\s+/g;
+		const startCrLfRE = /^[\r\n]+/;
+		const startWsRE   = /^\s+/;
+
+		/*
+			Remove linebreaks and extra spacing in a template string.
+		*/
+		Object.defineProperty(String, 'oneline', {
+			configurable : true,
+			writable     : true,
+
+			value(strings, ...values) {
+				return assembleTemplate(strings, ...values)
+					.replace(startWsRE, '')
+					.replace(endWsRE, '')
+					.replace(runWsRE, ' ');
+			}
+		});
+
+		/*
+			Outdent all lines by the smallest indention level, and remove starting CR/LFs
+			and all trailing whitespace.
+		*/
+		Object.defineProperty(String, 'outdent', {
+			configurable : true,
+			writable     : true,
+
+			value(strings, ...values) {
+				const string = assembleTemplate(strings, ...values)
+					.replace(startCrLfRE, '')
+					.replace(endWsRE, '');
+
+				const indents = string.match(indentsRE);
+
+				if (indents === null || indents.length === 0) {
+					return string;
+				}
+
+				const shortest = indents.reduce((a, b) => a.length < b.length ? a : b);
+
+				if (shortest.length === 0) {
+					return string;
+				}
+
+				return string.replace(new RegExp(`^${shortest}`, 'gm'), '');
 			}
 		});
 	})();
