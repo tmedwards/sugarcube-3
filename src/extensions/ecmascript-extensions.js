@@ -852,7 +852,8 @@ import stringFrom from './utils/stringfrom';
 				return stringFrom(value);
 			}
 
-			// TODO: Make this actually do something.
+			// TODO: Make this actually do something with `format`.
+
 			return stringFrom(value);
 		};
 		const _padString = (str, align, pad) => {
@@ -910,18 +911,15 @@ import stringFrom from './utils/stringfrom';
 		Various template string tag functions.
 	*/
 	(() => {
-		function assembleTemplate(strings, ...values) {
-			return values.reduce(
-				(str, val, i) => str += `${stringFrom(val)}${strings[i + 1]}`, // eslint-disable-line no-param-reassign
-				strings[0]
-			);
+		function assembleTemplate(parts, ...values) {
+			return parts.reduce((string, part, i) => `${string}${stringFrom(values[i - 1])}${part}`);
 		}
 
-		const endWsRE     = /\s+$/;
-		const indentsRE   = /^([ \t])*/gm;
-		const runWsRE     = /\s+/g;
-		const startCrLfRE = /^[\r\n]+/;
-		const startWsRE   = /^\s+/;
+		const endingWsRE     = /\s+$/;
+		const indentsRE      = /^([ \t])*/gm;
+		const runsOfWsRE     = /\s+/g;
+		const startingCrLfRE = /^[\r\n]+/;
+		const startingWsRE   = /^\s+/;
 
 		/*
 			Remove linebreaks and extra spacing in a template string.
@@ -930,26 +928,29 @@ import stringFrom from './utils/stringfrom';
 			configurable : true,
 			writable     : true,
 
-			value(strings, ...values) {
-				return assembleTemplate(strings, ...values)
-					.replace(startWsRE, '')
-					.replace(endWsRE, '')
-					.replace(runWsRE, ' ');
+			value(parts, ...values) {
+				return assembleTemplate(parts, ...values)
+					.replace(startingWsRE, '')
+					.replace(endingWsRE, '')
+					.replace(runsOfWsRE, ' ');
 			}
 		});
 
 		/*
 			Outdent all lines by the smallest indention level, and remove starting CR/LFs
 			and all trailing whitespace.
+
+			NOTE: This tag function, rightly, assumes that all encountered indention is
+			sane—i.e., either all tabs or all spaces, not a mix.
 		*/
 		Object.defineProperty(String, 'outdent', {
 			configurable : true,
 			writable     : true,
 
-			value(strings, ...values) {
-				const string = assembleTemplate(strings, ...values)
-					.replace(startCrLfRE, '')
-					.replace(endWsRE, '');
+			value(parts, ...values) {
+				const string = assembleTemplate(parts, ...values)
+					.replace(startingCrLfRE, '')
+					.replace(endingWsRE, '');
 
 				const indents = string.match(indentsRE);
 
