@@ -8,23 +8,15 @@
 ***********************************************************************************************************************/
 
 /*
-	Throws the given exception `ex`, if `result` is not `true`.
+	Throws a JavaScript error if `claim` is `false`.  Either the given error or,
+	if a string is given, a new `Error` with the given message.
 */
-function assert(result, ex) {
-	if (typeof result !== 'boolean') {
-		throw new TypeError('assert result parameter must be a boolean');
-	}
-	if (!(ex instanceof Error)) {
-		throw new TypeError('assert ex parameter must be a native JavaScript exception or inherited from one');
+function assert(claim, error) {
+	if (claim) {
+		return;
 	}
 
-	if (!result) {
-		/* eslint-disable no-param-reassign */
-		ex.result = false;
-		ex.expected = true;
-		/* eslint-enable no-param-reassign */
-		throw ex;
-	}
+	throw error instanceof Error ? error : new Error(error);
 }
 
 
