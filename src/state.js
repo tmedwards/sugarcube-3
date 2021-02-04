@@ -135,7 +135,7 @@ const State = (() => {
 		Restores the story state from a marshaled story state serialization object.
 	*/
 	function stateUnmarshal(state, updateSession = true) {
-		if (BUILD_DEBUG) { console.log(`[State/stateUnmarshal(updateSession: ${updateSession})]`); }
+		if (BUILD_DEBUG) { console.log(`[State/stateUnmarshal(state: …, updateSession: ${updateSession})]`, state); }
 
 		if (state == null) { // lazy equality for null
 			throw new Error('state object is null or undefined');
@@ -198,10 +198,6 @@ const State = (() => {
 		_name = passageName;
 		_visits[_name] = 1 + (_visits[_name] ?? 0);
 		_settled = clone(_working);
-
-		// QUESTION: Do I need this here?
-		// _working = clone(_variables);
-
 		_turns++;
 
 		// QUESTION: Move _temporary clearning here?
@@ -269,6 +265,9 @@ const State = (() => {
 		PRNG Functions.
 	*******************************************************************************/
 
+	/*
+		Returns a new PRNG wrapper object.
+	*/
 	function prngCreate(seed, mixEntropy = false) {
 		const newPrng = new Math.seedrandom(seed, { // eslint-disable-line new-cap
 			entropy : mixEntropy,
@@ -296,19 +295,28 @@ const State = (() => {
 		});
 	}
 
+	/*
+		Restores the PRNG state from a marshaled PRNG state serialization object.
+	*/
 	function prngUnmarshal(state) {
-		// Create a new PRNG using the original seed, then pull values from it
-		// until it has reached the original pull count.
+		// Create a new PRNG using the original seed.
 		const prng = prngCreate(state.seed);
 
+		// Pull values from the new PRNG until it has reached the pull count of
+		// the original.
 		for (let i = state.pull; i > 0; --i) {
 			prng.random();
 		}
 
+		// Return the new PRNG now that the original's state has been fully duplicated.
 		return prng;
 	}
 
-	// QUESTION: Move this to `Config`?
+	/*
+		Initializes the PRNG for use.
+
+		QUESTION: Move this to `Config`?
+	*/
 	function prngInit(seed, mixEntropy = false) {
 		if (BUILD_DEBUG) { console.log(`[State/prngInit(seed: ${seed}, mixEntropy: ${mixEntropy})]`); }
 
@@ -320,18 +328,30 @@ const State = (() => {
 		_pull = _prng.pull;
 	}
 
+	/*
+		Returns whether the PRNG is enabled.
+	*/
 	function prngIsEnabled() {
 		return _prng !== null;
 	}
 
+	/*
+		Returns the current pull count of the PRNG or, if the PRNG is not enabled, `NaN`.
+	*/
 	function prngPull() {
 		return _prng !== null ? _prng.pull : NaN;
 	}
 
+	/*
+		Returns the seed of the PRNG or, if the PRNG is not enabled, `null`.
+	*/
 	function prngSeed() {
 		return _prng !== null ? _prng.seed : null;
 	}
 
+	/*
+		Returns a pseudo-random floating-point number from the PRNG or, if the PRNG is not enabled, `Math.random()`.
+	*/
 	function prngRandom() {
 		if (BUILD_DEBUG) { console.log('[State/prngRandom()]'); }
 
@@ -394,10 +414,16 @@ const State = (() => {
 
 	const METADATA_STORE = 'metadata';
 
+	/*
+		Empty the metadata store.
+	*/
 	function metadataClear() {
 		Db.storage.delete(METADATA_STORE);
 	}
 
+	/*
+		Remove the given key, and its value, from the metadata store.
+	*/
 	function metadataDelete(key) {
 		if (typeof key !== 'string') {
 			throw new TypeError(`State.metadata.delete key parameter must be a string (received: ${typeof key})`);
@@ -416,6 +442,9 @@ const State = (() => {
 		}
 	}
 
+	/*
+		Returns the value of the given key from the metadata store.
+	*/
 	function metadataGet(key) {
 		if (typeof key !== 'string') {
 			throw new TypeError(`State.metadata.get key parameter must be a string (received: ${typeof key})`);
@@ -425,6 +454,9 @@ const State = (() => {
 		return store && store.hasOwnProperty(key) ? store[key] : undefined;
 	}
 
+	/*
+		Returns whether the given key exists within the metadata store.
+	*/
 	function metadataHas(key) {
 		if (typeof key !== 'string') {
 			throw new TypeError(`State.metadata.has key parameter must be a string (received: ${typeof key})`);
@@ -434,6 +466,9 @@ const State = (() => {
 		return store && store.hasOwnProperty(key);
 	}
 
+	/*
+		Sets the given key to the given value within the metadata store.
+	*/
 	function metadataSet(key, value) {
 		if (typeof key !== 'string') {
 			throw new TypeError(`State.metadata.set key parameter must be a string (received: ${typeof key})`);
@@ -449,6 +484,9 @@ const State = (() => {
 		}
 	}
 
+	/*
+		Returns the number of entries that exist within the metadata store.
+	*/
 	function metadataSize() {
 		const store = Db.storage.get(METADATA_STORE);
 		return store ? Object.keys(store).length : 0;
