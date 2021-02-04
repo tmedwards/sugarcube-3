@@ -1,5 +1,9 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
+## 2021-02-04
+
+* Ported recent `<svg>` tags fix from v2.
+
 ## 2021-02-03
 
 * `WebStorageAdapter` cleanup.  Finally able to tidy the `QuotaExceededError` code.
