@@ -27,11 +27,6 @@ const clone = (() => {
 			return orig;
 		}
 
-		// Check the cache.  If we get a hit, return the existing copy.
-		if (cache.has(orig)) {
-			return cache.get(orig);
-		}
-
 		// Unbox instances of the primitive exemplar objects.
 		//
 		// QUESTION: Do we really want to do this?
@@ -45,27 +40,44 @@ const clone = (() => {
 			return String(orig);
 		}
 
-		// Honor native clone methods.
-		if (typeof orig.clone === 'function') {
-			return orig.clone(true);
-		}
-		if (orig.nodeType && typeof orig.cloneNode === 'function') {
-			return orig.cloneNode(true);
+		// Check the cache and, if we get a hit, return the existing copy.
+		if (cache.has(orig)) {
+			return cache.get(orig);
 		}
 
 		// Create a copy of the original object.
+		let copyProps = true;
+		let copy;
+
+		// Handle objects with native clone methods.
+		if (typeof orig.clone === 'function') {
+			copyProps = false;
+			copy = orig.clone(true);
+		}
+
+		// Handle `Node` instances.
+		else if (orig.nodeType && typeof orig.cloneNode === 'function') {
+			copyProps = false;
+			copy = orig.cloneNode(true);
+		}
+
+		// Handle instances of the core supported object types, unknown, and
+		// generic objects.
 		//
 		// NOTE: Each non-generic object that we wish to support must be
 		// explicitly handled below.
-		let copy;
 
-		// Handle instances of the core supported object types.
-		if (orig instanceof Array) {
+		// Handle `Array` instances.
+		else if (orig instanceof Array) {
 			copy = new Array(orig.length);
 		}
+
+		// Handle `Date` instances.
 		else if (orig instanceof Date) {
 			copy = new Date(orig.getTime());
 		}
+
+		// Handle `Error` instances.
 		else if (orig instanceof Error) {
 			// NOTE: It's impossible to perfectly clone `…Error` objects,
 			// but this should work well enough.
@@ -74,10 +86,14 @@ const clone = (() => {
 			// to handle property descriptors, then this may also need to change.
 			Object.defineProperties(copy, Object.getOwnPropertyDescriptors(orig));
 		}
+
+		// Handle `Map` instances.
 		else if (orig instanceof Map) {
 			copy = new Map();
 			orig.forEach((val, key) => copy.set(_clone(key, cache), _clone(val, cache)));
 		}
+
+		// Handle `Promise` instances.
 		else if (orig instanceof Promise) {
 			// NOTE: It's impossible to perfectly clone `Promise` objects,
 			// but this should work well enough.
@@ -88,10 +104,14 @@ const clone = (() => {
 				)
 			);
 		}
+
+		// Handle `RegExp` instances.
 		else if (orig instanceof RegExp) {
 			copy = new RegExp(orig);
 			copy.lastIndex = orig.lastIndex;
 		}
+
+		// Handle `Set` instances.
 		else if (orig instanceof Set) {
 			copy = new Set();
 			orig.forEach(val => copy.add(_clone(val, cache)));
@@ -107,16 +127,19 @@ const clone = (() => {
 			copy = Object.create(Object.getPrototypeOf(orig));
 		}
 
-		// Duplicate the original object's own enumerable properties, which will
-		// include expando properties on non-generic objects.
-		//
-		// NOTE: This preserves neither symbol properties nor property attributes.
-		// Neither does the serialization code, however, so it's not really an issue
-		// at the moment.
-		Object.keys(orig).forEach(name => copy[name] = _clone(orig[name], cache));
-
 		// Add an entry for the orig→copy pair to the reference cache.
 		cache.set(orig, copy);
+
+		// If necessary, copy the properties of the original object.
+		if (copyProps) {
+			// Duplicate the original object's own enumerable properties, which will
+			// include expando properties on non-generic objects.
+			//
+			// NOTE: This preserves neither symbol properties nor property attributes.
+			// Neither does the serialization code, however, so it's not really an issue
+			// at the moment.
+			Object.keys(orig).forEach(name => copy[name] = _clone(orig[name], cache));
+		}
 
 		return copy;
 	}

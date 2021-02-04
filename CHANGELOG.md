@@ -2,6 +2,7 @@
 
 ## 2021-02-04
 
+* Fixed `clone()` so that it actually works as intended.
 * Ported recent `<svg>` tags fix from v2.
 
 ## 2021-02-03
