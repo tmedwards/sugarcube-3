@@ -10,14 +10,10 @@
 /*
 	TODO: This regular expression should be elsewhere.
 
-	Error prologs by engine/browser: (ca. 2018)
-		Chrome, Opera, & Vivaldi → `Uncaught \w*Error: …`
-		Edge & IE                → `…`
-		Firefox                  → `Error: …`
-		Opera (Presto)           → `Uncaught exception: \w*(?:Error|Exception): …`
-		Safari (ca. v5.1)        → `\w*(?:Error|_ERR): …`
+	Error prologs by engine/browser: (ca. 2021)
+		Most browsers → `(Uncaught )?Error: …`
 */
-const errorPrologRE = /^(?:(?:uncaught\s+(?:exception:\s+)?)?\w*(?:error|exception|_err):\s+)+/i; // eslint-disable-line no-unused-vars, no-var
+const errorPrologRE = /^(?:(?:uncaught\s+)?error:\s+)/i; // eslint-disable-line no-unused-vars, no-var
 
 /*
 	Alert API static object.
@@ -29,7 +25,7 @@ const Alert = (() => {
 
 	function mesg(where, error, isFatal, isUncaught) {
 		let mesg = 'Error';
-		let nice = `${isFatal ? 'A fatal' : 'An'} error has occurred.`;
+		let nice = `A${isFatal ? ' fatal' : 'n'} error has occurred.`;
 
 		if (isFatal) {
 			nice += ' Aborting.';
@@ -89,12 +85,12 @@ const Alert = (() => {
 
 			// Uncaught exceptions during play may be recoverable/ignorable.
 			if (document.readyState === 'complete') {
-				mesg(null, error || what, false, true);
+				mesg(null, error ?? what, false, true);
 			}
 
 			// Uncaught exceptions during startup should be fatal.
 			else {
-				mesg(null, error || what, true, true);
+				mesg(null, error ?? what, true, true);
 				window.onerror = origOnError;
 
 				if (typeof window.onerror === 'function') {
