@@ -34,7 +34,7 @@ const State = (() => {
 	// Working story variables.
 	let _working = Object.create(null);
 
-	// Total number of played passages.
+	// Total number of played turns.
 	let _turns = 0;
 
 	// (optional) Seedable PRNG object.

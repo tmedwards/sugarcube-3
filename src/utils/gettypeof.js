@@ -14,51 +14,34 @@
 	NOTE: In ≤ES5, returns the value of the `[[Class]]` internal slot for objects.
 
 	Examples:
-		getTypeOf(null)           → 'null'
-		getTypeOf(undefined)      → 'undefined'
+		getTypeOf(42n)            → 'bigint'
 		getTypeOf(true)           → 'boolean'
-		getTypeOf(42)             → 'number'
-		getTypeOf("fnord")        → 'string'
 		getTypeOf(function () {}) → 'function'
+		getTypeOf(42)             → 'number'
+		getTypeOf(null)           → 'null'
+		getTypeOf("fnord")        → 'string'
+		getTypeOf(Symbol("ZETA")) → 'symbol'
+		getTypeOf(undefined)      → 'undefined'
 		getTypeOf(['a', 'b'])     → 'Array'
 		getTypeOf({ a : 'b' })    → 'Object'
 		getTypeOf(new Date())     → 'Date'
 		getTypeOf(new Map())      → 'Map'
 		getTypeOf(new Set())      → 'Set'
+		Etc.
 */
 const getTypeOf = (() => {
 	// Cache the `<Object>.toString()` method.
 	const toString = Object.prototype.toString;
 
-	// If the browser is using the `Map()` and `Set()` polyfills, then return a
-	// version of `getTypeOf()` that contains special cases for them, since they
-	// do not have a `[[Class]]` internal slot and the `@@toStringTag` internal
-	// property is unavailable to them.
-	if (toString.call(new Map()) === '[object Object]') {
-		return function getTypeOf(O) {
-			// Special case for `null`, since `typeof` is a buggy piece of shit.
-			if (O === null) { return 'null'; }
-
-			// Special cases for the `Map` and `Set` polyfills.
-			//
-			// NOTE: We don't special case the `WeakMap` and `WeakSet` polyfills
-			// here since they're (a) unlikely to be used and (b) broken anyway.
-			if (O instanceof Map) { return 'Map'; }
-			if (O instanceof Set) { return 'Set'; }
-
-			const baseType = typeof O;
-			return baseType === 'object' ? toString.call(O).slice(8, -1) : baseType;
-		};
-	}
-
-	// Elsewise, return the regular `getTypeOf()` function.
-	return function getTypeOf(O) {
+	function getTypeOf(O) {
 		// Special case for `null`, since `typeof` is a buggy piece of shit.
 		if (O === null) { return 'null'; }
 
 		const baseType = typeof O;
 		return baseType === 'object' ? toString.call(O).slice(8, -1) : baseType;
-	};
+	}
+
+	return getTypeOf;
 })();
 
 
