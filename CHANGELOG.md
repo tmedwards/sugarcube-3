@@ -1,8 +1,14 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
+* **TODO:** Make auto saves not save on the same turn that any save is loaded, probably session restores too.
+
+## 2021-02-05
+
+* Fixed `clone()` so that it works as intended.  For realzies this time!
+
 ## 2021-02-04
 
-* Fixed `clone()` so that it actually works as intended.
+* Damn lies.  ~~Fixed `clone()` so that it actually works as intended.~~
 * Ported recent `<svg>` tags fix from v2.
 
 ## 2021-02-03
