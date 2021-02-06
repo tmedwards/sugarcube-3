@@ -5,6 +5,9 @@
 ## 2021-02-05
 
 * Fixed `clone()` so that it works as intended.  For realzies this time!
+* Updated `clone()` to handle `ArrayBuffer`, `DataView`, and typed array objects.
+* Disallow the core document elements in `stringFrom()`.
+* Updated the ESLint config.
 
 ## 2021-02-04
 

@@ -13,11 +13,9 @@ import getTypeOf from './utils/gettypeof';
 /*
 	Returns a deep copy of the given object, which may contain circular references.
 
-	Supports: arrays, {array buffers}, bigints, booleans, dates, functions, generic
-	objects, maps, numbers, null, regexps, sets, strings, symbols, {typed arrays},
+	Supports: arrays, array buffers, bigints, booleans, data views, dates, functions,
+	generic objects, maps, numbers, null, regexps, sets, strings, symbols, typed arrays,
 	and undefined.  Throws an error for any other value.
-
-	NOTE: {…} = Currently unimplemented.
 
 	WARNING: For generic objects, only their own enumerable properties are duplicated.
 	Non-enumerable properties and property descriptors—e.g., getters/setters and
@@ -52,6 +50,33 @@ const clone = (() => {
 		// Initialize copies of `Array` objects.
 		else if (O instanceof Array) {
 			copy = new Array(O.length);
+		}
+
+		// Copy `ArrayBuffer`, `DataView`, typed array objects.
+		else if (O instanceof ArrayBuffer) {
+			final = true;
+			copy = new ArrayBuffer(O.byteLength);
+			new Uint8Array(copy).set(new Uint8Array(O));
+		}
+		else if (O instanceof DataView) {
+			final = true;
+			copy = new DataView(O.buffer, O.byteOffset, O.byteLength);
+		}
+		else if (
+			O instanceof BigInt64Array ||
+			O instanceof BigUint64Array ||
+			O instanceof Float64Array ||
+			O instanceof Float32Array ||
+			O instanceof Int32Array ||
+			O instanceof Int16Array ||
+			O instanceof Int8Array ||
+			O instanceof Uint32Array ||
+			O instanceof Uint16Array ||
+			O instanceof Uint8Array ||
+			O instanceof Uint8ClampedArray
+		) {
+			final = true;
+			copy = new O.constructor(O.buffer, O.byteOffset, O.length);
 		}
 
 		// Copy `Date` objects.
