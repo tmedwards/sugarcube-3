@@ -160,6 +160,7 @@ const Serial = (() => {
 					writable     : true,
 					value        : origMethodCache.get(id)
 				});
+				origMethodCache.delete(id);
 			}
 			else {
 				delete reference.toJSON; // eslint-disable-line no-param-reassign
