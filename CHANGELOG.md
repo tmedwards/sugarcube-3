@@ -2,6 +2,10 @@
 
 * **TODO:** Make auto saves not save on the same turn that any save is loaded, probably session restores too.
 
+## 2021-02-06
+
+* Fixed a minor bobble in `Serial`.
+
 ## 2021-02-05
 
 * Fixed `clone()` so that it works as intended.  For realzies this time!
@@ -44,7 +48,7 @@
 * `DebugBar` API changes: `DebugBar.start()` → `DebugBar.finalize()`.
 * `Dialog` API changes: `Dialog.finalize()` added.
 * `L10n` API changes: `L10n` → `I18n`.
-* `I18n` API changes: `I18n.get()` → `I18n()`.
+* ~~`I18n` API changes: `I18n.get()` → `I18n()`.~~
 * `UIBar` API changes: `UIBar.start()` → `UIBar.finalize()`.
 * `State` API changes:
 	* `State.hasPlayed()` → `State.hasVisited()`.
