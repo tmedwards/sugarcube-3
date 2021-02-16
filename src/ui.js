@@ -7,18 +7,18 @@
 
 ***********************************************************************************************************************/
 
-import Setting, { settings } from './setting';
-import Config from './config';
-import Dialog from './dialog';
-import Engine from './engine';
-import Has from './lib/has';
-import I18n from './i18n/i18n';
-import Save from './save';
-import Story from './story';
-import Wikifier from './markup/wikifier';
-import createSlug from './utils/createslug';
-import { errorPrologRE } from './lib/alert';
-import setDisplayTitle from './utils/setdisplaytitle';
+import Setting, { settings } from '~/setting';
+import Config from '~/config';
+import Dialog from '~/dialog';
+import Engine from '~/engine';
+import Has from '~/lib/has';
+import I18n from '~/i18n/i18n';
+import Save from '~/save';
+import Story from '~/story';
+import Wikifier from '~/markup/wikifier';
+import createSlug from '~/utils/createslug';
+import { errorPrologRE } from '~/lib/alert';
+import setDisplayTitle from '~/utils/setdisplaytitle';
 
 
 /*

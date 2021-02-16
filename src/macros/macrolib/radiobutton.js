@@ -7,10 +7,10 @@
 
 ***********************************************************************************************************************/
 
-import Macro from './macros/macro';
-import State from './state';
-import Wikifier from './markup/wikifier';
-import createSlug from './utils/createslug';
+import Macro from '../macro';
+import State from '~/state';
+import Wikifier from '~/markup/wikifier';
+import createSlug from '~/utils/createslug';
 
 
 /*

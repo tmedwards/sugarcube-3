@@ -7,7 +7,7 @@
 
 ***********************************************************************************************************************/
 
-import KVStore from './kvstore/kvstore';
+import KVStore from '~/kvstore/kvstore';
 
 // NOTE: Adapter imports must come after the main `KVStore` import and be listed
 // in order of desirability (least → most).

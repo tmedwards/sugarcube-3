@@ -7,8 +7,8 @@
 
 ***********************************************************************************************************************/
 
-import { MAX_SAVE_ID } from './constants';
-import getTypeOf from './utils/gettypeof';
+import { MAX_SAVE_ID } from '~/constants';
+import getTypeOf from '~/utils/gettypeof';
 
 
 /*

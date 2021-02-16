@@ -7,12 +7,12 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Engine from './engine';
-import Has from './lib/has';
-import Macro from './macros/macro';
-import SimpleAudio from './audio/simpleaudio';
-import Story from './story';
+import Config from '~/config';
+import Engine from '~/engine';
+import Has from '~/lib/has';
+import Macro from '../macro';
+import SimpleAudio from '~/audio/simpleaudio';
+import Story from '~/story';
 
 
 (() => {

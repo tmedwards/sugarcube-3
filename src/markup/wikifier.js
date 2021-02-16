@@ -7,16 +7,16 @@
 
 ***********************************************************************************************************************/
 
-import Lexer, { EOF } from './markup/lexer';
-import Config from './config';
-import Patterns from './lib/patterns';
-import Scripting from './markup/scripting';
-import State from './state';
-import Story from './story';
-import convertBreaks from './utils/convertbreaks';
-import cssPropToDOMProp from './utils/cssproptodomprop';
-import { errorPrologRE } from './lib/alert';
-import getTypeOf from './utils/gettypeof';
+import Lexer, { EOF } from '~/markup/lexer';
+import Config from '~/config';
+import Patterns from '~/lib/patterns';
+import Scripting from '~/markup/scripting';
+import State from '~/state';
+import Story from '~/story';
+import convertBreaks from '~/utils/convertbreaks';
+import cssPropToDOMProp from '~/utils/cssproptodomprop';
+import { errorPrologRE } from '~/lib/alert';
+import getTypeOf from '~/utils/gettypeof';
 
 
 /*

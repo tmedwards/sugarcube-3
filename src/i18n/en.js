@@ -16,7 +16,7 @@
 	SEE: https://github.com/tmedwards/sugarcube-3/tree/develop/locale
 */
 
-import I18n from './i18n/i18n';
+import I18n from '~/i18n/i18n';
 
 
 // Strings for American English (`en-US`) and default fallback.

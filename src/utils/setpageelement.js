@@ -7,8 +7,8 @@
 
 ***********************************************************************************************************************/
 
-import Story from './story';
-import Wikifier from './markup/wikifier';
+import Story from '~/story';
+import Wikifier from '~/markup/wikifier';
 
 
 /*

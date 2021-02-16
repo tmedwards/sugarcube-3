@@ -7,8 +7,8 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Macro from './macros/macro';
+import Config from '~/config';
+import Macro from '../macro';
 
 
 /*

@@ -7,8 +7,8 @@
 
 ***********************************************************************************************************************/
 
-import Db from './db';
-import mappingFrom from './utils/mappingfrom';
+import Db from '~/db';
+import mappingFrom from '~/utils/mappingfrom';
 
 
 // settings object.

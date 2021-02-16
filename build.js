@@ -175,10 +175,10 @@ function assembleLibraries(filenames) {
 
 function compileJavaScript() {
 	log('compiling JavaScript...');
-	const rollup       = require('rollup');
-	const includepaths = require('rollup-plugin-includepaths');
-	const babel        = require('@rollup/plugin-babel').babel;
-	const terser       = require('rollup-plugin-terser').terser;
+	const rollup = require('rollup');
+	const alias  = require('@rollup/plugin-alias');
+	const babel  = require('@rollup/plugin-babel').babel;
+	const terser = require('rollup-plugin-terser').terser;
 
 	const rollupInputOpts = {
 		input  : 'src/sugarcube.js',
@@ -200,14 +200,9 @@ function compileJavaScript() {
 		},
 		treeshake : false,
 		plugins   : [
-			includepaths({
-				paths : [
-					// Allow paths relative to `src` directory on imports.
-					//
-					// NOTE: The paths still need to be prefixed with `./` or
-					// Rollup assumes they're external if their names happen
-					// to match a well known package.
-					'src'
+			alias({
+				entries: [
+					{ find : /^~\/(.*)(?:\.js)?$/, replacement : 'src/$1.js' }
 				]
 			})
 		]

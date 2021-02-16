@@ -7,24 +7,24 @@
 
 ***********************************************************************************************************************/
 
-import Lexer, { EOF } from './markup/lexer';
-import Config from './config';
-import DebugView from './lib/debugview';
-import Engine from './engine';
-import Macro from './macros/macro';
-import MacroContext from './macros/macrocontext';
-import Patterns from './lib/patterns';
-import Scripting from './markup/scripting';
-import State from './state';
-import Story from './story';
-import Template from './markup/template';
-import Wikifier from './markup/wikifier';
-import appendError from './utils/appenderror';
-import createExternalLink from './utils/createexternallink';
-import createLink from './utils/createlink';
-import hasOwn from './utils/hasown';
-import isExternalLink from './utils/isexternallink';
-import stringFrom from './utils/stringfrom';
+import Lexer, { EOF } from '~/markup/lexer';
+import Config from '~/config';
+import DebugView from '~/lib/debugview';
+import Engine from '~/engine';
+import Macro from '~/macros/macro';
+import MacroContext from '~/macros/macrocontext';
+import Patterns from '~/lib/patterns';
+import Scripting from '~/markup/scripting';
+import State from '~/state';
+import Story from '~/story';
+import Template from '~/markup/template';
+import Wikifier from '~/markup/wikifier';
+import appendError from '~/utils/appenderror';
+import createExternalLink from '~/utils/createexternallink';
+import createLink from '~/utils/createlink';
+import hasOwn from '~/utils/hasown';
+import isExternalLink from '~/utils/isexternallink';
+import stringFrom from '~/utils/stringfrom';
 
 
 /* eslint "no-param-reassign": [ 2, { "props" : false } ] */

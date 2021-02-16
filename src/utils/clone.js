@@ -7,7 +7,7 @@
 
 ***********************************************************************************************************************/
 
-import getTypeOf from './utils/gettypeof';
+import getTypeOf from '~/utils/gettypeof';
 
 
 /*

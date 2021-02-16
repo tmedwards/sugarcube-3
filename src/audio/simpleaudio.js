@@ -7,14 +7,14 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Has from './lib/has';
-import LoadScreen from './loadscreen';
-import Story from './story';
-import Visibility from './lib/visibility';
-import clone from './utils/clone';
-import hasOwn from './utils/hasown';
-import parseURL from './utils/parseurl';
+import Config from '~/config';
+import Has from '~/lib/has';
+import LoadScreen from '~/loadscreen';
+import Story from '~/story';
+import Visibility from '~/lib/visibility';
+import clone from '~/utils/clone';
+import hasOwn from '~/utils/hasown';
+import parseURL from '~/utils/parseurl';
 
 
 /*

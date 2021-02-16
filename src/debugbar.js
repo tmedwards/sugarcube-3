@@ -7,15 +7,15 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Db from './db';
-import DebugView from './lib/debugview';
-import Engine from './engine';
-import I18n from './i18n/i18n';
-import Patterns from './lib/patterns';
-import State from './state';
-import encodeEntities from './utils/encodeentities';
-import getToStringTag from './utils/gettostringtag';
+import Config from '~/config';
+import Db from '~/db';
+import DebugView from '~/lib/debugview';
+import Engine from '~/engine';
+import I18n from '~/i18n/i18n';
+import Patterns from '~/lib/patterns';
+import State from '~/state';
+import encodeEntities from '~/utils/encodeentities';
+import getToStringTag from '~/utils/gettostringtag';
 
 
 /*

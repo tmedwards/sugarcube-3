@@ -7,15 +7,15 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Db from './db';
-import I18n from './i18n/i18n';
-import { MAX_SAVE_ID } from './constants';
-import Serial from './lib/serial';
-import State from './state';
-import createFilename from './utils/createfilename';
-import hasOwn from './utils/hasown';
-import mappingFrom from './utils/mappingfrom';
+import Config from '~/config';
+import Db from '~/db';
+import I18n from '~/i18n/i18n';
+import { MAX_SAVE_ID } from '~/constants';
+import Serial from '~/lib/serial';
+import State from '~/state';
+import createFilename from '~/utils/createfilename';
+import hasOwn from '~/utils/hasown';
+import mappingFrom from '~/utils/mappingfrom';
 
 
 /*

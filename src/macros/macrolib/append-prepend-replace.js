@@ -7,9 +7,9 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import { MIN_DOM_ACTION_DELAY } from './constants';
-import Macro from './macros/macro';
+import Config from '~/config';
+import { MIN_DOM_ACTION_DELAY } from '~/constants';
+import Macro from '../macro';
 
 
 /*

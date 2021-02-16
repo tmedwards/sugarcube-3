@@ -7,10 +7,10 @@
 
 ***********************************************************************************************************************/
 
-import Db from './db';
-import Scripting from './markup/scripting';
-import clone from './utils/clone';
-import hasOwn from './utils/hasown';
+import Db from '~/db';
+import Scripting from '~/markup/scripting';
+import clone from '~/utils/clone';
+import hasOwn from '~/utils/hasown';
 
 
 /*

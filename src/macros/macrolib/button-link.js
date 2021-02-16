@@ -7,12 +7,12 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Engine from './engine';
-import Macro from './macros/macro';
-import State from './state';
-import Story from './story';
-import Wikifier from './markup/wikifier';
+import Config from '~/config';
+import Engine from '~/engine';
+import Macro from '../macro';
+import State from '~/state';
+import Story from '~/story';
+import Wikifier from '~/markup/wikifier';
 
 
 /*

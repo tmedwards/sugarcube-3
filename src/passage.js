@@ -7,13 +7,13 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import I18n from './i18n/i18n';
-import Wikifier from './markup/wikifier';
-import createSlug from './utils/createslug';
-import decodeEntities from './utils/decodeentities';
-import encodeEntities from './utils/encodeentities';
-import stripNewlines from './utils/stripnewlines';
+import Config from '~/config';
+import I18n from '~/i18n/i18n';
+import Wikifier from '~/markup/wikifier';
+import createSlug from '~/utils/createslug';
+import decodeEntities from '~/utils/decodeentities';
+import encodeEntities from '~/utils/encodeentities';
+import stripNewlines from '~/utils/stripnewlines';
 
 
 /*

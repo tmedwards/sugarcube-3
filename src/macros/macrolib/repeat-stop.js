@@ -7,12 +7,12 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import { MIN_DOM_ACTION_DELAY } from './constants';
-import Macro from './macros/macro';
-import State from './state';
-import Wikifier from './markup/wikifier';
-import cssTimeToMS from './utils/csstimetoms';
+import Config from '~/config';
+import { MIN_DOM_ACTION_DELAY } from '~/constants';
+import Macro from '../macro';
+import State from '~/state';
+import Wikifier from '~/markup/wikifier';
+import cssTimeToMS from '~/utils/csstimetoms';
 
 
 /*

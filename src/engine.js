@@ -7,20 +7,20 @@
 
 ***********************************************************************************************************************/
 
-import Alert from './lib/alert';
-import Config from './config';
-import DebugView from './lib/debugview';
-import Has from './lib/has';
-import LoadScreen from './loadscreen';
-import { MIN_DOM_ACTION_DELAY } from './constants';
-import Save from './save';
-import State from './state';
-import Story from './story';
-import StyleWrapper from './lib/stylewrapper';
-import UI from './ui';
-import Wikifier from './markup/wikifier';
-import mappingFrom from './utils/mappingfrom';
-import now from './utils/now';
+import Alert from '~/lib/alert';
+import Config from '~/config';
+import DebugView from '~/lib/debugview';
+import Has from '~/lib/has';
+import LoadScreen from '~/loadscreen';
+import { MIN_DOM_ACTION_DELAY } from '~/constants';
+import Save from '~/save';
+import State from '~/state';
+import Story from '~/story';
+import StyleWrapper from '~/lib/stylewrapper';
+import UI from '~/ui';
+import Wikifier from '~/markup/wikifier';
+import mappingFrom from '~/utils/mappingfrom';
+import now from '~/utils/now';
 
 
 /*

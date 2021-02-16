@@ -7,12 +7,12 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import DebugView from './lib/debugview';
-import Patterns from './lib/patterns';
-import State from './state';
-import Wikifier from './markup/wikifier';
-import appendError from './utils/appenderror';
+import Config from '~/config';
+import DebugView from '~/lib/debugview';
+import Patterns from '~/lib/patterns';
+import State from '~/state';
+import Wikifier from '~/markup/wikifier';
+import appendError from '~/utils/appenderror';
 
 
 /*

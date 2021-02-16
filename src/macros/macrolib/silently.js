@@ -7,9 +7,9 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Macro from './macros/macro';
-import Wikifier from './markup/wikifier';
+import Config from '~/config';
+import Macro from '../macro';
+import Wikifier from '~/markup/wikifier';
 
 
 /*

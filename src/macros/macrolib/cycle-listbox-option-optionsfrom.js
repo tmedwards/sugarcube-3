@@ -7,12 +7,12 @@
 
 ***********************************************************************************************************************/
 
-import Macro from './macros/macro';
-import Scripting from './markup/scripting';
-import State from './state';
-import createSlug from './utils/createslug';
-import getToStringTag from './utils/gettostringtag';
-import sameValueZero from './utils/samevaluezero';
+import Macro from '../macro';
+import Scripting from '~/markup/scripting';
+import State from '~/state';
+import createSlug from '~/utils/createslug';
+import getToStringTag from '~/utils/gettostringtag';
+import sameValueZero from '~/utils/samevaluezero';
 
 
 /*

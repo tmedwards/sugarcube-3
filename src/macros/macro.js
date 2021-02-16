@@ -7,8 +7,8 @@
 
 ***********************************************************************************************************************/
 
-import Patterns from './lib/patterns';
-import getTypeOf from './utils/gettypeof';
+import Patterns from '~/lib/patterns';
+import getTypeOf from '~/utils/gettypeof';
 
 
 /*

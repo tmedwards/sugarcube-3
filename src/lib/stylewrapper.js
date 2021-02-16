@@ -7,9 +7,9 @@
 
 ***********************************************************************************************************************/
 
-import Patterns from './lib/patterns';
-import Story from './story';
-import Wikifier from './markup/wikifier';
+import Patterns from '~/lib/patterns';
+import Story from '~/story';
+import Wikifier from '~/markup/wikifier';
 
 
 /*

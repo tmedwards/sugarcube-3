@@ -7,11 +7,11 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Passage from './passage';
-import createSlug from './utils/createslug';
-import decodeEntities from './utils/decodeentities';
-import sameValueZero from './utils/samevaluezero';
+import Config from '~/config';
+import Passage from '~/passage';
+import createSlug from '~/utils/createslug';
+import decodeEntities from '~/utils/decodeentities';
+import sameValueZero from '~/utils/samevaluezero';
 
 
 /*

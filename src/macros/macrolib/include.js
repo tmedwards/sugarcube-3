@@ -7,9 +7,9 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Macro from './macros/macro';
-import Story from './story';
+import Config from '~/config';
+import Macro from '../macro';
+import Story from '~/story';
 
 
 /*

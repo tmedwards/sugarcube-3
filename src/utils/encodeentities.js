@@ -7,7 +7,7 @@
 
 ***********************************************************************************************************************/
 
-import mappingFrom from './utils/mappingfrom';
+import mappingFrom from '~/utils/mappingfrom';
 
 
 /*

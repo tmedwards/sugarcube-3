@@ -7,14 +7,14 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Macro from './macros/macro';
-import Patterns from './lib/patterns';
-import Scripting from './markup/scripting';
-import State from './state';
-import Wikifier from './markup/wikifier';
-import characterAndPosAt from './utils/characterandposat';
-import getToStringTag from './utils/gettostringtag';
+import Config from '~/config';
+import Macro from '../macro';
+import Patterns from '~/lib/patterns';
+import Scripting from '~/markup/scripting';
+import State from '~/state';
+import Wikifier from '~/markup/wikifier';
+import characterAndPosAt from '~/utils/characterandposat';
+import getToStringTag from '~/utils/gettostringtag';
 
 
 /*

@@ -7,10 +7,10 @@
 
 ***********************************************************************************************************************/
 
-import KVStore from './kvstore/kvstore';
-import Serial from './lib/serial';
-import exceptionFrom from './utils/exceptionfrom';
-import hasOwn from './utils/hasown';
+import KVStore from '../kvstore';
+import Serial from '~/lib/serial';
+import exceptionFrom from '~/utils/exceptionfrom';
+import hasOwn from '~/utils/hasown';
 
 
 KVStore.adapters.add((() => {

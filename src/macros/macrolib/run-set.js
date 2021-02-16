@@ -7,9 +7,9 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Macro from './macros/macro';
-import Scripting from './markup/scripting';
+import Config from '~/config';
+import Macro from '../macro';
+import Scripting from '~/markup/scripting';
 
 
 /*

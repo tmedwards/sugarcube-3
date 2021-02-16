@@ -7,12 +7,12 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Engine from './engine';
-import { MIN_DOM_ACTION_DELAY } from './constants';
-import Macro from './macros/macro';
-import State from './state';
-import createSlug from './utils/createslug';
+import Config from '~/config';
+import Engine from '~/engine';
+import { MIN_DOM_ACTION_DELAY } from '~/constants';
+import Macro from '../macro';
+import State from '~/state';
+import createSlug from '~/utils/createslug';
 
 
 /*

@@ -7,9 +7,9 @@
 
 ***********************************************************************************************************************/
 
-import Wikifier from './markup/wikifier';
-import { errorPrologRE } from './lib/alert';
-import getActiveElement from './utils/getactiveelement';
+import Wikifier from '~/markup/wikifier';
+import { errorPrologRE } from '~/lib/alert';
+import getActiveElement from '~/utils/getactiveelement';
 
 
 /*

@@ -7,8 +7,8 @@
 
 ***********************************************************************************************************************/
 
-import Patterns from './lib/patterns';
-import Story from './story';
+import Patterns from '~/lib/patterns';
+import Story from '~/story';
 
 
 /*

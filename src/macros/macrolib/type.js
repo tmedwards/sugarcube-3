@@ -7,14 +7,14 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Engine from './engine';
-import Macro from './macros/macro';
-import NodeTyper from './lib/nodetyper';
-import State from './state';
-import Wikifier from './markup/wikifier';
-import cssTimeToMS from './utils/csstimetoms';
-import scrubEventKey from './utils/scrubeventkey';
+import Config from '~/config';
+import Engine from '~/engine';
+import Macro from '../macro';
+import NodeTyper from '~/lib/nodetyper';
+import State from '~/state';
+import Wikifier from '~/markup/wikifier';
+import cssTimeToMS from '~/utils/csstimetoms';
+import scrubEventKey from '~/utils/scrubeventkey';
 
 
 /*

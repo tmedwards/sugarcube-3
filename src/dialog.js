@@ -7,9 +7,9 @@
 
 ***********************************************************************************************************************/
 
-import Has from './lib/has';
-import I18n from './i18n/i18n';
-import getActiveElement from './utils/getactiveelement';
+import Has from '~/lib/has';
+import I18n from '~/i18n/i18n';
+import getActiveElement from '~/utils/getactiveelement';
 
 
 /*

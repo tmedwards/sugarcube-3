@@ -7,9 +7,9 @@
 
 ***********************************************************************************************************************/
 
-import Macro from './macros/macro';
-import Wikifier from './markup/wikifier';
-import stripNewlines from './utils/stripnewlines';
+import Macro from '../macro';
+import Wikifier from '~/markup/wikifier';
+import stripNewlines from '~/utils/stripnewlines';
 
 
 /*

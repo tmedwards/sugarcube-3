@@ -13,48 +13,48 @@
 // import 'core-js/stable'; // Or whatever.
 
 // Non-binding imports for local polyfills, extensions, and plugins.
-import './extensions/ecmascript-polyfills';
-import './extensions/ecmascript-extensions';
-import './extensions/jquery-plugins';
+import '~/extensions/ecmascript-polyfills';
+import '~/extensions/ecmascript-extensions';
+import '~/extensions/jquery-plugins';
 
 // Non-binding imports for languages.
-import './i18n/en';
+import '~/i18n/en';
 
 // Non-binding imports for utility functions to guarantee availability for users.
 // TODO: Add imports for any utility functions we want to be public.
-// import './utils/createdeferred';
+// import '~/utils/createdeferred';
 
 // Non-binding imports for the core macros and parsers.
-import './macros/macrolib';
-import './markup/parserlib';
+import '~/macros/macrolib';
+import '~/markup/parserlib';
 
 // Binding imports for everything this file needs or is exporting.
-import Scripting, { setup } from './markup/scripting';
-import Setting, { settings } from './setting';
-import Alert from './lib/alert';
-import Config from './config';
-import Db from './db';
-import DebugBar from './debugbar';
-import DebugView from './lib/debugview';
-import Dialog from './dialog';
-import Engine from './engine';
-import Fullscreen from './lib/fullscreen';
-import Has from './lib/has';
-import I18n from './i18n/i18n';
-import LoadScreen from './loadscreen';
-import { MIN_DOM_ACTION_DELAY } from './constants';
-import Macro from './macros/macro';
-import Passage from './passage';
-import Save from './save';
-import Serial from './lib/serial';
-import SimpleAudio from './audio/simpleaudio';
-import State from './state';
-import Story from './story';
-import StyleWrapper from './lib/stylewrapper';
-import UI from './ui';
-import UIBar from './uibar';
-import Visibility from './lib/visibility';
-import Wikifier from './markup/wikifier';
+import Scripting, { setup } from '~/markup/scripting';
+import Setting, { settings } from '~/setting';
+import Alert from '~/lib/alert';
+import Config from '~/config';
+import Db from '~/db';
+import DebugBar from '~/debugbar';
+import DebugView from '~/lib/debugview';
+import Dialog from '~/dialog';
+import Engine from '~/engine';
+import Fullscreen from '~/lib/fullscreen';
+import Has from '~/lib/has';
+import I18n from '~/i18n/i18n';
+import LoadScreen from '~/loadscreen';
+import { MIN_DOM_ACTION_DELAY } from '~/constants';
+import Macro from '~/macros/macro';
+import Passage from '~/passage';
+import Save from '~/save';
+import Serial from '~/lib/serial';
+import SimpleAudio from '~/audio/simpleaudio';
+import State from '~/state';
+import Story from '~/story';
+import StyleWrapper from '~/lib/stylewrapper';
+import UI from '~/ui';
+import UIBar from '~/uibar';
+import Visibility from '~/lib/visibility';
+import Wikifier from '~/markup/wikifier';
 
 
 /*

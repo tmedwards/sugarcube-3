@@ -7,10 +7,10 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Macro from './macros/macro';
-import Patterns from './lib/patterns';
-import State from './state';
+import Config from '~/config';
+import Macro from '../macro';
+import Patterns from '~/lib/patterns';
+import State from '~/state';
 
 
 /*

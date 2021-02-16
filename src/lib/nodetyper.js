@@ -7,9 +7,9 @@
 
 ***********************************************************************************************************************/
 
-import characterAndPosAt from './utils/characterandposat';
-import getTypeOf from './utils/gettypeof';
-import hasOwn from './utils/hasown';
+import characterAndPosAt from '~/utils/characterandposat';
+import getTypeOf from '~/utils/gettypeof';
+import hasOwn from '~/utils/hasown';
 
 
 /*

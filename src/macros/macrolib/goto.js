@@ -7,10 +7,10 @@
 
 ***********************************************************************************************************************/
 
-import Engine from './engine';
-import Macro from './macros/macro';
-import Story from './story';
-import Wikifier from './markup/wikifier';
+import Engine from '~/engine';
+import Macro from '../macro';
+import Story from '~/story';
+import Wikifier from '~/markup/wikifier';
 
 
 /*

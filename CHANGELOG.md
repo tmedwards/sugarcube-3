@@ -2,6 +2,10 @@
 
 * **TODO:** Make auto saves not save on the same turn that any save is loaded, probably session restores too.
 
+## 2021-02-16
+
+* Get VSCode—intellisense mostly—and Rollup on the same page.
+
 ## 2021-02-06
 
 * Fixed a minor bobble in `Serial`.

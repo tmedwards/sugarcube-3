@@ -7,18 +7,18 @@
 
 ***********************************************************************************************************************/
 
-import Alert from './lib/alert';
-import Config from './config';
-import Dialog from './dialog';
-// import Engine from './engine';
-import I18n from './i18n/i18n';
-import { MIN_DOM_ACTION_DELAY } from './constants';
-import Setting from './setting';
-// import State from './state';
-import Story from './story';
-import UI from './ui';
-import setDisplayTitle from './utils/setdisplaytitle';
-import setPageElement from './utils/setpageelement';
+import Alert from '~/lib/alert';
+import Config from '~/config';
+import Dialog from '~/dialog';
+// import Engine from '~/engine';
+import I18n from '~/i18n/i18n';
+import { MIN_DOM_ACTION_DELAY } from '~/constants';
+import Setting from '~/setting';
+// import State from '~/state';
+import Story from '~/story';
+import UI from '~/ui';
+import setDisplayTitle from '~/utils/setdisplaytitle';
+import setPageElement from '~/utils/setpageelement';
 
 
 /*

@@ -7,10 +7,10 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import Engine from './engine';
-import State from './state';
-import Story from './story';
+import Config from '~/config';
+import Engine from '~/engine';
+import State from '~/state';
+import Story from '~/story';
 
 
 /*

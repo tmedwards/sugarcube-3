@@ -19,14 +19,14 @@
 	Until I can find a workaround, tree shaking MUST NOT be enabled.
 */
 
-import Engine from './engine';
-import Patterns from './lib/patterns';
-import State from './state';
-import Story from './story';
-import getTypeOf from './utils/gettypeof';
-import mappingFrom from './utils/mappingfrom';
-import now from './utils/now';
-import parseURL from './utils/parseurl';
+import Engine from '~/engine';
+import Patterns from '~/lib/patterns';
+import State from '~/state';
+import Story from '~/story';
+import getTypeOf from '~/utils/gettypeof';
+import mappingFrom from '~/utils/mappingfrom';
+import now from '~/utils/now';
+import parseURL from '~/utils/parseurl';
 
 
 // setup object.

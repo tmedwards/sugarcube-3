@@ -7,8 +7,8 @@
 
 ***********************************************************************************************************************/
 
-import Config from './config';
-import hasOwn from './utils/hasown';
+import Config from '~/config';
+import hasOwn from '~/utils/hasown';
 
 /*
 	TODO: Make selection of user language possible at any time, rather

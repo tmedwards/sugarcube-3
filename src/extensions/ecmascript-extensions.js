@@ -7,7 +7,7 @@
 
 ***********************************************************************************************************************/
 
-import stringFrom from './utils/stringfrom';
+import stringFrom from '~/utils/stringfrom';
 
 
 /*

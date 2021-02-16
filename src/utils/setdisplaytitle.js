@@ -7,8 +7,8 @@
 
 ***********************************************************************************************************************/
 
-import Wikifier from './markup/wikifier';
-import getTypeOf from './utils/gettypeof';
+import Wikifier from '~/markup/wikifier';
+import getTypeOf from '~/utils/gettypeof';
 
 
 /*
