@@ -24,8 +24,9 @@ If applicable, add screenshots to help explain your problem.
 
 **Project details.**
  - SugarCube Version: [e.g., 3.0.2]
- - Add-ons Used: [e.g., Chapel's Notify Macro, Cyrus' Click to Proceed Macro]
- - Libraries Used: [e.g., Moment.js, Tracery]
+ - Included Add-ons: [e.g., Chapel's Notify Macro, Cyrus' Click to Proceed Macro]
+ - Included Libraries: [e.g., Moment.js, Tracery]
+ - Compiler & Version: [e.g., Twine 2.3.13, Tweego 2.1.1]
 
 **Desktop details.**
  - OS & Version: [e.g., Windows 10]
