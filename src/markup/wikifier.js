@@ -535,11 +535,13 @@ const Wikifier = (() => {
 								let subMatch;
 
 								while ((subMatch = idOrClassRE.exec(match[3])) !== null) {
-									if (subMatch[1] === '.') {
-										css.classes.push(subMatch[2]);
+									const value = subMatch[0].slice(1);
+
+									if (subMatch[0].startsWith('.')) {
+										css.classes.push(value);
 									}
 									else {
-										css.id = subMatch[2];
+										css.id = value;
 									}
 								}
 							}
