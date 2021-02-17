@@ -1,6 +1,11 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
-* **TODO:** Make auto saves not save on the same turn that any save is loaded, probably session restores too.
+* **TODO:** Make auto saves not save on the same turn that any save is loaded or, probably, a session is restored.
+
+## 2021-02-17
+
+* Fixed the inline CSS helper.
+* Updated some styles and the HTML template.
 
 ## 2021-02-16
 
