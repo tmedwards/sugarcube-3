@@ -1,0 +1,32 @@
+/***********************************************************************************************************************
+
+	css/global.css
+
+	Copyright © 2013–2021 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
+	Use of this source code is governed by a BSD 2-clause "Simplified" License, which may be found in the LICENSE file.
+
+***********************************************************************************************************************/
+
+:root {
+	/*
+		Colors.
+	*/
+	--fore-color: #ddd;          /* was: #eee */
+	--back-color-primus: #000;   /* was: #111 */
+	--back-color-secundus: #111; /* was: #222 */
+	--back-color-tertius: #333;  /* was: #444 */
+
+	/*
+		Fonts.
+
+		The primary font size for text should be around 16px–19px,
+		while the secondary font size should be around 2px smaller.
+		Input element content font size for text should be no less
+		than 16px.
+	*/
+	--font-stack: /*system-ui,*/ -apple-system, BlinkMacSystemFont, "Segoe UI", /*Roboto,*/ "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", /* for Windows 7/8 users */ "Segoe UI Symbol";
+	--code-stack: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+	--font-size-primus: 18px;
+	--font-size-secundus: calc(var(--font-size-primus) - 2px); /* 89.47% | 0.89rem */
+	--font-size-tertius: calc(var(--font-size-primus) - 4px);  /* 78.95% | 0.78rem */
+}

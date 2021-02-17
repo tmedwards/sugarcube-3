@@ -7,30 +7,31 @@
 
 ***********************************************************************************************************************/
 
-@keyframes init-loading-spin {
-	0%   { transform: rotate(0deg); }
-	100% { transform: rotate(360deg); }
-}
+
 #init-screen {
 	display: none;
-	z-index: 500000;
+	z-index: 5000000;
 	position: fixed;
 	top: 0px;
 	left: 0px;
 	height: 100%;
 	width: 100%;
-	font: 28px/1 Helmet, Freesans, sans-serif;
-	font-weight: bold;
-	color: #eee;
-	background-color: #111;
+	font-family: var(--font-stack);
+	font-size: 32px;
+	font-weight: 700;
+	line-height: 1;
+	color: #ddd;
+	background-color: #000;
 	text-align: center;
 }
 #init-screen > div {
 	display: none;
 	position: relative;
 	margin: 0 auto;
-	max-width: 1136px;
 	top: 25%;
+}
+#init-screen > div > p:first-child {
+	margin-top: 0;
 }
 html[data-init="no-js"] #init-screen, html[data-init="lacking"] #init-screen, html[data-init="loading"] #init-screen {
 	display: block;
@@ -39,24 +40,33 @@ html[data-init="no-js"] #init-no-js, html[data-init="lacking"] #init-lacking {
 	display: block;
 	padding: 0 1em;
 }
-html[data-init="no-js"] #init-no-js {
-	color: red;
+html[data-init="no-js"] #init-no-js > *:first-child::before, html[data-init="lacking"] #init-lacking > *:first-child::before {
+	content: "\1f6d1\00a0";
 }
 html[data-init="loading"] #init-loading {
 	display: block;
-	border: 24px solid transparent;
-	border-radius: 50%;
-	border-top-color: #7f7f7f;
-	border-bottom-color: #7f7f7f;
-	width: 100px;
-	height: 100px;
-	animation: init-loading-spin 2s linear infinite;
+	text-align: center;
+	top: calc(40vh - 1.666vw);
 }
 html[data-init="loading"] #init-loading > div {
-	text-indent: 9999em;
-	overflow: hidden;
-	white-space: nowrap;
+	animation: 1.5s ease-in-out infinite loading-dots;
+	background-color: #ddd;
+	border-radius: 50%;
+	display: inline-block;
+	font-size: 1.666vw;
+	height: 4em;
+	margin: 0 1.33em;
+	width: 4em;
 }
-html[data-init="loading"] #ui-bar, html[data-init="loading"] #passages {
+html[data-init="loading"] #init-loading > div:nth-child(1) {
+	animation-delay: 0s;
+}
+html[data-init="loading"] #init-loading > div:nth-child(2) {
+	animation-delay: 0.4s;
+}
+html[data-init="loading"] #init-loading > div:nth-child(3) {
+	animation-delay: 0.8s;
+}
+html[data-init="loading"] #ui-bar, html[data-init="loading"] #story {
 	display: none;
 }
