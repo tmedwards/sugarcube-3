@@ -7,7 +7,7 @@
 
 ***********************************************************************************************************************/
 
-import Macro from '../macro';
+import Macro from '~/macros/macro';
 import State from '~/state';
 import createLink from '~/utils/createlink';
 

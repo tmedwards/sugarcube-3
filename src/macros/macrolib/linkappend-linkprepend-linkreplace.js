@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 import { MIN_DOM_ACTION_DELAY } from '~/constants';
-import Macro from '../macro';
+import Macro from '~/macros/macro';
 import Wikifier from '~/markup/wikifier';
 
 

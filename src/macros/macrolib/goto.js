@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 import Engine from '~/engine';
-import Macro from '../macro';
+import Macro from '~/macros/macro';
 import Story from '~/story';
 import Wikifier from '~/markup/wikifier';
 

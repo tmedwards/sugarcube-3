@@ -7,7 +7,7 @@
 
 ***********************************************************************************************************************/
 
-import KVStore from '../kvstore';
+import KVStore from '~/kvstore/kvstore';
 import Serial from '~/lib/serial';
 // TODO: All errors are instances of `DOMException`, so we should probably
 // convert them to instances of `Error` via `exceptionFrom()`.

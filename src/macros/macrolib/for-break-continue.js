@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 import Config from '~/config';
-import Macro from '../macro';
+import Macro from '~/macros/macro';
 import Patterns from '~/lib/patterns';
 import Scripting from '~/markup/scripting';
 import State from '~/state';

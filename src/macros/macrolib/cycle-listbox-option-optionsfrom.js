@@ -7,7 +7,7 @@
 
 ***********************************************************************************************************************/
 
-import Macro from '../macro';
+import Macro from '~/macros/macro';
 import Scripting from '~/markup/scripting';
 import State from '~/state';
 import createSlug from '~/utils/createslug';

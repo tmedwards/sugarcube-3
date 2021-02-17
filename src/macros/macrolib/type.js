@@ -9,7 +9,7 @@
 
 import Config from '~/config';
 import Engine from '~/engine';
-import Macro from '../macro';
+import Macro from '~/macros/macro';
 import NodeTyper from '~/lib/nodetyper';
 import State from '~/state';
 import Wikifier from '~/markup/wikifier';

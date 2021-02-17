@@ -7,7 +7,7 @@
 
 ***********************************************************************************************************************/
 
-import Macro from '../macro';
+import Macro from '~/macros/macro';
 import Scripting from '~/markup/scripting';
 import Wikifier from '~/markup/wikifier';
 import encodeEntities from '~/utils/encodeentities';

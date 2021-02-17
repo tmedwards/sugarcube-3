@@ -7,7 +7,7 @@
 
 ***********************************************************************************************************************/
 
-import Macro from '../macro';
+import Macro from '~/macros/macro';
 import Patterns from '~/lib/patterns';
 import State from '~/state';
 import Wikifier from '~/markup/wikifier';

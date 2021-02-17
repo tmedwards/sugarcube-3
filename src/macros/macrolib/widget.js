@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 import Config from '~/config';
-import Macro from '../macro';
+import Macro from '~/macros/macro';
 import State from '~/state';
 import Wikifier from '~/markup/wikifier';
 

@@ -12,8 +12,8 @@ import KVStore from '~/kvstore/kvstore';
 // NOTE: Adapter imports must come after the main `KVStore` import and be listed
 // in order of desirability (least → most).
 /* eslint-disable sort-imports */
-import './kvstore/adapters/webstorage';
-import './kvstore/adapters/caching-indexeddb';
+import '~/kvstore/adapters/webstorage';
+import '~/kvstore/adapters/caching-indexeddb';
 /* eslint-enable sort-imports */
 
 
