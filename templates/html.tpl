@@ -35,14 +35,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <script id="script-libraries" type="text/javascript">
 if(typeof BigInt==='function'&&typeof customElements==='object'&&typeof IDBObjectStore==='function'&&typeof IDBObjectStore.prototype==='object'&&typeof IDBObjectStore.prototype.getKey==='function'&&typeof Intl==='object'&&typeof Intl.PluralRules==='function'&&typeof Intl.PluralRules.supportedLocalesOf==='function'){document.documentElement.setAttribute("data-init", "loading");
 '{{BUILD_LIB_SOURCE}}'
-}else{document.documentElement.setAttribute("data-init", "lacking");}
+}else{document.documentElement.setAttribute("data-init", "no-cap");}
 </script>
 '{{BUILD_CSS_SOURCE}}'
 </head>
 <body>
 	<div id="init-screen">
 		<div id="init-no-js"><noscript>JavaScript must be enabled to play <i>{{STORY_NAME}}</i>.</noscript></div>
-		<div id="init-lacking"><p>Your browser lacks required capabilities.</p><p>Upgrade it or switch to another browser to continue.</p></div>
+		<div id="init-no-cap"><p>Browser lacks required capabilities.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div aria-label="Loading"></div><div></div><div></div></div>
 	</div>
 	{{STORY_DATA}}

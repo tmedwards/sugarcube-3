@@ -7,7 +7,6 @@
 
 ***********************************************************************************************************************/
 
-
 #init-screen {
 	display: none;
 	z-index: 5000000;
@@ -28,35 +27,48 @@
 	display: none;
 	position: relative;
 	margin: 0 auto;
-	top: 25%;
+	top: 40vh;
 }
 #init-screen > div > p:first-child {
 	margin-top: 0;
 }
-html[data-init="no-js"] #init-screen, html[data-init="lacking"] #init-screen, html[data-init="loading"] #init-screen {
+html[data-init="no-js"] #init-screen, html[data-init="no-cap"] #init-screen, html[data-init="loading"] #init-screen {
 	display: block;
 }
-html[data-init="no-js"] #init-no-js, html[data-init="lacking"] #init-lacking {
+html[data-init="no-js"] #init-no-js, html[data-init="no-cap"] #init-no-cap {
 	display: block;
 	padding: 0 1em;
 }
-html[data-init="no-js"] #init-no-js > *:first-child::before, html[data-init="lacking"] #init-lacking > *:first-child::before {
+html[data-init="no-js"] #init-no-js > *:first-child::before, html[data-init="no-cap"] #init-no-cap > *:first-child::before {
 	content: "\1f6d1\00a0";
+}
+html[data-init="no-cap"] #init-no-cap {
+	top: 33vh;
 }
 html[data-init="loading"] #init-loading {
 	display: block;
 	text-align: center;
-	top: calc(40vh - 1.666vw);
 }
 html[data-init="loading"] #init-loading > div {
-	animation: 1.5s ease-in-out infinite loading-dots;
+	--base-dot-size: 4vw;
+
+	animation: 1.5s ease-in-out infinite busy-dots;
 	background-color: #ddd;
 	border-radius: 50%;
 	display: inline-block;
-	font-size: 1.666vw;
-	height: 4em;
-	margin: 0 1.33em;
-	width: 4em;
+	height: var(--loading-dot-size, var(--base-dot-size));
+	margin: 0 calc(var(--loading-dot-size, var(--base-dot-size)) / 4);
+	width: var(--loading-dot-size, var(--base-dot-size));
+}
+@media screen and (max-width: 1136px) {
+	html[data-init="loading"] #init-loading > div {
+		--base-dot-size: 6vw;
+	}
+}
+@media screen and (max-width: 768px) {
+	html[data-init="loading"] #init-loading > div {
+		--base-dot-size: 8vw;
+	}
 }
 html[data-init="loading"] #init-loading > div:nth-child(1) {
 	animation-delay: 0s;

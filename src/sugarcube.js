@@ -142,8 +142,8 @@ jQuery(() => {
 		document.normalize();
 	}
 
-	// Remove #init-no-js & #init-lacking from #init-screen.
-	jQuery('#init-no-js,#init-lacking').remove();
+	// Remove #init-no-js & #init-no-cap from #init-screen.
+	jQuery('#init-no-js,#init-no-cap').remove();
 
 	// From this point on it's promises all the way down.
 	Promise.resolve()
