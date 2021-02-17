@@ -1,6 +1,9 @@
 # SugarCube v3 Pre-alpha Changelog Highlights
 
-* **TODO:** Make auto saves not save on the same turn that any save is loaded or, probably, a session is restored.
+## TODO
+
+* Make auto saves not save on the same turn that any save is loaded or, probably, a session is restored.
+* Consider meshing the auto save and session update somehow, so that the state is automatically marshaled only once per turn.
 
 ## 2021-02-17
 
@@ -24,7 +27,7 @@
 
 ## 2021-02-04
 
-* Damn lies.  ~~Fixed `clone()` so that it actually works as intended.~~
+* ~~Fixed `clone()` so that it actually works as intended.~~ Damnable lie.
 * Ported recent `<svg>` tags fix from v2.
 
 ## 2021-02-03
@@ -57,7 +60,7 @@
 * `DebugBar` API changes: `DebugBar.start()` → `DebugBar.finalize()`.
 * `Dialog` API changes: `Dialog.finalize()` added.
 * `L10n` API changes: `L10n` → `I18n`.
-* ~~`I18n` API changes: `I18n.get()` → `I18n()`.~~
+* ~~`I18n` API changes: `I18n.get()` → `I18n()`.~~ Pisses off ESLint, so reverse this for now.
 * `UIBar` API changes: `UIBar.start()` → `UIBar.finalize()`.
 * `State` API changes:
 	* `State.hasPlayed()` → `State.hasVisited()`.
