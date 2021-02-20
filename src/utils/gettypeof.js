@@ -11,8 +11,6 @@
 	Returns the value `'null'` for `null`, the value yielded by `typeof` for
 	primitives and functions, or the `@@toStringTag` internal property for objects.
 
-	NOTE: In ≤ES5, returns the value of the `[[Class]]` internal slot for objects.
-
 	Examples:
 		getTypeOf(42n)            → 'bigint'
 		getTypeOf(true)           → 'boolean'
