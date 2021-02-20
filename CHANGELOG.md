@@ -5,6 +5,10 @@
 * Make auto saves not save on the same turn that any save is loaded or, probably, a session is restored.
 * Consider meshing the auto save and session update somehow, so that the state is automatically marshaled only once per turn.
 
+## 2021-02-20
+
+* Added CSS custom properties for the current font icons.
+
 ## 2021-02-17
 
 * Fixed the inline CSS helper.
