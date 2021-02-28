@@ -309,6 +309,7 @@ const DebugBar = (() => {
 			'aria-hidden' : true,
 			hidden        : 'hidden'
 		});
+		jQuery(document.documentElement).dataListRemove('data-debug', 'watch');
 	}
 
 	function disableWatchUpdates() {
@@ -319,6 +320,7 @@ const DebugBar = (() => {
 	}
 
 	function enableWatch() {
+		jQuery(document.documentElement).dataListAdd('data-debug', 'watch');
 		$watchBody.removeAttr('aria-hidden hidden');
 	}
 

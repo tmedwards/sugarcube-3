@@ -113,21 +113,21 @@ class DebugView {
 	}
 
 	static isEnabled() {
-		return jQuery(document.documentElement).attr('data-debug-view') === 'enabled';
+		return jQuery(document.documentElement).dataListHas('data-debug', 'views');
 	}
 
 	static enable() {
-		jQuery(document.documentElement).attr('data-debug-view', 'enabled');
+		jQuery(document.documentElement).dataListAdd('data-debug', 'views');
 		jQuery.event.trigger(':debugviewupdate');
 	}
 
 	static disable() {
-		jQuery(document.documentElement).removeAttr('data-debug-view');
+		jQuery(document.documentElement).dataListRemove('data-debug', 'views');
 		jQuery.event.trigger(':debugviewupdate');
 	}
 
 	static toggle() {
-		if (jQuery(document.documentElement).attr('data-debug-view') === 'enabled') {
+		if (DebugView.isEnabled()) {
 			DebugView.disable();
 		}
 		else {
