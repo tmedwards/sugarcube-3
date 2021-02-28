@@ -16,9 +16,10 @@ html[data-dialog] body {
 
 
 /*
-	Default structural styles.
+	Default styles.
 */
 #ui-overlay[data-open] {
+	opacity: 0.8;
 	visibility: visible;
 	transition: opacity 200ms ease-in;
 }
@@ -26,22 +27,18 @@ html[data-dialog] body {
 	transition: visibility 200ms step-end, opacity 200ms ease-in;
 }
 #ui-overlay {
+	background-color: #000;
 	visibility: hidden;
 	opacity: 0;
-	z-index: 100000;
+	z-index: 1000000;
 	position: fixed;
-	/*
 	top: -50vh;
 	left: -50vw;
 	height: 200vh;
 	width: 200vw;
-	*/
-	top: -50%;
-	left: -50%;
-	height: 200%;
-	width: 200%;
 }
 #ui-dialog[data-open] {
+	opacity: 1;
 	display: block;
 	transition: opacity 200ms ease-in;
 }
@@ -58,86 +55,66 @@ html[data-dialog] body {
 	  shenanigans.
 */
 #ui-dialog {
+	background-color: var(--dialog-back-color);
+	border: 1px solid var(--dialog-border-color);
 	display: none;
+	margin: 0;
+	max-width: 66em;
 	opacity: 0;
-	z-index: 100100;
+	padding: 0;
 	position: fixed;
 	top: 50px;
-	margin: 0;
-	padding: 0;
+	z-index: 1000100;
 }
 #ui-dialog > * {
 	box-sizing: border-box;
 }
 #ui-dialog-titlebar {
+	background-color: var(--dialog-title-back-color);
+	min-height: 24px;
 	position: relative;
 }
-#ui-dialog-close {
-	display: block;
-	position: absolute;
-	right: 0;
-	top: 0;
-	white-space: nowrap;
-}
-#ui-dialog-body {
-	overflow: auto;
-	min-width: 280px;
-	height: 92%; /* fallback for browsers without support for calc() */
-	height: calc(100% - 2.1em); /* parent - title(2.1em) */
-}
-
-
-/*
-	Default appearance styles.
-*/
-#ui-overlay {
-	background-color: #000;
-}
-#ui-overlay[data-open] {
-	opacity: 0.8;
-}
-#ui-dialog {
-	max-width: 66em;
-}
-#ui-dialog[data-open] {
-	opacity: 1;
-}
-#ui-dialog-titlebar {
-	background-color: #444;
-	min-height: 24px;
-}
 #ui-dialog-title {
+	font-size: 1.5em;
 	margin: 0;
 	padding: 0.2em 3.5em 0.2em 0.5em;
-	font-size: 1.5em;
 	text-align: center;
 	text-transform: uppercase;
 }
 #ui-dialog-close {
-	cursor: pointer;
-	font-size: 120%;
-	margin: 0;
-	padding: 0;
-	width: 3.6em;
-	height: 98%;
 	background-color: transparent;
 	border: none;
+	cursor: pointer;
+	display: block;
+	font-size: 120%;
+	height: 98%;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	user-select: none;
+	white-space: nowrap;
+	width: 3.6em;
 }
 #ui-dialog-close:hover {
 	color: #e44;
 }
 #ui-dialog-body {
-	background-color: #111;
-	border: 1px solid #444;
-	text-align: left;
+	/* background-color: var(--dialog-body-color); */
+	/* border: 1px solid var(--dialog-back-color); */
+	height: calc(100% - 2.1em); /* parent - title(2.1em) */
 	line-height: 1.5;
+	min-width: 280px;
+	overflow: auto;
 	padding: 1em;
+	text-align: left;
 }
 #ui-dialog-body > *:first-child {
 	margin-top: 0;
 }
 #ui-dialog-body hr {
-	background-color: #444;
+	background-color: var(--dialog-back-color);
 }
 
 /* Default dialog button bar styling. */
@@ -156,21 +133,23 @@ html[data-dialog] body {
 	margin-left: 1em;
 }
 
-/* Stop text selection on certain UI elements. */
-#ui-dialog-close {
-	user-select: none;
-}
-
 
 /*
 	Default font icon styles.
 */
-#ui-dialog-close {
-	font-family: "tme-fa-icons";
+#ui-dialog-close::before {
+	font-family: "sc-icons" !important; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
 	font-style: normal;
-	font-weight: normal;
+	/* font-weight: normal; */
+	font-weight: 900;
 	font-variant: normal;
-	text-transform: none;
 	line-height: 1;
-	speak: none;
+	speak: never;
+	text-rendering: auto;
+	text-transform: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+#ui-dialog-close::before {
+	content: var(--icon-times);
 }

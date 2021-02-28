@@ -11,52 +11,69 @@
 	Default debug bar styles.
 */
 #debug-bar {
-	background-color: #222;
-	border-left: 1px solid #444;
-	border-top: 1px solid #444;
+	/* Debug bar hierarchy variables. */
+	--debug-back-color: var(--back-color-secundus);
+	--debug-fore-color: var(--fore-color);
+	--debug-border-color: var(--back-color-tertius);
+	--debug-body-color: var(--back-color-primus);
+	--debug-head-color: var(--back-color-secundus);
+
+	/* Properties. */
+	background-color: var(--debug-back-color);
+	border-left: 1px solid var(--debug-border-color);
+	border-right: 1px solid var(--debug-border-color);
 	bottom: 0;
 	margin: 0;
-	max-height: 75%;
+	/* max-height: 75%; */
 	/* max-width: 28em;
 	min-width: 22em; */
-	padding: 0.5em;
 	position: fixed;
 	right: 0;
+	top: 0;
+	width: 33.33vw;
 	z-index: 99900;
 }
-#debug-bar > div:not([id]) + div {
+#debug-bar button {
+	-webkit-touch-callout: none;
+}
+
+#debug-bar-tray {
+	border-bottom: 1px solid var(--debug-border-color);
+	padding: 0.5em;
+	position: relative;
+}
+#debug-bar-tray > div:not(:first-of-type) {
 	margin-top: 0.5em;
 }
-#debug-bar > div > label {
+#debug-bar-tray > div > [id$="-label"] {
 	margin-right: 0.5em;
 }
-#debug-bar > div > input[type="text"] {
+#debug-bar-tray > div > input[type="text"] {
 	min-width: 0;
 	width: 8em;
 }
-#debug-bar > div > select {
+#debug-bar-tray > div > select {
 	width: 15em;
 }
 
 #debug-bar-toggle {
-	color: #eee;
-	background-color: #222;
-	border: 1px solid #444;
-	height: 101%; /* fallback for browsers without support for calc() */
-	height: calc(100% + 1px);
-	left: -2em; /* fallback for browsers without support for calc() */
-	left: calc(-2em - 1px);
+	color: var(--debug-fore-color);
+	background-color: var(--debug-back-color);
+	border: 1px solid var(--debug-border-color);
+	/* height: calc(100% + 1px); */
+	height: 6em;
+	left: calc(-2.225em - 1px);
 	position: absolute;
-	top: -1px;
-	width: 2em;
+	top: 0;
+	width: 2.225em;
 }
 #debug-bar-toggle:hover {
 	background-color: #333;
-	border-color: #eee;
+	border-color: var(--debug-fore-color);
 }
 
 #debug-bar-hint {
-	bottom: 0.175em;
+	top: 0.1em;
 	font-size: 4.5em;
 	opacity: 0.33;
 	pointer-events: none;
@@ -66,20 +83,47 @@
 	white-space: nowrap;
 }
 
+#debug-bar-jump-play {
+	/* float: right;
+	margin-right: 0.1em; */
+	margin-bottom: 0.2em;
+	width: 2.05em;
+}
+#debug-bar-jump-play::before {
+	/* Centering adjustment, since there's no text in button. */
+	padding-left: 0.1em;
+}
+
+#debug-bar-code-label {
+	margin-right: 0.5em;
+}
+
+#debug-bar-run-code {
+	/* float: right;
+	margin-right: 0.1em; */
+	margin-bottom: 0.2em;
+	width: 2.05em;
+}
+#debug-bar-run-code::before {
+	/* Centering adjustment, since there's no text in button. */
+	padding-left: 0.1em;
+}
+#debug-bar-code-box {
+	min-width: calc(100% - 1em);
+}
+
 #debug-bar-watch {
 	background-color: #222;
-	border-left: 1px solid #444;
-	border-top: 1px solid #444;
-	bottom: 102%; /* fallback for browsers without support for calc() */
-	bottom: calc(100% + 1px);
+	/* border-left: 1px solid var(--debug-border-color); */
+	border-bottom: 1px solid var(--debug-border-color);
+	/* bottom: calc(100% + 1px); */
 	font-size: 0.9em;
-	left: -1px;
-	max-height: 650%; /* fallback for browsers without support for vh units */
-	max-height: 65vh;
-	position: absolute;
+	/* left: -1px; */
+	/* max-height: 65vh; */
+	/* position: absolute; */
 	overflow-x: hidden;
 	overflow-y: scroll;
-	right: 0;
+	/* right: 0; */
 	z-index: 99800;
 }
 #debug-bar-watch[hidden] {
@@ -114,125 +158,143 @@
 }
 #debug-bar-watch-toggle,
 #debug-bar-views-toggle {
-	color: #eee;
+	color: var(--debug-fore-color);
 	background-color: transparent;
-	border: 1px solid #444;
+	border: 1px solid var(--debug-border-color);
 	margin-right: 1em;
 	padding: 0.4em;
 }
-#debug-bar-watch-toggle:hover,
-#debug-bar-views-toggle:hover {
+#debug-bar-views-toggle:hover,
+#debug-bar-watch-toggle:hover {
 	background-color: #333;
-	border-color: #eee;
+	border-color: var(--debug-fore-color);
 }
-#debug-bar-watch:not([hidden]) ~ div #debug-bar-watch-toggle,
-html[data-debug-view] #debug-bar-views-toggle {
+html[data-debug~="views"] #debug-bar-views-toggle,
+html[data-debug~="watch"] #debug-bar-watch-toggle {
 	background-color: #282;
 	border-color: #4a4;
 }
-#debug-bar-watch:not([hidden]) ~ div #debug-bar-watch-toggle:hover,
-html[data-debug-view] #debug-bar-views-toggle:hover {
+html[data-debug~="views"] #debug-bar-views-toggle:hover,
+html[data-debug~="watch"] #debug-bar-watch-toggle:hover {
 	background-color: #4a4;
 	border-color: #6c6;
 }
 
-#debug-bar-toggle:before,
-#debug-bar-hint:after,
-#debug-bar-watch .watch-delete:before,
-#debug-bar-watch-add:before,
-#debug-bar-watch-all:before,
-#debug-bar-watch-none:before,
-#debug-bar-watch-toggle:after,
-#debug-bar-views-toggle:after {
-	font-family: "tme-fa-icons";
+
+/*
+	Default font icon styles.
+*/
+#debug-bar-toggle::before,
+#debug-bar-hint::after,
+#debug-bar-jump-play::before,
+#debug-bar-run-code::before,
+#debug-bar-watch .watch-delete::before,
+#debug-bar-watch-add::before,
+#debug-bar-watch-all::before,
+#debug-bar-watch-none::before,
+#debug-bar-watch-toggle::after,
+#debug-bar-views-toggle::after {
+	font-family: "sc-icons" !important; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
 	font-style: normal;
-	font-weight: normal;
+	/* font-weight: normal; */
+	font-weight: 900;
 	font-variant: normal;
-	text-transform: none;
 	line-height: 1;
-	speak: none;
+	speak: never;
+	text-rendering: auto;
+	text-transform: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
-#debug-bar-toggle:before {
-	content: "\e838";
+#debug-bar-toggle::before {
+	content: var(--icon-bug);
 }
-#debug-bar-hint:after {
-	content: "\e838\202f\e822";
+#debug-bar-hint::after {
+	content: var(--icon-bug) "\202f" var(--icon-arrow-right);
 }
-#debug-bar-watch .watch-delete:before {
-	content: "\e804";
+#debug-bar-jump-play::before {
+	content: var(--icon-arrow-right);
 }
-#debug-bar-watch-add:before {
-	content: "\e805";
+#debug-bar-run-code::before {
+	content: var(--icon-play);
+	padding-left: 0.2em; /* Centering adjustment. */
 }
-#debug-bar-watch-all:before {
-	content: "\e83a";
+#debug-bar-watch .watch-delete::before {
+	content: var(--icon-times);
 }
-#debug-bar-watch-none:before {
-	content: "\e827";
+#debug-bar-watch-add::before {
+	content: var(--icon-plus);
 }
-#debug-bar-watch-toggle:after,
-#debug-bar-views-toggle:after {
-	content: "\00a0\00a0\e830";
+#debug-bar-watch-all::before {
+	content: var(--icon-magic);
 }
-#debug-bar-watch:not([hidden]) ~ div #debug-bar-watch-toggle:after,
-html[data-debug-view] #debug-bar-views-toggle:after {
-	content: "\00a0\00a0\e831";
+#debug-bar-watch-none::before {
+	content: var(--icon-trash);
+}
+#debug-bar-views-toggle::after,
+#debug-bar-watch-toggle::after {
+	content: var(--icon-toggle-off);
+	margin-left: 0.5em;
+}
+html[data-debug~="views"] #debug-bar-views-toggle::after,
+html[data-debug~="watch"] #debug-bar-watch-toggle::after {
+	content: var(--icon-toggle-on);
 }
 
 
 /*
 	Default debug view styles.
 */
-html[data-debug-view] .debug {
+html[data-debug~="views"] .debug {
 	padding: 0.25em;
 	background-color: #234; /* #541, #151 */
 }
-html[data-debug-view] .debug[title] {
+html[data-debug~="views"] .debug[title] {
 	cursor: help;
 }
-html[data-debug-view] .debug.block {
+html[data-debug~="views"] .debug.block {
 	display: inline-block;
 	vertical-align: middle;
 }
-html[data-debug-view] .debug.invalid {
+html[data-debug~="views"] .debug.invalid {
 	text-decoration: line-through;
 }
-html[data-debug-view] .debug.hidden,
-html[data-debug-view] .debug.hidden .debug {
+html[data-debug~="views"] .debug.hidden,
+html[data-debug~="views"] .debug.hidden .debug {
 	background-color: #555;
 }
-html:not([data-debug-view]) .debug.hidden {
+html:not([data-debug~="view"]) .debug.hidden {
 	display: none;
 }
 
-html[data-debug-view] .debug[data-name][data-type]:before,
-html[data-debug-view] .debug[data-name][data-type].nonvoid:after {
-	background-color: rgba(0,0,0,0.25);
-	font-family: monospace, monospace;
+html[data-debug~="views"] .debug[data-name][data-type]::before,
+html[data-debug~="views"] .debug[data-name][data-type].nonvoid::after {
+	background-color: rgba(0, 0, 0, 0.25);
+	font-family: var(--code-stack);
 	white-space: pre;
 }
-html[data-debug-view] .debug[data-name][data-type]:before {
+html[data-debug~="views"] .debug[data-name][data-type]::before {
 	content: attr(data-name);
 }
-html[data-debug-view] .debug[data-name][data-type|="macro"]:before {
+html[data-debug~="views"] .debug[data-name][data-type|="macro"]::before {
 	content: "<<" attr(data-name) ">>";
 }
-html[data-debug-view] .debug[data-name][data-type|="macro"].nonvoid:after {
+html[data-debug~="views"] .debug[data-name][data-type|="macro"].nonvoid::after {
 	content: "<</" attr(data-name) ">>";
 }
-html[data-debug-view] .debug[data-name][data-type|="html"]:before {
+html[data-debug~="views"] .debug[data-name][data-type|="html"]::before {
 	content: "<" attr(data-name) ">";
 }
-html[data-debug-view] .debug[data-name][data-type|="html"].nonvoid:after {
+html[data-debug~="views"] .debug[data-name][data-type|="html"].nonvoid::after {
 	content: "</" attr(data-name) ">";
 }
-html[data-debug-view] .debug[data-name][data-type]:not(:empty):before {
+html[data-debug~="views"] .debug[data-name][data-type]:not(:empty)::before {
 	margin-right: 0.25em;
 }
-html[data-debug-view] .debug[data-name][data-type].nonvoid:not(:empty):after {
+html[data-debug~="views"] .debug[data-name][data-type].nonvoid:not(:empty)::after {
 	margin-left: 0.25em;
 }
-html[data-debug-view] .debug[data-name][data-type|="special"],
-html[data-debug-view] .debug[data-name][data-type|="special"]:before {
+html[data-debug~="views"] .debug[data-name][data-type|="special"],
+html[data-debug~="views"] .debug[data-name][data-type|="special"]::before {
 	display: block;
 }

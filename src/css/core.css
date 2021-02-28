@@ -7,57 +7,26 @@
 
 ***********************************************************************************************************************/
 
-/*
-	Default structural styles.
-*/
-html {
-	/*
-		We define the base font size and line height here as they affect the layout
-		of the base page elements (i.e. `#ui-bar`, `#ui-dialog`, and `#story`).
-	*/
-	font: 16px/1 Helmet, Freesans, sans-serif;
+/* Scrollbar styles. */
+*::-webkit-scrollbar {
+	background-color: var(--back-color-secundus);
+	width: 8px;
+}
+*::-webkit-scrollbar-thumb {
+	background-color: var(--back-color-tertius);
+	border: 1px solid var(--back-color-secundus);
+}
+* { /* stylelint-disable-line no-descending-specificity */
+	scrollbar-color: var(--back-color-tertius) var(--back-color-secundus);
+	scrollbar-width: thin;
 }
 
-
-
-/*
-	Fullscreen appearance styles.
-*/
+/* Fullscreen styles. */
 *:fullscreen { /* Cause Blink/WebKit to behave like Gecko. */
 	height: 100%;
 	width: 100%;
 }
-body::-ms-backdrop { /* Prevent IE 11 from hiding the `body` element's background. */
-	background: none;
-}
 
-
-/*
-	Scrollbar appearance styles.
-*/
-*::-webkit-scrollbar {
-	background-color: #222;
-	width: 8px;
-}
-*::-webkit-scrollbar-thumb {
-	background-color: #444;
-	border: 1px solid #222;
-}
-* {
-	-ms-scrollbar-base-color: #6e6e6e;
-	-ms-scrollbar-arrow-color: #222;
-	-ms-scrollbar-face-color: #222;
-	-ms-scrollbar-track-color: #444;
-
-	/* Standards. */
-	scrollbar-color: #444 #222;
-	scrollbar-width: thin;
-}
-
-
-/*
-	Default appearance styles.
-*/
 *:focus {
 	outline: thin dotted;
 }
@@ -66,34 +35,38 @@ body::-ms-backdrop { /* Prevent IE 11 from hiding the `body` element's backgroun
 }
 
 /* Story data styling. */
-tw-storydata {
+tw-storydata { /* stylelint-disable-line selector-type-no-unknown */
 	display: none !important;
 	z-index: 0;
 }
 
 body {
-	color: #eee;
-	background-color: #111;
+	color: var(--fore-color);
+	background-color: var(--back-color-primus);
+	font-family: var(--font-stack);
+	font-size: var(--font-size-primus, 18px);
+	line-height: 1;
 	overflow: auto;
 }
 a {
 	cursor: pointer;
-	color: #68d;
+	color: #57c;
 	text-decoration: none;
 	transition: background-color 200ms, border 200ms, color 200ms, text-decoration 200ms;
 }
 a:hover {
-	color: #8af;
+	color: #79e;
 	text-decoration: underline;
 }
 a.link-broken {
-	color: #c22;
+	color: #b11;
 }
 a.link-broken:hover {
-	color: #e44;
+	color: #d33;
 }
-a[disabled], span.link-disabled {
-	color: #aaa;
+a[disabled],
+span.link-disabled {
+	color: #999;
 	cursor: not-allowed !important;
 	/*
 		NOTE: Do not use `pointer-events` here as it disables
@@ -111,9 +84,9 @@ area {
 }
 button {
 	cursor: pointer;
-	color: #eee;
-	background-color: #35a;
-	border: 1px solid #57c;
+	color: var(--fore-color);
+	background-color: #249;
+	border: 1px solid #46b;
 	line-height: normal;
 	padding: 0.4em;
 	transition: background-color 200ms, border 200ms, color 200ms;
@@ -121,17 +94,25 @@ button {
 	-webkit-touch-callout: none;
 }
 button:hover {
-	background-color: #57c;
-	border-color: #79e;
+	background-color: #46b;
+	border-color: #68d;
 }
 button:disabled {
-	background-color: #444;
-	border: 1px solid #666;
+	background-color: var(--back-color-tertius);
+	border: 1px solid #555;
 }
-input, select, textarea {
-	color: #eee;
+/* button,
+input,
+select,
+textarea {
+	border-radius: 4px;
+} */
+input,
+select,
+textarea {
+	color: var(--fore-color);
 	background-color: transparent;
-	border: 1px solid #444;
+	border: 1px solid var(--back-color-tertius);
 	padding: 0.4em;
 	transition: background-color 200ms, border 200ms, color 200ms;
 }
@@ -145,7 +126,10 @@ textarea {
 	min-width: 30em;
 	resize: vertical;
 }
-input[type="checkbox"], input[type="file"], input[type="radio"], select {
+input[type="checkbox"],
+input[type="file"],
+input[type="radio"],
+select {
 	cursor: pointer;
 }
 /* BEGIN: input[type="range"] */
@@ -157,8 +141,8 @@ input[type="range"]:focus {
 	outline: none;
 }
 input[type="range"]::-webkit-slider-runnable-track {
-	background: #222;
-	border: 1px solid #444;
+	background: var(--back-color-secundus);
+	border: 1px solid var(--back-color-tertius);
 	border-radius: 0;
 	cursor: pointer;
 	height: 10px;
@@ -166,8 +150,8 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 input[type="range"]::-webkit-slider-thumb {
 	-webkit-appearance: none;
-	background: #35a;
-	border: 1px solid #57c;
+	background: #249;
+	border: 1px solid #46b;
 	border-radius: 0;
 	cursor: pointer;
 	height: 18px;
@@ -182,19 +166,19 @@ input[type="range"]::-webkit-slider-thumb {
 	width: 33px;
 }
 input[type="range"]:focus::-webkit-slider-runnable-track {
-	background: #222;
+	background: var(--back-color-secundus);
 }
 input[type="range"]::-moz-range-track {
-	background: #222;
-	border: 1px solid #444;
+	background: var(--back-color-secundus);
+	border: 1px solid var(--back-color-tertius);
 	border-radius: 0;
 	cursor: pointer;
 	height: 10px;
 	width: 100%;
 }
 input[type="range"]::-moz-range-thumb {
-	background: #35a;
-	border: 1px solid #57c;
+	background: #249;
+	border: 1px solid #46b;
 	border-radius: 0;
 	cursor: pointer;
 	height: 18px;
@@ -209,38 +193,45 @@ input[type="range"]::-ms-track {
 	width: calc(100% - 1px);
 }
 input[type="range"]::-ms-fill-lower {
-	background: #222;
-	border: 1px solid #444;
+	background: var(--back-color-secundus);
+	border: 1px solid var(--back-color-tertius);
 	border-radius: 0;
 }
 input[type="range"]::-ms-fill-upper {
-	background: #222;
-	border: 1px solid #444;
+	background: var(--back-color-secundus);
+	border: 1px solid var(--back-color-tertius);
 	border-radius: 0;
 }
 input[type="range"]::-ms-thumb {
-	background: #35a;
-	border: 1px solid #57c;
+	background: #249;
+	border: 1px solid #46b;
 	border-radius: 0;
 	cursor: pointer;
 	height: 16px;
 	width: 33px;
 }
 /* END: input[type="range"] */
-input:not(:disabled):focus, select:not(:disabled):focus, textarea:not(:disabled):focus,
-input:not(:disabled):hover, select:not(:disabled):hover, textarea:not(:disabled):hover {
-	background-color: #333;
-	border-color: #eee;
+input:not(:disabled):focus,
+select:not(:disabled):focus,
+textarea:not(:disabled):focus,
+input:not(:disabled):hover,
+select:not(:disabled):hover,
+textarea:not(:disabled):hover {
+	background-color: #222;
+	border-color: var(--fore-color);
 }
 hr {
 	display: block;
 	height: 1px;
 	border: none;
-	border-top: 1px solid #eee;
+	border-top: 1px solid var(--fore-color);
 	margin: 1em 0;
 	padding: 0;
 }
-audio, canvas, progress, video {
+audio,
+canvas,
+progress,
+video {
 	max-width: 100%;
 	vertical-align: middle;
 }
@@ -251,8 +242,8 @@ audio, canvas, progress, video {
 }
 
 .error-view {
-	background-color: #511;
-	border-left: 0.5em solid #c22;
+	background-color: #400;
+	border-left: 0.5em solid #a00;
 	display: inline-block;
 	margin: 0.1em;
 	max-width: 100%;
@@ -280,54 +271,43 @@ audio, canvas, progress, video {
 	display: none;
 }
 .error-view > .error-source:not([hidden]) {
-	background-color: rgba(0, 0, 0, 0.2);
+	background-color: rgba(0, 0, 0, 0.3);
 	display: block;
 	margin: 0 0 0.25em;
 	overflow-x: auto;
 	padding: 0.25em;
 }
 
-.highlight, .marked {
-	color: yellow;
-	font-weight: bold;
-	font-style: italic;
-}
 .nobr {
 	white-space: nowrap;
 }
 
-[data-icon]:before,
-[data-icon-before]:before,
-[data-icon-after]:after,
-.error-view > .error-toggle:before,
-.error-view > .error:before,
-a.link-external:after {
-	font-family: "tme-fa-icons";
+.error-view > .error-toggle::before,
+.error-view > .error::before,
+a.link-external::after {
+	font-family: "sc-icons" !important; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
 	font-style: normal;
-	font-weight: normal;
+	/* font-weight: normal; */
+	font-weight: 900;
 	font-variant: normal;
-	text-transform: none;
 	line-height: 1;
-	speak: none;
+	speak: never;
+	text-rendering: auto;
+	text-transform: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
-[data-icon]:before {
-	content: attr(data-icon);
+.error-view > .error-toggle::before {
+	content: var(--icon-caret-right);
 }
-[data-icon-before]:before {
-	content: attr(data-icon-before) "\00a0\00a0";
+.error-view > .error-toggle.enabled::before {
+	content: var(--icon-caret-down);
 }
-[data-icon-after]:after {
-	content: "\00a0\00a0" attr(data-icon-after);
+.error-view > .error::before {
+	content: var(--icon-exclamation-triangle);
+	margin-right: 0.4em;
 }
-.error-view > .error-toggle:before {
-	content: "\e81a";
-}
-.error-view > .error-toggle.enabled:before {
-	content: "\e818";
-}
-.error-view > .error:before {
-	content: "\e80d\00a0\00a0";
-}
-a.link-external:after {
-	content: "\00a0\e80e";
+a.link-external::after {
+	content: var(--icon-link-ext);
+	margin-left: 0.2em;
 }

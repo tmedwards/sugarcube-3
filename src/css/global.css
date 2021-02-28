@@ -11,10 +11,22 @@
 	/*
 		Colors.
 	*/
+	/* General. */
 	--fore-color: #ddd;          /* was: #eee */
 	--back-color-primus: #000;   /* was: #111 */
 	--back-color-secundus: #111; /* was: #222 */
 	--back-color-tertius: #333;  /* was: #444 */
+
+	/* Sidebar. */
+	--sidebar-back-color: var(--back-color-secundus);
+	--sidebar-border-color: var(--back-color-tertius);
+
+	/* Dialog. */
+	--dialog-back-color: var(--back-color-primus);
+	--dialog-title-back-color: var(--back-color-tertius);
+	--dialog-border-color: var(--back-color-tertius);
+	/* --dialog-body-color: var(--back-color-primus); */
+	--dialog-head-color: var(--back-color-secundus);
 
 	/*
 		Fonts.
@@ -24,14 +36,14 @@
 		Input element content font size for text should be no less
 		than 16px.
 	*/
-	--font-stack: /*system-ui,*/ -apple-system, BlinkMacSystemFont, "Segoe UI", /*Roboto,*/ "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", /* for Windows 7/8 users */ "Segoe UI Symbol";
-	--code-stack: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+	--font-stack: /*system-ui,*/ -apple-system, BlinkMacSystemFont, "Segoe UI", /*Roboto,*/ "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", /* for Windows 7/8 users */ "Segoe UI Symbol"; /* stylelint-disable-line value-keyword-case */
+	--code-stack: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; /* stylelint-disable-line value-keyword-case */
 	--font-size-primus: 18px;
 	--font-size-secundus: calc(var(--font-size-primus) - 2px); /* 89.47% | 0.89rem */
 	--font-size-tertius: calc(var(--font-size-primus) - 4px);  /* 78.95% | 0.78rem */
 
 	/*
-		Icons ("sc-icons").
+		Icons (see: "css/sc-icons.css").
 	*/
 	--icon-search: "\f002";
 	--icon-heart: "\f004";

@@ -8,17 +8,10 @@
 ***********************************************************************************************************************/
 
 @keyframes busy-dots {
-	50% {
-		opacity: 0.2;
-		transform: scale(0.3);
-	}
-}
-
-@keyframes busy-spinner {
-	from {
-		transform: rotate(0turn);
+	0% {
+		opacity: 1;
 	}
 	to {
-		transform: rotate(1turn);
+		opacity: 0.2;
 	}
 }

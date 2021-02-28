@@ -8,78 +8,57 @@
 ***********************************************************************************************************************/
 
 /*
-	Default structural styles.
-*/
-/* Settings dialog styling. */
-#ui-dialog-body.settings [id|="setting-body"] > div:first-child {
-	display: table;
-	width: 100%;
-}
-#ui-dialog-body.settings [id|="setting-label"] {
-	display: table-cell;
-	padding: 0.4em 2em 0.4em 0;
-}
-#ui-dialog-body.settings [id|="setting-label"] + div {
-	display: table-cell;
-	min-width: 8em;
-	text-align: right;
-	vertical-align: middle;
-	white-space: nowrap;
-}
-
-
-/*
-	Built-in dialog appearance styles.
+	Built-in dialog styles.
 */
 /* List-based dialog styling. */
-#ui-dialog-body.list {
+#ui-dialog.list > #ui-dialog-body {
 	padding: 0;
 }
-#ui-dialog-body.list ul {
+#ui-dialog.list > #ui-dialog-body ul {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 	border: 1px solid transparent;
 }
-#ui-dialog-body.list li {
+#ui-dialog.list > #ui-dialog-body li {
 	margin: 0;
 }
-#ui-dialog-body.list li:not(:first-child) {
-	border-top: 1px solid #444;
+#ui-dialog.list > #ui-dialog-body li:not(:first-child) {
+	border-top: 1px solid var(--dialog-back-color);
 }
-#ui-dialog-body.list li a {
+#ui-dialog.list > #ui-dialog-body li a {
 	display: block;
 	padding: 0.25em 0.75em;
 	border: 1px solid transparent;
 	color: #eee;
 	text-decoration: none;
 }
-#ui-dialog-body.list li a:hover {
+#ui-dialog.list > #ui-dialog-body li a:hover {
 	background-color: #333;
 	border-color: #eee;
 }
 
 /* Saves dialog styling. */
-#ui-dialog-body.saves {
+#ui-dialog.saves > #ui-dialog-body {
 	/*
-		NOTE: Older versions of Webkit/Blink need 1px bottom padding or they trigger
-		the scrollbar for some odd reason.
+		NOTE: Older versions of Webkit/Blink need `1px` bottom padding or they'll
+		trigger the scrollbar for some odd reason.
 	*/
 	padding: 0 0 1px;
 }
-#ui-dialog-body.saves > *:not(:first-child) {
-	border-top: 1px solid #444;
+#ui-dialog.saves > #ui-dialog-body > *:not(:first-child) {
+	border-top: 1px solid var(--dialog-border-color);
 }
-#ui-dialog-body.saves > h2 {
-	background-color: #222;
-	font-size: 100%;
+#ui-dialog.saves > #ui-dialog-body > h2 {
+	background-color: var(--dialog-head-color);
+	font-size: inherit;
 	margin: 0;
 	padding: 0.1em 0 0.1em 0.4em;
 }
-#ui-dialog-body.saves #saves-container {
+#ui-dialog.saves > #ui-dialog-body #saves-container {
 	overflow-y: auto;
 }
-#ui-dialog-body.saves #saves-list {
+#ui-dialog.saves > #ui-dialog-body #saves-list {
 	border-collapse: collapse;
 	border-spacing: 0;
 	display: table;
@@ -88,135 +67,152 @@
 	padding: 0;
 	width: 100%;
 }
-#ui-dialog-body.saves #saves-list > li {
+#ui-dialog.saves > #ui-dialog-body #saves-list > li {
 	display: table-row;
 	margin: 0.33em 0;
 }
-#ui-dialog-body.saves #saves-list > li:not(:first-child) {
-	border-top: 1px solid #444;
+#ui-dialog.saves > #ui-dialog-body #saves-list > li:not(:first-child) {
+	border-top: 1px solid var(--dialog-border-color);
 }
-#ui-dialog-body.saves #saves-list > li > div {
+#ui-dialog.saves > #ui-dialog-body #saves-list > li > div {
 	display: table-cell;
 	padding: 0.33em;
 }
-#ui-dialog-body.saves #saves-list > li > div:not(.empty) {
+#ui-dialog.saves > #ui-dialog-body #saves-list > li > div:not(.empty) {
 	line-height: 1.2;
 	vertical-align: top;
 }
-#ui-dialog-body.saves #saves-list > li > div.empty {
+#ui-dialog.saves > #ui-dialog-body #saves-list > li > div.empty {
 	color: #808080;
 	speak: none;
 	text-align: center;
 	user-select: none;
 }
-#ui-dialog-body.saves #saves-list > li > div .details {
-	font-size: 75%;
+#ui-dialog.saves > #ui-dialog-body #saves-list > li > div .details {
+	/* font-size: 0.78rem; */
+	font-size: var(--font-size-tertius);
 	margin-left: 1em;
 }
-#ui-dialog-body.saves #saves-list ul.buttons {
+#ui-dialog.saves > #ui-dialog-body #saves-list ul.buttons {
 	display: table-cell;
 	text-align: right;
 	padding: 0.33em;
+	vertical-align: middle;
 }
-#ui-dialog-body.saves #saves-list button {
-	color: #eee;
+#ui-dialog.saves > #ui-dialog-body #saves-list button {
+	color: #ddd;
 	background-color: transparent;
-	border: 1px solid #444;
-	width: 2.05em;
+	border: 1px solid var(--dialog-border-color);
+	width: 2.25em;
 }
-#ui-dialog-body.saves #saves-list button:disabled {
-	color: #808080;
-	border-color: #191919;
+#ui-dialog.saves > #ui-dialog-body #saves-list button:disabled {
+	color: #707070;
+	border-color: #090909;
 }
-#ui-dialog-body.saves #saves-list button:not(:disabled):hover {
-	background-color: #333;
-	border-color: #eee;
+#ui-dialog.saves > #ui-dialog-body #saves-list button:not(:disabled):hover {
+	background-color: #222;
+	border-color: #ddd;
 }
-#ui-dialog-body.saves #saves-list button.delete:not(:disabled),
-#ui-dialog-body.saves button[id="saves-clear"]:not(:disabled) {
-	background-color: #a22;
-	border-color: #c44;
+#ui-dialog.saves > #ui-dialog-body #saves-list button.delete:not(:disabled),
+#ui-dialog.saves > #ui-dialog-body button[id="saves-clear"]:not(:disabled) {
+	background-color: #911;
+	border-color: #b33;
 }
-#ui-dialog-body.saves #saves-list button.delete:not(:disabled):hover,
-#ui-dialog-body.saves button[id="saves-clear"]:not(:disabled):hover {
-	background-color: #c44;
-	border-color: #e66;
+#ui-dialog.saves > #ui-dialog-body #saves-list button.delete:not(:disabled):hover,
+#ui-dialog.saves > #ui-dialog-body button[id="saves-clear"]:not(:disabled):hover {
+	background-color: #b33;
+	border-color: #d55;
 }
-#ui-dialog-body.saves #saves-list button.load:not(:disabled) {
-	background-color: #272;
-	border-color: #494;
+#ui-dialog.saves > #ui-dialog-body #saves-list button.load:not(:disabled) {
+	background-color: #161;
+	border-color: #383;
 }
-#ui-dialog-body.saves #saves-list button.load:not(:disabled):hover {
-	background-color: #494;
-	border-color: #6b6;
+#ui-dialog.saves > #ui-dialog-body #saves-list button.load:not(:disabled):hover {
+	background-color: #383;
+	border-color: #5a5;
 }
-#ui-dialog-body.saves > ul.buttons {
+#ui-dialog.saves > #ui-dialog-body > ul.buttons {
 	padding: 0.33em;
 }
-#ui-dialog-body.saves > ul.buttons.slots > li:last-child {
+#ui-dialog.saves > #ui-dialog-body > ul.buttons.slots > li:last-child {
 	/*
 		NOTE: Using `position:absolute;right:0;` here can produce poor results,
-		so we use `float:right` instead.
+		so we use `float:right;` instead.
 	*/
 	float: right;
 
-	/* Patch up bottom spacing since we're floating. */
+	/* Patch bottom spacing since we're floating. */
 	margin-bottom: 0.33em;
 }
 
 /* Settings dialog styling. */
-#ui-dialog-body.settings div[id|="header-body"] {
+#ui-dialog.settings > #ui-dialog-body div[id|="header-body"] {
 	margin: 1em 0;
 }
-#ui-dialog-body.settings div[id|="header-body"]:first-child {
+#ui-dialog.settings > #ui-dialog-body div[id|="header-body"]:first-child {
 	margin-top: 0;
 }
-#ui-dialog-body.settings div[id|="header-body"]:not(:first-child) {
-	border-top: 1px solid #444;
+#ui-dialog.settings > #ui-dialog-body div[id|="header-body"]:not(:first-child) {
+	border-top: 1px solid var(--dialog-border-color);
 	padding-top: 1em;
 }
-#ui-dialog-body.settings div[id|="header-body"] > * {
+#ui-dialog.settings > #ui-dialog-body div[id|="header-body"] > * {
 	margin: 0;
 }
-#ui-dialog-body.settings h2[id|="header-heading"] {
-	font-size: 1.375em;
+#ui-dialog.settings > #ui-dialog-body h2[id|="header-heading"] {
+	font-size: 1.375rem;
 }
-#ui-dialog-body.settings p[id|="header-desc"],
-#ui-dialog-body.settings p[id|="setting-desc"] {
+#ui-dialog.settings > #ui-dialog-body p[id|="header-desc"],
+#ui-dialog.settings > #ui-dialog-body p[id|="setting-desc"] {
 	font-size: 87.5%;
 	margin: 0 0 0 0.5em;
 }
-#ui-dialog-body.settings div[id|="setting-body"] + div[id|="setting-body"] {
+#ui-dialog.settings > #ui-dialog-body div[id|="setting-body"] + div[id|="setting-body"] {
 	margin: 1em 0;
 }
-#ui-dialog-body.settings [id|="setting-control"] {
+#ui-dialog.settings > #ui-dialog-body [id|="setting-body"] > div:first-child {
+	display: table;
+	width: 100%;
+}
+#ui-dialog.settings > #ui-dialog-body [id|="setting-label"] {
+	display: table-cell;
+	padding: 0.4em 2em 0.4em 0;
+}
+#ui-dialog.settings > #ui-dialog-body [id|="setting-label"] + div {
+	display: table-cell;
+	min-width: 8em;
+	text-align: right;
+	vertical-align: middle;
 	white-space: nowrap;
 }
-#ui-dialog-body.settings button[id|="setting-control"] {
+#ui-dialog.settings > #ui-dialog-body [id|="setting-control"] {
+	white-space: nowrap;
+}
+#ui-dialog.settings > #ui-dialog-body button[id|="setting-control"] {
 	color: #eee;
 	background-color: transparent;
-	border: 1px solid #444;
+	border: 1px solid var(--dialog-border-color);
 	padding: 0.4em;
 }
-#ui-dialog-body.settings button[id|="setting-control"]:hover {
+#ui-dialog.settings > #ui-dialog-body button[id|="setting-control"]:hover {
 	background-color: #333;
 	border-color: #eee;
 }
-#ui-dialog-body.settings button[id|="setting-control"].enabled {
+#ui-dialog.settings > #ui-dialog-body button[id|="setting-control"].enabled {
 	background-color: #272;
 	border-color: #494;
 }
-#ui-dialog-body.settings button[id|="setting-control"].enabled:hover {
+#ui-dialog.settings > #ui-dialog-body button[id|="setting-control"].enabled:hover {
 	background-color: #494;
 	border-color: #6b6;
 }
-#ui-dialog-body.settings input[type="range"][id|="setting-control"] {
+#ui-dialog.settings > #ui-dialog-body input[type="range"][id|="setting-control"] {
 	max-width: 35vw;
 }
 
 /* Stop text selection on certain UI elements. */
-#ui-dialog-body.list a,
-#ui-dialog-body.settings span[id|="setting-input"] {
+#ui-dialog.list > #ui-dialog-body a,
+#ui-dialog.settings > #ui-dialog-body span[id|="setting-input"] {
 	user-select: none;
 }
 
@@ -224,58 +220,71 @@
 /*
 	Default font icon styles.
 */
-#ui-dialog-body.saves button.delete:before,
-#ui-dialog-body.saves button.load:before,
-#ui-dialog-body.saves button.save:before,
-#ui-dialog-body.saves button[id="saves-clear"]:before,
-#ui-dialog-body.saves button[id="saves-disk-export"]:before,
-#ui-dialog-body.saves button[id="saves-disk-import"]:before,
-#ui-dialog-body.saves button[id="saves-disk-load"]:before,
-#ui-dialog-body.saves button[id="saves-disk-save"]:before,
-#ui-dialog-body.settings button[id|="setting-control"]:after,
-#ui-dialog-body.settings button[id|="setting-control"].enabled:after {
-	font-family: "tme-fa-icons";
+#ui-dialog.saves > #ui-dialog-body button.delete::before,
+#ui-dialog.saves > #ui-dialog-body button.load::before,
+#ui-dialog.saves > #ui-dialog-body button.save::before,
+#ui-dialog.saves > #ui-dialog-body button[id="saves-clear"]::before,
+#ui-dialog.saves > #ui-dialog-body button[id="saves-disk-export"]::before,
+#ui-dialog.saves > #ui-dialog-body button[id="saves-disk-import"]::before,
+#ui-dialog.saves > #ui-dialog-body button[id="saves-disk-load"]::before,
+#ui-dialog.saves > #ui-dialog-body button[id="saves-disk-save"]::before,
+#ui-dialog.settings > #ui-dialog-body button[id|="setting-control"]::after,
+#ui-dialog.settings > #ui-dialog-body button[id|="setting-control"].enabled::after {
+	font-family: "sc-icons" !important; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
 	font-style: normal;
-	font-weight: normal;
+	/* font-weight: normal; */
+	font-weight: 900;
 	font-variant: normal;
-	text-transform: none;
 	line-height: 1;
-	speak: none;
+	speak: never;
+	text-rendering: auto;
+	text-transform: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
-#ui-dialog-body.saves button:before {
-	/* Centering adjustment, since there's no text in button. */
-	padding-left: 0.1em;
+#ui-dialog.saves > #ui-dialog-body button.delete::before {
+	content: var(--icon-trash-alt);
 }
-#ui-dialog-body.saves button.delete:before {
-	content: "\e827";
+#ui-dialog.saves > #ui-dialog-body button.delete:disabled::before {
+	content: var(--icon-trash);
 }
-#ui-dialog-body.saves button.delete:disabled:before {
-	content: "\e828";
+#ui-dialog.saves > #ui-dialog-body button.load::before {
+	content: var(--icon-play);
+	padding-left: 0.2em; /* Centering adjustment. */
 }
-#ui-dialog-body.saves button.load:before {
-	content: "\e842";
+#ui-dialog.saves > #ui-dialog-body button.save::before {
+	content: var(--icon-save);
+	padding-left: 0.05em; /* Centering adjustment. */
 }
-#ui-dialog-body.saves button.save:before {
-	content: "\e82b";
-	padding-left: 0.05em; /* Centering adjustment override. */
+#ui-dialog.saves > #ui-dialog-body button[id="saves-clear"]::before {
+	content: var(--icon-trash-alt);
+	margin-right: 0.4em;
 }
-#ui-dialog-body.saves button[id="saves-clear"]:before {
-	content: "\e827\00a0";
+#ui-dialog.saves > #ui-dialog-body button[id="saves-clear"]:disabled::before {
+	content: var(--icon-trash);
+	margin-right: 0.4em;
 }
-#ui-dialog-body.saves button[id="saves-clear"]:disabled:before {
-	content: "\e828\00a0";
+#ui-dialog.saves > #ui-dialog-body button[id="saves-disk-export"]::before {
+	content: var(--icon-file-export);
+	margin-right: 0.4em;
 }
-#ui-dialog-body.saves button[id="saves-disk-export"]:before,
-#ui-dialog-body.saves button[id="saves-disk-save"]:before {
-		content: "\e829\00a0";
+#ui-dialog.saves > #ui-dialog-body button[id="saves-disk-import"]::before {
+	content: var(--icon-file-import);
+	margin-right: 0.4em;
 }
-#ui-dialog-body.saves button[id="saves-disk-import"]:before,
-#ui-dialog-body.saves button[id="saves-disk-load"]:before {
-		content: "\e82a\00a0";
+#ui-dialog.saves > #ui-dialog-body button[id="saves-disk-save"]::before {
+	content: var(--icon-file-download);
+	margin-right: 0.4em;
 }
-#ui-dialog-body.settings button[id|="setting-control"]:after {
-	content: "\00a0\00a0\e830";
+#ui-dialog.saves > #ui-dialog-body button[id="saves-disk-load"]::before {
+	content: var(--icon-file-upload);
+	margin-right: 0.4em;
 }
-#ui-dialog-body.settings button[id|="setting-control"].enabled:after {
-	content: "\00a0\00a0\e831";
+#ui-dialog.settings > #ui-dialog-body button[id|="setting-control"]::after {
+	content: var(--icon-toggle-off);
+	margin-left: 0.5em;
+}
+#ui-dialog.settings > #ui-dialog-body button[id|="setting-control"].enabled::after {
+	content: var(--icon-toggle-on);
+	margin-left: 0.5em;
 }

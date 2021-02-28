@@ -7,18 +7,16 @@
 
 ***********************************************************************************************************************/
 
-/*
-	Default appearance styles.
-*/
 .passage {
-	line-height: 1.75;
+	line-height: 1.5;
 	text-align: left;
 	transition: opacity 400ms ease-in;
 }
 .passage-in {
 	opacity: 0;
 }
-.passage ul, .passage ol {
+.passage ul,
+.passage ol {
 	margin-left: 0.5em;
 	padding-left: 1.5em;
 }
@@ -27,6 +25,9 @@
 	border-collapse: collapse;
 	font-size: 100%;
 }
-.passage tr, .passage th, .passage td, .passage caption {
+.passage tr,
+.passage th,
+.passage td,
+.passage caption {
 	padding: 3px;
 }
