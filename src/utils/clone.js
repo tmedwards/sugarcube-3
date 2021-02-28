@@ -63,8 +63,12 @@ const clone = (() => {
 			copy = new DataView(O.buffer, O.byteOffset, O.byteLength);
 		}
 		else if (
-			O instanceof BigInt64Array ||
-			O instanceof BigUint64Array ||
+			// NOTE (ca. Mar, 2021): Bigint typed arrays are currently unsupported by,
+			// at least, iOS Safari.
+			//
+			// O instanceof BigInt64Array ||
+			// O instanceof BigUint64Array ||
+			//
 			O instanceof Float64Array ||
 			O instanceof Float32Array ||
 			O instanceof Int32Array ||
