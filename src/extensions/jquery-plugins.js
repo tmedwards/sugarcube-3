@@ -315,3 +315,115 @@ import getActiveElement from '~/utils/getactiveelement';
 		}
 	});
 })();
+
+
+/*
+	Data list methods plugin.
+
+	`jQuery.dataListAdd(dataAttrName, valueList)`
+		Adds the given space separated values to the given data attribute.
+
+	`jQuery.dataListHas(dataAttrName, valueList, anyMatch = false)`
+		Returns whether the given space separated values exist within the given data attribute.
+
+	`jQuery.dataListRemove(dataAttrName, valueList)`
+		Removes the given space separated values from the given data attribute.
+*/
+(() => {
+	jQuery.fn.extend({
+		/*
+			Extend jQuery's chainable methods with a `dataListAdd()` method.
+		*/
+		dataListAdd(dataAttrName, valueList) {
+			// Bail out if there are no target element(s) or data attribute.
+			if (this.length === 0 || !dataAttrName) {
+				return this;
+			}
+
+			// Get the array of given values to add.
+			const toAdd = valueList?.splitOrEmpty(' ') ?? [];
+
+			// Add the given values to the target element(s), if any.
+			if (toAdd.length > 0) {
+				for (let i = 0; i < this.length; ++i) {
+					const el = this[i];
+
+					// Get the current values from the element.
+					const values = el.getAttribute(dataAttrName)?.splitOrEmpty(' ') ?? [];
+
+					// Uniquely add the given values.
+					values.pushUnique(...toAdd);
+
+					// Assign the updated value list back to the element.
+					el.setAttribute(dataAttrName, values.join(' '));
+				}
+			}
+
+			// Return `this` for further chaining.
+			return this;
+		},
+
+		/*
+			Extend jQuery's chainable methods with a `dataListHas()` method.
+		*/
+		dataListHas(dataAttrName, valueList, anyMatch = false) {
+			// Bail out if there are no target element(s) or data attribute.
+			if (this.length === 0 || !dataAttrName) {
+				return false;
+			}
+
+			// Get the array of given values to check.
+			const toCheck = valueList?.splitOrEmpty(' ') ?? [];
+
+			// Bail out if there are no values to check.
+			if (toCheck.length === 0) {
+				return false;
+			}
+
+			// Check the given values on the target element(s).
+			for (let i = 0; i < this.length; ++i) {
+				// Get the current values from the element.
+				const values = this[i].getAttribute(dataAttrName)?.splitOrEmpty(' ') ?? [];
+
+				// Check the given values.
+				if (!values[anyMatch ? 'includesAny' : 'includesAll'](...toCheck)) {
+					return false;
+				}
+			}
+
+			return true;
+		},
+
+		/*
+			Extend jQuery's chainable methods with a `dataListRemove()` method.
+		*/
+		dataListRemove(dataAttrName, valueList) {
+			// Bail out if there are no target element(s) or data attribute.
+			if (this.length === 0 || !dataAttrName) {
+				return this;
+			}
+
+			// Get the array of given values to remove.
+			const toRemove = valueList?.splitOrEmpty(' ') ?? [];
+
+			// Remove the given values from the target element(s), if any.
+			if (toRemove.length > 0) {
+				for (let i = 0; i < this.length; ++i) {
+					const el = this[i];
+
+					// Get the current values from the element.
+					const values = el.getAttribute(dataAttrName)?.splitOrEmpty(' ') ?? [];
+
+					// Remove the given values.
+					values.delete(...toRemove);
+
+					// Assign the updated value list back to the element.
+					el.setAttribute(dataAttrName, values.join(' '));
+				}
+			}
+
+			// Return `this` for further chaining.
+			return this;
+		}
+	});
+})();
