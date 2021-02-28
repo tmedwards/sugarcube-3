@@ -167,7 +167,7 @@ const Dialog = (() => {
 				+ '<div id="ui-dialog" tabindex="0" role="dialog" aria-labelledby="ui-dialog-title">'
 				+     '<div id="ui-dialog-titlebar">'
 				+         '<h1 id="ui-dialog-title"></h1>'
-				+         '<button id="ui-dialog-close" class="ui-close" tabindex="0" aria-label="">\uE804</button>'
+				+         '<button id="ui-dialog-close" class="ui-close" tabindex="0" aria-label=""></button>'
 				+     '</div>'
 				+     '<div id="ui-dialog-body"></div>'
 				+ '</div>'
