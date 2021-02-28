@@ -11,8 +11,8 @@
 	display: none;
 	z-index: 5000000;
 	position: fixed;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 	height: 100%;
 	width: 100%;
 	font-family: var(--font-stack);
@@ -32,53 +32,56 @@
 #init-screen > div > p:first-child {
 	margin-top: 0;
 }
-html[data-init="no-js"] #init-screen, html[data-init="no-cap"] #init-screen, html[data-init="loading"] #init-screen {
+html[data-init="no-js"] #init-screen,
+html[data-init="no-cap"] #init-screen,
+html[data-init="loading"] #init-screen {
 	display: block;
 }
-html[data-init="no-js"] #init-no-js, html[data-init="no-cap"] #init-no-cap {
+html[data-init="no-js"] #init-no-js,
+html[data-init="no-cap"] #init-no-cap {
 	display: block;
 	padding: 0 1em;
 }
-html[data-init="no-js"] #init-no-js > *:first-child::before, html[data-init="no-cap"] #init-no-cap > *:first-child::before {
-	content: "\1f6d1\00a0";
+html[data-init="no-js"] #init-no-js > *:first-child::before,
+html[data-init="no-cap"] #init-no-cap > *:first-child::before {
+	color: #c00;
+	content: "\f071";
+	font-family: "sc-icons" !important; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
+	font-style: normal;
+	/* font-weight: normal; */
+	font-weight: 900;
+	font-variant: normal;
+	line-height: 1;
+	margin-right: 0.4em;
+	speak: never;
+	text-rendering: auto;
+	text-transform: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 html[data-init="no-cap"] #init-no-cap {
 	top: 33vh;
 }
 html[data-init="loading"] #init-loading {
 	display: block;
-	text-align: center;
+	pointer-events: none;
+	top: calc(50% - 60px);
 }
-html[data-init="loading"] #init-loading > div {
-	--base-dot-size: 4vw;
-
-	animation: 1.5s ease-in-out infinite busy-dots;
-	background-color: #ddd;
-	border-radius: 50%;
-	display: inline-block;
-	height: var(--loading-dot-size, var(--base-dot-size));
-	margin: 0 calc(var(--loading-dot-size, var(--base-dot-size)) / 4);
-	width: var(--loading-dot-size, var(--base-dot-size));
+html[data-init="loading"] #init-loading svg {
+	max-height: 120px;
+	max-width: 80vw;
 }
-@media screen and (max-width: 1136px) {
-	html[data-init="loading"] #init-loading > div {
-		--base-dot-size: 6vw;
-	}
+html[data-init="loading"] #init-loading svg circle {
+	animation: busy-dots 1.2s ease-in-out infinite;
+	opacity: 0.2;
 }
-@media screen and (max-width: 768px) {
-	html[data-init="loading"] #init-loading > div {
-		--base-dot-size: 8vw;
-	}
+html[data-init="loading"] #init-loading svg circle:nth-of-type(2) {
+	animation-delay: 0.2s;
 }
-html[data-init="loading"] #init-loading > div:nth-child(1) {
-	animation-delay: 0s;
-}
-html[data-init="loading"] #init-loading > div:nth-child(2) {
+html[data-init="loading"] #init-loading svg circle:nth-of-type(3) {
 	animation-delay: 0.4s;
 }
-html[data-init="loading"] #init-loading > div:nth-child(3) {
-	animation-delay: 0.8s;
-}
-html[data-init="loading"] #ui-bar, html[data-init="loading"] #story {
+html[data-init="loading"] #ui-bar,
+html[data-init="loading"] #story {
 	display: none;
 }

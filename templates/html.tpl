@@ -40,10 +40,10 @@ if(typeof BigInt==='function'&&typeof customElements==='object'&&typeof IDBObjec
 '{{BUILD_CSS_SOURCE}}'
 </head>
 <body>
-	<div id="init-screen">
+	<div id="init-screen" dir="ltr">
 		<div id="init-no-js"><noscript>JavaScript must be enabled to play <i>{{STORY_NAME}}</i>.</noscript></div>
 		<div id="init-no-cap"><p>Browser lacks required capabilities.</p><p>Upgrade or switch to another browser.</p></div>
-		<div id="init-loading"><div aria-label="Loading"></div><div></div><div></div></div>
+		<div id="init-loading"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 20" aria-label="Loading"><g><circle cx="10" cy="10" r="10" fill="currentColor"></circle><circle cx="35" cy="10" r="10" fill="currentColor"></circle><circle cx="60" cy="10" r="10" fill="currentColor"></circle></g></svg></div>
 	</div>
 	{{STORY_DATA}}
 	<script id="script-sugarcube" type="text/javascript">
