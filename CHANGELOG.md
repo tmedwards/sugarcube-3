@@ -8,6 +8,7 @@
 ## 2021-03-01
 
 * Added `postcss-mixins` plugin development dependency.
+* Added `stylelint-a11y` development dependency.
 
 ## 2021-02-28
 
