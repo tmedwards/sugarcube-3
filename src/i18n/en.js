@@ -52,6 +52,7 @@ I18n.StringsByLang.en = {
 		Debug bar.
 	*/
 	debugBarToggle      : 'Toggle the debug bar',
+	debugBarPlayJump    : 'Play',
 	debugBarNoWatches   : '\u2014 no watches set \u2014',
 	debugBarAddWatch    : 'Add watch',
 	debugBarDeleteWatch : 'Delete watch',
@@ -61,6 +62,7 @@ I18n.StringsByLang.en = {
 	debugBarLabelWatch  : 'Watch',
 	debugBarLabelTurn   : 'Turn', // (noun) chance to act (in a game), moment, period
 	debugBarLabelViews  : 'Views',
+	debugBarLabelJump   : 'Jump',
 	debugBarViewsToggle : 'Toggle the debug views',
 	debugBarWatchToggle : 'Toggle the watch panel',
 

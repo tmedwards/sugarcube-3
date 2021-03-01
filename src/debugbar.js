@@ -14,7 +14,7 @@ import Engine from '~/engine';
 import I18n from '~/i18n/i18n';
 import Patterns from '~/lib/patterns';
 import State from '~/state';
-import encodeEntities from '~/utils/encodeentities';
+import Story from '~/story';
 import getToStringTag from '~/utils/gettostringtag';
 
 
@@ -22,8 +22,8 @@ import getToStringTag from '~/utils/gettostringtag';
 	DebugBar API static object.
 */
 const DebugBar = (() => {
-	const WATCH_UPDATE_DELAY   = 200; // in milliseconds
-	const VARLIST_UPDATE_DELAY = 500; // in milliseconds
+	const WATCH_UPDATE_DELAY = 200; // in milliseconds
+	const LIST_UPDATE_DELAY  = 500; // in milliseconds
 
 	const variableRE   = new RegExp(`^${Patterns.variable}$`);
 	const numericKeyRE = /^\d+$/;
@@ -31,11 +31,13 @@ const DebugBar = (() => {
 	let varList        = [];
 	let stowed         = true;
 	let watchTimerId   = null;
-	let varListTimerId = null;
+	let listTimerId    = null;
 	let $debugBar      = null;
 	let $watchBody     = null;
+	let $watchToggle   = null;
 	let $varDatalist   = null;
-	let $turnSelect    = null;
+	let $turnValue     = null;
+	let $jumpDatalist  = null;
 
 
 	/*******************************************************************************
@@ -62,8 +64,14 @@ const DebugBar = (() => {
 				+         '<button id="debug-bar-toggle" tabindex="0" title="" aria-label=""></button>'
 				+         '<div>'
 				+             '<button id="debug-bar-views-toggle" tabindex="0" title="" aria-label=""></button>'
-				+             '<label id="debug-bar-turn-label" for="debug-bar-turn-select"></label>'
-				+             '<select id="debug-bar-turn-select" tabindex="0"></select>'
+				+             '<span id="debug-bar-turn-label" class="label"></span>'
+				+             '<span id="debug-bar-turn-value"></span>'
+				+         '</div>'
+				+         '<div>'
+				+             '<label id="debug-bar-jump-label" for="debug-bar-jump-input"></label>'
+				+             '<input id="debug-bar-jump-input" name="debug-bar-jump-input" type="text" list="debug-bar-jump-list" tabindex="0">'
+				+             '<datalist id="debug-bar-jump-list" aria-hidden="true" hidden="hidden"></datalist>'
+				+             '<button id="debug-bar-jump-play" tabindex="0" title="" aria-label=""></button>'
 				+         '</div>'
 				+         '<div>'
 				+             '<label id="debug-bar-code-label" for="debug-bar-code-box"></label>'
@@ -94,13 +102,16 @@ const DebugBar = (() => {
 		// NOTE: We rewrap the elements themselves, rather than simply using
 		// the results of `find()`, so that we cache uncluttered jQuery-wrappers
 		// (i.e. `context` refers to the elements and there is no `prevObject`).
-		$debugBar    = jQuery('#debug-bar');
-		$watchBody   = jQuery($debugBar.find('#debug-bar-watch').get(0));
-		$varDatalist = jQuery($debugBar.find('#debug-bar-var-list').get(0));
-		$turnSelect  = jQuery($debugBar.find('#debug-bar-turn-select').get(0));
+		$debugBar     = jQuery('#debug-bar');
+		$watchBody    = jQuery($debugBar.find('#debug-bar-watch').get(0));
+		$watchToggle  = jQuery($debugBar.find('#debug-bar-watch-toggle').get(0));
+		$varDatalist  = jQuery($debugBar.find('#debug-bar-var-list').get(0));
+		$turnValue    = jQuery($debugBar.find('#debug-bar-turn-value').get(0));
+		$jumpDatalist = jQuery($debugBar.find('#debug-bar-jump-list').get(0));
 
 		const $barToggle   = jQuery($debugBar.find('#debug-bar-toggle').get(0));
-		const $watchToggle = jQuery($debugBar.find('#debug-bar-watch-toggle').get(0));
+		const $jumpInput   = jQuery($debugBar.find('#debug-bar-jump-input').get(0));
+		const $jumpPlay    = jQuery($debugBar.find('#debug-bar-jump-play').get(0));
 		const $watchInput  = jQuery($debugBar.find('#debug-bar-watch-input').get(0));
 		const $watchAdd    = jQuery($debugBar.find('#debug-bar-watch-add').get(0));
 		const $watchAll    = jQuery($debugBar.find('#debug-bar-watch-all').get(0));
@@ -110,6 +121,24 @@ const DebugBar = (() => {
 		// Set up the debug bar's local event handlers.
 		$barToggle
 			.ariaClick(debugBarToggle);
+		$viewsToggle
+			.ariaClick(() => {
+				DebugView.toggle();
+				updateSession();
+			});
+		$jumpInput
+			.on(':play', function () {
+				Engine.play(this.value.trim());
+				this.value = '';
+			})
+			.on('keypress', ev => {
+				if (ev.which === 13 /* Enter/Return */) {
+					ev.preventDefault();
+					$jumpInput.trigger(':play');
+				}
+			});
+		$jumpPlay
+			.ariaClick(() => $jumpInput.trigger(':play'));
 		$watchToggle
 			.ariaClick(debugBarWatchToggle);
 		$watchInput
@@ -129,20 +158,11 @@ const DebugBar = (() => {
 			.ariaClick(debugBarWatchAddAll);
 		$watchNone
 			.ariaClick(debugBarWatchClear);
-		$turnSelect
-			.on('change', function () {
-				Engine.goTo(Number(this.value));
-			});
-		$viewsToggle
-			.ariaClick(() => {
-				DebugView.toggle();
-				updateSession();
-			});
 
 		// Set up the debug bar's global event handlers.
 		jQuery(document)
-			// Set up a handler for the history select.
-			.on(':historyupdate.debug-bar', updateTurnSelect)
+			// Set up a handler for the turn display.
+			.on(':stateupdate.debug-bar', updateTurnDisplay)
 			// Set up a handler for engine resets to clear the active debug session.
 			.on(':enginerestart.debug-bar', clearSession);
 	}
@@ -156,6 +176,7 @@ const DebugBar = (() => {
 
 		// Set various labels.
 		const barToggleLabel   = I18n.get('debugBarToggle');
+		const jumpPlayLabel    = I18n.get('debugBarPlayJump');
 		const codeRunLabel     = I18n.get('debugBarCodeRun');
 		const watchAddLabel    = I18n.get('debugBarAddWatch');
 		const watchAllLabel    = I18n.get('debugBarWatchAll');
@@ -164,6 +185,8 @@ const DebugBar = (() => {
 		const viewsToggleLabel = I18n.get('debugBarViewsToggle');
 
 		$debugBar.find('#debug-bar-toggle').attr({ title : barToggleLabel, 'aria-label' : barToggleLabel });
+		$debugBar.find('#debug-bar-jump-label').text(I18n.get('debugBarLabelJump'));
+		$debugBar.find('#debug-bar-jump-play').attr({ title : jumpPlayLabel, 'aria-label' : jumpPlayLabel });
 		$debugBar.find('#debug-bar-views-toggle').attr({ title : viewsToggleLabel, 'aria-label' : viewsToggleLabel }).text(I18n.get('debugBarLabelViews'));
 		$debugBar.find('#debug-bar-turn-label').text(I18n.get('debugBarLabelTurn'));
 		$debugBar.find('#debug-bar-code-label').text(I18n.get('debugBarLabelCode'));
@@ -177,14 +200,17 @@ const DebugBar = (() => {
 
 		// Attempt to restore an existing session.
 		if (!restoreSession()) {
-			// If there's no active debug session, then initially stow the debug bar
-			// and enable debug views.
+			// If there's no active debug session, then initially stow the debug bar,
+			// enable debug views, and enable variable watching.
 			debugBarStow();
 			DebugView.enable();
+			enableWatchUpdates();
+			enableWatch();
 		}
 
 		// Update the UI.
-		updateTurnSelect();
+		updateTurnDisplay();
+		updateJumpList();
 		updateVarList();
 	}
 
@@ -296,6 +322,107 @@ const DebugBar = (() => {
 	// The debug state storage key.
 	const STORAGE_KEY = 'debugState';
 
+	const toWatchString = (() => {
+		function _toWatchString(O, cache) {
+			// Handle the `null` primitive.
+			if (O === null) {
+				return 'null';
+			}
+
+			// Handle the rest of the primitives and functions.
+			switch (typeof O) {
+				case 'bigint':
+				case 'boolean':
+				case 'number':
+				case 'symbol':
+				case 'undefined':
+					return String(O);
+
+				case 'string':
+					return JSON.stringify(O);
+
+				case 'function':
+					// return JSON.stringify(value.toString());
+					return 'function';
+			}
+
+			// Check the cache and, if we get a hit, return a midline horizontal ellipsis.
+			if (cache.has(O)) {
+				return '\u22ef';
+			}
+
+			// Add an entry for the original to the reference cache.
+			cache.add(O);
+
+			const objType = getToStringTag(O);
+
+			// /*
+			// 	Handle instances of the primitive exemplar objects (`Boolean`, `Number`, `String`).
+			// */
+			// if (objType === 'Boolean') {
+			// 	return `Boolean\u202F{${String(value)}}`;
+			// }
+			// if (objType === 'Number') {
+			// 	return `Number\u202F{${String(value)}}`;
+			// }
+			// if (objType === 'String') {
+			// 	return `String\u202F{"${String(value)}"}`;
+			// }
+
+			// Handle `Date` objects.
+			if (objType === 'Date') {
+				// return `Date\u202F${value.toISOString()}`;
+				return `Date\u202F{${O.toLocaleString()}}`;
+			}
+
+			// Handle `RegExp` objects.
+			if (objType === 'RegExp') {
+				return `RegExp\u202F${O.toString()}`;
+			}
+
+			const result = [];
+
+			// Handle `Array` & `Set` objects.
+			if (O instanceof Array || O instanceof Set) {
+				const list = O instanceof Array ? O : Array.from(O);
+
+				// own numeric properties
+				// NOTE: Do not use `<Array>.forEach()` here as it skips undefined members.
+				for (let i = 0, len = list.length; i < len; ++i) {
+					result.push(list.hasOwnProperty(i) ? _toWatchString(list[i], cache) : '<empty>');
+				}
+
+				// own enumerable non-numeric expando properties
+				Object.keys(list)
+					.filter(key => !numericKeyRE.test(key))
+					.forEach(key => result.push(`${_toWatchString(key, cache)}: ${_toWatchString(list[key], cache)}`));
+
+				return `${objType}(${list.length})\u202F[${result.join(', ')}]`;
+			}
+
+			// Handle `Map` objects.
+			if (O instanceof Map) {
+				O.forEach((val, key) => result.push(`${_toWatchString(key, cache)} \u2192 ${_toWatchString(val, cache)}`));
+
+				return `${objType}(${O.size})\u202F{${result.join(', ')}}`;
+			}
+
+			// General object handling.
+			// own enumerable properties
+			Object.keys(O)
+				.forEach(key => result.push(`${_toWatchString(key, cache)}: ${_toWatchString(O[key], cache)}`));
+
+			return `${objType}\u202F{${result.join(', ')}}`;
+		}
+
+		function toWatchString(O) {
+			const cache = new Set();
+			return _toWatchString(O, cache);
+		}
+
+		return toWatchString;
+	})();
+
 	function stowDebugBar() {
 		$debugBar.css('right', `-${$debugBar.outerWidth()}px`);
 	}
@@ -303,6 +430,19 @@ const DebugBar = (() => {
 	function unstowDebugBar() {
 		$debugBar.css('right', 0);
 	}
+
+	// function disableJumpListUpdates() {
+	// 	if (listTimerId !== null) {
+	// 		clearInterval(listTimerId);
+	// 		listTimerId = null;
+	// 	}
+	// }
+
+	// function enableJumpListUpdates() {
+	// 	if (listTimerId === null) {
+	// 		listTimerId = setInterval(() => updateJumpList(), LIST_UPDATE_DELAY);
+	// 	}
+	// }
 
 	function disableWatch() {
 		$watchBody.attr({
@@ -331,15 +471,15 @@ const DebugBar = (() => {
 	}
 
 	function disableVarListUpdates() {
-		if (varListTimerId !== null) {
-			clearInterval(varListTimerId);
-			varListTimerId = null;
+		if (listTimerId !== null) {
+			clearInterval(listTimerId);
+			listTimerId = null;
 		}
 	}
 
 	function enableVarListUpdates() {
-		if (varListTimerId === null) {
-			varListTimerId = setInterval(() => updateVarList(), VARLIST_UPDATE_DELAY);
+		if (listTimerId === null) {
+			listTimerId = setInterval(() => updateVarList(), LIST_UPDATE_DELAY);
 		}
 	}
 
@@ -357,17 +497,6 @@ const DebugBar = (() => {
 		}
 
 		const debugState = Db.session.get(STORAGE_KEY);
-
-		stowed = debugState.stowed;
-
-		if (stowed) {
-			disableVarListUpdates();
-			debugBarStow();
-		}
-		else {
-			enableVarListUpdates();
-			debugBarUnstow();
-		}
 
 		watchList.push(...debugState.watchList);
 		updateWatchBody();
@@ -392,6 +521,17 @@ const DebugBar = (() => {
 		}
 		else {
 			DebugView.disable();
+		}
+
+		stowed = debugState.stowed;
+
+		if (stowed) {
+			disableVarListUpdates();
+			debugBarStow();
+		}
+		else {
+			enableVarListUpdates();
+			debugBarUnstow();
 		}
 
 		return true;
@@ -531,106 +671,36 @@ const DebugBar = (() => {
 			.append(options);
 	}
 
-	function updateTurnSelect() {
-		const histLen = State.size;
-		const offset  = 1 + State.expired.length;
-		const options = document.createDocumentFragment();
-
-		for (let i = 0; i < histLen; ++i) {
-			jQuery(document.createElement('option'))
-				.val(i)
-				.text(`${offset + i}. ${encodeEntities(State.history[i].name)}`)
-				.appendTo(options);
-		}
-
-		$turnSelect
+	function updateTurnDisplay() {
+		$turnValue
 			.empty()
-			.ariaDisabled(histLen < 2)
-			.append(options)
-			.val(State.activeIndex);
+			.text(`${State.turns} ${JSON.stringify(State.passage)}`);
 	}
 
-	function toWatchString(value) {
-		// Handle the `null` primitive.
-		if (value === null) {
-			return 'null';
-		}
+	// Info passages are passages which contain solely structural data and code,
+	// rather than any actual story content.
+	const INFO_PASSAGES = Object.freeze([
+		'StoryAuthor', 'StoryBanner', 'StoryCaption', 'StoryDisplayTitle',
+		'StoryMenu', 'StorySubtitle', 'StoryTitle',
 
-		// Handle the rest of the primitives and functions.
-		switch (typeof value) {
-			case 'boolean':
-			case 'number':
-			case 'symbol':
-			case 'undefined':
-				return String(value);
+		'StoryInit', 'StoryInterface',
 
-			case 'string':
-				return JSON.stringify(value);
+		'PassageReady', 'PassageDone', 'PassageHeader', 'PassageFooter'
+	]);
 
-			case 'function':
-				// return JSON.stringify(value.toString());
-				return 'function';
-		}
+	function updateJumpList() {
+		const names = [...Story.getAllRegular().keys()].filter(name => !INFO_PASSAGES.includes(name));
 
-		const objType = getToStringTag(value);
-
-		// /*
-		// 	Handle instances of the primitive exemplar objects (`Boolean`, `Number`, `String`).
-		// */
-		// if (objType === 'Boolean') {
-		// 	return `Boolean\u202F{${String(value)}}`;
-		// }
-		// if (objType === 'Number') {
-		// 	return `Number\u202F{${String(value)}}`;
-		// }
-		// if (objType === 'String') {
-		// 	return `String\u202F{"${String(value)}"}`;
-		// }
-
-		// Handle `Date` objects.
-		if (objType === 'Date') {
-			// return `Date\u202F${value.toISOString()}`;
-			return `Date\u202F{${value.toLocaleString()}}`;
-		}
-
-		// Handle `RegExp` objects.
-		if (objType === 'RegExp') {
-			return `RegExp\u202F${value.toString()}`;
-		}
-
-		const result = [];
-
-		// Handle `Array` & `Set` objects.
-		if (value instanceof Array || value instanceof Set) {
-			const list = value instanceof Array ? value : Array.from(value);
-
-			// own numeric properties
-			// NOTE: Do not use `<Array>.forEach()` here as it skips undefined members.
-			for (let i = 0, len = list.length; i < len; ++i) {
-				result.push(list.hasOwnProperty(i) ? toWatchString(list[i]) : '<empty>');
-			}
-
-			// own enumerable non-numeric expando properties
-			Object.keys(list)
-				.filter(key => !numericKeyRE.test(key))
-				.forEach(key => result.push(`${toWatchString(key)}: ${toWatchString(list[key])}`));
-
-			return `${objType}(${list.length})\u202F[${result.join(', ')}]`;
-		}
-
-		// Handle `Map` objects.
-		if (value instanceof Map) {
-			value.forEach((val, key) => result.push(`${toWatchString(key)} \u2192 ${toWatchString(val)}`));
-
-			return `${objType}(${value.size})\u202F{${result.join(', ')}}`;
-		}
-
-		// General object handling.
-		// own enumerable properties
-		Object.keys(value)
-			.forEach(key => result.push(`${toWatchString(key)}: ${toWatchString(value[key])}`));
-
-		return `${objType}\u202F{${result.join(', ')}}`;
+		// Update the datalist.
+		const options = document.createDocumentFragment();
+		names.forEach(name => {
+			jQuery(document.createElement('option'))
+				.val(name)
+				.appendTo(options);
+		});
+		$jumpDatalist
+			.empty()
+			.append(options);
 	}
 
 
