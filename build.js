@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /***********************************************************************************************************************
 
-	build.js (v1.6.3, 2021-02-26)
+	build.js (v1.7.0, 2021-03-01)
 		A Node.js-hosted build script for SugarCube.
 
 	Copyright © 2013–2021 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
 	Use of this source code is governed by a BSD 2-clause "Simplified" License, which may be found in the LICENSE file.
 
 ***********************************************************************************************************************/
-/* eslint-env node, es6 */
+/* eslint-env node, es2020 */
 /* eslint-disable strict */
 'use strict';
 
@@ -18,22 +18,25 @@
 *******************************************************************************/
 
 const CONFIG = {
-	css : [
-		// The ordering herein is significant.
-		'vendor/normalize.css',
-		'src/css/sc-icons.css',
-		'src/css/global.css',
-		'src/css/animation.css',
-		'src/css/init-screen.css',
-		'src/css/core.css',
-		'src/css/core-display.css',
-		'src/css/core-passage.css',
-		'src/css/core-macro.css',
-		'src/css/ui-dialog.css',
-		'src/css/ui.css',
-		'src/css/ui-bar.css',
-		'src/css/ui-debug.css'
-	],
+	css : {
+		mixins : 'src/css/_mixins.css',
+		files  : [
+			// The ordering herein is significant.
+			'vendor/normalize.css',
+			'src/css/sc-icons.css',
+			'src/css/global.css',
+			'src/css/animation.css',
+			'src/css/init-screen.css',
+			'src/css/core.css',
+			'src/css/core-display.css',
+			'src/css/core-passage.css',
+			'src/css/core-macro.css',
+			'src/css/ui-dialog.css',
+			'src/css/ui.css',
+			'src/css/ui-bar.css',
+			'src/css/ui-debug.css'
+		]
+	},
 	libs : [
 		// The ordering herein is significant.
 		'vendor/lz-string.min.js',
@@ -203,7 +206,7 @@ function compileJavaScript() {
 		treeshake : false,
 		plugins   : [
 			alias({
-				entries: [
+				entries : [
 					{ find : /^~\/(.*)(?:\.js)?$/, replacement : 'src/$1.js' }
 				]
 			})
@@ -256,19 +259,23 @@ function compileJavaScript() {
 	return compile();
 }
 
-function compileStyles(filenames) {
+function compileStyles(config) {
 	log('compiling CSS...');
-	const autoprefixer    = require('autoprefixer');
-	const postcss         = require('postcss');
-	const CleanCSS        = require('clean-css');
-	const normalizeRegExp = /normalize\.css$/;
+	const autoprefixer = require('autoprefixer');
+	const mixins       = require('postcss-mixins');
+	const postcss      = require('postcss');
+	const CleanCSS     = require('clean-css');
+	const excludeRE    = /(?:normalize)\.css$/;
+	const mixinContent = readFileContents(config.mixins);
 
-	return concatFiles(filenames, (contents, filename) => {
+	return concatFiles(config.files, (contents, filename) => {
 		let css = contents;
 
-		// Do not run autoprefixer on 'normalize.css'.
-		if (!normalizeRegExp.test(filename)) {
-			const processed = postcss([autoprefixer]).process(css, { from : filename });
+		// Do not run the postcss plugins on files that match the exclusion regexp.
+		if (!excludeRE.test(filename)) {
+			css = `${mixinContent}\n${css}`;
+
+			const processed = postcss([mixins, autoprefixer]).process(css, { from : filename });
 
 			css = processed.css;
 

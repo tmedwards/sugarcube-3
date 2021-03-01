@@ -194,17 +194,7 @@ html[data-debug~="watch"] #debug-bar-watch-toggle:hover {
 #debug-bar-watch-none::before,
 #debug-bar-watch-toggle::after,
 #debug-bar-views-toggle::after {
-	font-family: "sc-icons" !important; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
-	font-style: normal;
-	/* font-weight: normal; */
-	font-weight: 900;
-	font-variant: normal;
-	line-height: 1;
-	speak: never;
-	text-rendering: auto;
-	text-transform: none;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	@mixin sc-icons-properties;
 }
 #debug-bar-toggle::before {
 	content: var(--icon-bug);
@@ -212,10 +202,10 @@ html[data-debug~="watch"] #debug-bar-watch-toggle:hover {
 #debug-bar-hint::after {
 	content: var(--icon-bug) "\202f" var(--icon-arrow-right);
 }
-#debug-bar-jump-play::before {
+#debug-bar-jump-play::before { /* stylelint-disable-line no-duplicate-selectors */
 	content: var(--icon-arrow-right);
 }
-#debug-bar-run-code::before {
+#debug-bar-run-code::before { /* stylelint-disable-line no-duplicate-selectors */
 	content: var(--icon-play);
 	padding-left: 0.2em; /* Centering adjustment. */
 }

@@ -138,18 +138,8 @@ html[data-dialog] body {
 	Default font icon styles.
 */
 #ui-dialog-close::before {
-	font-family: "sc-icons" !important; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
-	font-style: normal;
-	/* font-weight: normal; */
-	font-weight: 900;
-	font-variant: normal;
-	line-height: 1;
-	speak: never;
-	text-rendering: auto;
-	text-transform: none;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	@mixin sc-icons-properties;
 }
-#ui-dialog-close::before {
+#ui-dialog-close::before { /* stylelint-disable-line no-duplicate-selectors */
 	content: var(--icon-times);
 }

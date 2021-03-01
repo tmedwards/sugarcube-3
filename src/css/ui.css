@@ -230,17 +230,7 @@
 #ui-dialog.saves > #ui-dialog-body button[id="saves-disk-save"]::before,
 #ui-dialog.settings > #ui-dialog-body button[id|="setting-control"]::after,
 #ui-dialog.settings > #ui-dialog-body button[id|="setting-control"].enabled::after {
-	font-family: "sc-icons" !important; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
-	font-style: normal;
-	/* font-weight: normal; */
-	font-weight: 900;
-	font-variant: normal;
-	line-height: 1;
-	speak: never;
-	text-rendering: auto;
-	text-transform: none;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	@mixin sc-icons-properties;
 }
 #ui-dialog.saves > #ui-dialog-body button.delete::before {
 	content: var(--icon-trash-alt);

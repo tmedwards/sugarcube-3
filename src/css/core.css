@@ -285,17 +285,7 @@ video {
 .error-view > .error-toggle::before,
 .error-view > .error::before,
 a.link-external::after {
-	font-family: "sc-icons" !important; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
-	font-style: normal;
-	/* font-weight: normal; */
-	font-weight: 900;
-	font-variant: normal;
-	line-height: 1;
-	speak: never;
-	text-rendering: auto;
-	text-transform: none;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+	@mixin sc-icons-properties;
 }
 .error-view > .error-toggle::before {
 	content: var(--icon-caret-right);

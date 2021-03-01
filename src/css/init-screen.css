@@ -44,20 +44,11 @@ html[data-init="no-cap"] #init-no-cap {
 }
 html[data-init="no-js"] #init-no-js > *:first-child::before,
 html[data-init="no-cap"] #init-no-cap > *:first-child::before {
+	@mixin sc-icons-properties;
+
 	color: #c00;
 	content: "\f071";
-	font-family: "sc-icons" !important; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
-	font-style: normal;
-	/* font-weight: normal; */
-	font-weight: 900;
-	font-variant: normal;
-	line-height: 1;
 	margin-right: 0.4em;
-	speak: never;
-	text-rendering: auto;
-	text-transform: none;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
 }
 html[data-init="no-cap"] #init-no-cap {
 	top: 33vh;
