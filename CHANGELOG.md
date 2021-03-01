@@ -5,9 +5,22 @@
 * Make auto saves not save on the same turn that any save is loaded or, probably, a session is restored.
 * Consider meshing the auto save and session update somehow, so that the state is automatically marshaled only once per turn.
 
+## 2021-03-01
+
+* Added `postcss-mixins` plugin development dependency.
+
+## 2021-02-28
+
+* Added `stylelint` development dependency.
+* Added a custom jQuery data list plugin to the local extensions.
+* Updated the icon font, from subset of FAv5 free to subset of FAv5 free solid.
+* Updated the init screens.
+* Updated various styles.
+* More `DebugBar` spadework.
+
 ## 2021-02-20
 
-* Added CSS custom properties for the current font icons.
+* Added CSS custom properties for the icon font.
 
 ## 2021-02-17
 
