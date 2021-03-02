@@ -78,7 +78,7 @@
 	background-color: transparent;
 	border-right: none;
 	border: 1px solid var(--sidebar-border-color);
-	color: var(--fore-color);
+	color: var(--sidebar-color);
 	display: block;
 	font-size: 1.2em;
 	line-height: inherit;
@@ -90,7 +90,7 @@
 }
 #ui-bar-toggle:hover {
 	background-color: var(--sidebar-border-color);
-	border-color: var(--fore-color);
+	border-color: var(--sidebar-color);
 }
 #ui-bar.stowed #ui-bar-toggle {
 	padding: 0.3em 0.35em 0.25em 0.55em;
@@ -129,7 +129,7 @@
 }
 #menu li a {
 	border: 1px solid transparent;
-	color: var(--fore-color);
+	color: var(--sidebar-color);
 	display: block;
 	padding: 0.25em 0.75em;
 	text-transform: uppercase;
@@ -138,7 +138,7 @@
 }
 #menu li a:hover {
 	background-color: var(--sidebar-border-color);
-	border-color: var(--fore-color);
+	border-color: var(--sidebar-color);
 }
 
 

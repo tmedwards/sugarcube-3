@@ -9,38 +9,89 @@
 
 :root {
 	/*
-		Colors.
-	*/
-	/* General. */
-	--fore-color: #ddd;          /* was: #eee */
-	--back-color-primus: #000;   /* was: #111 */
-	--back-color-secundus: #111; /* was: #222 */
-	--back-color-tertius: #333;  /* was: #444 */
-
-	/* Sidebar. */
-	--sidebar-back-color: var(--back-color-secundus);
-	--sidebar-border-color: var(--back-color-tertius);
-
-	/* Dialog. */
-	--dialog-back-color: var(--back-color-primus);
-	--dialog-title-back-color: var(--back-color-tertius);
-	--dialog-border-color: var(--back-color-tertius);
-	/* --dialog-body-color: var(--back-color-primus); */
-	--dialog-head-color: var(--back-color-secundus);
-
-	/*
 		Fonts.
 
-		The primary font size for text should be around 16px–19px,
-		while the secondary font size should be around 2px smaller.
-		Input element content font size for text should be no less
-		than 16px.
+		The primary font size for text should be around 18px–19px.  Smaller text
+		should be some multiple of 2px smaller, not to exceed a minimum of 14px.
+		The font size for input element text should not exceed a minimum of 2px
+		smaller than the primary font size.
 	*/
-	--font-stack: /*system-ui,*/ -apple-system, BlinkMacSystemFont, "Segoe UI", /*Roboto,*/ "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", /* for Windows 7/8 users */ "Segoe UI Symbol"; /* stylelint-disable-line value-keyword-case */
-	--code-stack: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; /* stylelint-disable-line value-keyword-case */
-	--font-size-primus: 18px;
-	--font-size-secundus: calc(var(--font-size-primus) - 2px); /* 89.47% | 0.89rem */
-	--font-size-tertius: calc(var(--font-size-primus) - 4px);  /* 78.95% | 0.78rem */
+	--base-font-stack: /*system-ui,*/ -apple-system, BlinkMacSystemFont, "Segoe UI", /*Roboto,*/ "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", /* for Windows 7/8 users */ "Segoe UI Symbol"; /* stylelint-disable-line value-keyword-case */
+	--code-font-stack: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; /* stylelint-disable-line value-keyword-case */
+	--base-font-size: 18px;
+	/* --xxx-font-size: calc(var(--base-font-size) - 2px); */
+	--detail-font-size: calc(var(--base-font-size) - 4px);
+
+
+	/*
+		Colors.
+	*/
+	/* Base. */
+	--base-color: #ddd;          /* was: #eee */
+	--base-back-color: #000;     /* was: #111 */
+	--base-alt-back-color: #111; /* was: #222 */
+	--base-border-color: #333;   /* was: #444 */
+
+	/* Scrollbars. */
+	--scrollbar-track-color: var(--base-alt-back-color);
+	--scrollbar-thumb-color: var(--base-border-color);
+
+	/* Anchors. */
+	--anchor-color: #57c;
+	--anchor-hover-color: #79e;
+	--anchor-broken-color: #b11;
+	--anchor-broken-hover-color: #d33;
+	--anchor-disabled-color: #999;
+
+	/* Buttons. */
+	--button-color: var(--base-color);
+	--button-back-color: #249;
+	--button-border-color: #46b;
+	--button-hover-back-color: #46b;
+	--button-hover-border-color: #68d;
+	--button-disabled-back-color: var(--base-border-color);
+	--button-disabled-border-color: #555;
+
+	/* Input Elements (Inputs, Selects, & Textareas). */
+	--input-color: var(--base-color);
+	--input-back-color: transparent;
+	--input-border-color: var(--base-border-color);
+	--input-hover-back-color: #222;
+	--input-hover-border-color: var(--base-color);
+	/* TODO: Add disabled properties and styles. */
+	--input-range-track-back-color: var(--base-alt-back-color);
+	--input-range-track-border-color: var(--base-border-color);
+	--input-range-thumb-back-color: #249;
+	--input-range-thumb-border-color: #46b;
+
+	/* Errors. */
+	--error-back-color: #400;
+	--error-source-back-color: rgba(0, 0, 0, 0.3);
+	--error-border-color: #a00;
+
+	/* Macros. */
+
+	/* Sidebar. */
+	--sidebar-color: var(--base-color);
+	--sidebar-back-color: var(--base-alt-back-color);
+	--sidebar-border-color: var(--base-border-color);
+
+	/* Dialog. */
+	/* --dialog-color: var(--base-color); */
+	--dialog-back-color: var(--base-back-color);
+	--dialog-title-back-color: var(--base-border-color);
+	--dialog-border-color: var(--base-border-color);
+	/* --dialog-body-color: var(--base-back-color); */
+	--dialog-head-color: var(--base-alt-back-color);
+	--dialog-overlay-back-color: var(--base-back-color);
+
+	/* Debug. */
+	--debug-color: var(--base-color);
+	--debug-back-color: var(--base-alt-back-color);
+	--debug-border-color: var(--base-border-color);
+	--debug-body-color: var(--base-back-color);
+	--debug-head-color: var(--base-alt-back-color);
+
 
 	/*
 		Icons (see: "css/sc-icons.css").

@@ -27,7 +27,7 @@ html[data-dialog] body {
 	transition: visibility 200ms step-end, opacity 200ms ease-in;
 }
 #ui-overlay {
-	background-color: #000;
+	background-color: var(--dialog-overlay-back-color);
 	visibility: hidden;
 	opacity: 0;
 	z-index: 1000000;

@@ -15,7 +15,7 @@
 	left: 0;
 	height: 100%;
 	width: 100%;
-	font-family: var(--font-stack);
+	font-family: var(--base-font-stack);
 	font-size: 32px;
 	font-weight: 700;
 	line-height: 1;

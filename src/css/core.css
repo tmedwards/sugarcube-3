@@ -9,15 +9,15 @@
 
 /* Scrollbar styles. */
 *::-webkit-scrollbar {
-	background-color: var(--back-color-secundus);
+	background-color: var(--scrollbar-track-color);
 	width: 8px;
 }
 *::-webkit-scrollbar-thumb {
-	background-color: var(--back-color-tertius);
-	border: 1px solid var(--back-color-secundus);
+	background-color: var(--scrollbar-thumb-color);
+	border: 1px solid var(--scrollbar-track-color);
 }
 * { /* stylelint-disable-line no-descending-specificity */
-	scrollbar-color: var(--back-color-tertius) var(--back-color-secundus);
+	scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
 	scrollbar-width: thin;
 }
 
@@ -41,32 +41,34 @@ tw-storydata { /* stylelint-disable-line selector-type-no-unknown */
 }
 
 body {
-	color: var(--fore-color);
-	background-color: var(--back-color-primus);
-	font-family: var(--font-stack);
-	font-size: var(--font-size-primus, 18px);
+	color: var(--base-color);
+	background-color: var(--base-back-color);
+	font-family: var(--base-font-stack, sans-serif);
+	font-size: var(--base-font-size, 18px);
 	line-height: 1;
 	overflow: auto;
 }
 a {
 	cursor: pointer;
-	color: #57c;
+	color: var(--anchor-color);
 	text-decoration: none;
 	transition: background-color 200ms, border 200ms, color 200ms, text-decoration 200ms;
 }
+a:focus,
 a:hover {
-	color: #79e;
+	color: var(--anchor-hover-color);
 	text-decoration: underline;
 }
 a.link-broken {
-	color: #b11;
+	color: var(--anchor-broken-color);
 }
-a.link-broken:hover {
-	color: #d33;
+a.link-broken:hover,
+a.link-broken:focus {
+	color: var(--anchor-broken-hover-color);
 }
 a[disabled],
 span.link-disabled {
-	color: #999;
+	color: var(--anchor-disabled-color);
 	cursor: not-allowed !important;
 	/*
 		NOTE: Do not use `pointer-events` here as it disables
@@ -84,22 +86,23 @@ area {
 }
 button {
 	cursor: pointer;
-	color: var(--fore-color);
-	background-color: #249;
-	border: 1px solid #46b;
+	color: var(--button-color);
+	background-color: var(--button-back-color);
+	border: 1px solid var(--button-border-color);
 	line-height: normal;
 	padding: 0.4em;
 	transition: background-color 200ms, border 200ms, color 200ms;
 	user-select: none;
 	-webkit-touch-callout: none;
 }
+button:focus,
 button:hover {
-	background-color: #46b;
-	border-color: #68d;
+	background-color: var(--button-hover-back-color);
+	border-color: var(--button-hover-border-color);
 }
 button:disabled {
-	background-color: var(--back-color-tertius);
-	border: 1px solid #555;
+	background-color: var(--button-disabled-back-color);
+	border: 1px solid var(--button-disabled-border-color);
 }
 /* button,
 input,
@@ -110,9 +113,9 @@ textarea {
 input,
 select,
 textarea {
-	color: var(--fore-color);
-	background-color: transparent;
-	border: 1px solid var(--back-color-tertius);
+	color: var(--input-color);
+	background-color: var(--input-back-color);
+	border: 1px solid var(--input-border-color);
 	padding: 0.4em;
 	transition: background-color 200ms, border 200ms, color 200ms;
 }
@@ -137,12 +140,12 @@ input[type="range"] {
 	-webkit-appearance: none;
 	min-height: 1.2em;
 }
-input[type="range"]:focus {
+/* input[type="range"]:focus {
 	outline: none;
-}
+} */
 input[type="range"]::-webkit-slider-runnable-track {
-	background: var(--back-color-secundus);
-	border: 1px solid var(--back-color-tertius);
+	background: var(--input-range-track-back-color);
+	border: 1px solid var(--input-range-track-border-color);
 	border-radius: 0;
 	cursor: pointer;
 	height: 10px;
@@ -150,8 +153,8 @@ input[type="range"]::-webkit-slider-runnable-track {
 }
 input[type="range"]::-webkit-slider-thumb {
 	-webkit-appearance: none;
-	background: #249;
-	border: 1px solid #46b;
+	background: var(--input-range-thumb-back-color);
+	border: 1px solid var(--input-range-thumb-border-color);
 	border-radius: 0;
 	cursor: pointer;
 	height: 18px;
@@ -165,26 +168,26 @@ input[type="range"]::-webkit-slider-thumb {
 	margin-top: -5px;
 	width: 33px;
 }
-input[type="range"]:focus::-webkit-slider-runnable-track {
-	background: var(--back-color-secundus);
-}
+/* input[type="range"]:focus::-webkit-slider-runnable-track {
+	background: var(--input-range-track-back-color);
+} */
 input[type="range"]::-moz-range-track {
-	background: var(--back-color-secundus);
-	border: 1px solid var(--back-color-tertius);
+	background: var(--input-range-track-back-color);
+	border: 1px solid var(--input-range-track-border-color);
 	border-radius: 0;
 	cursor: pointer;
 	height: 10px;
 	width: 100%;
 }
 input[type="range"]::-moz-range-thumb {
-	background: #249;
-	border: 1px solid #46b;
+	background: var(--input-range-thumb-back-color);
+	border: 1px solid var(--input-range-thumb-border-color);
 	border-radius: 0;
 	cursor: pointer;
 	height: 18px;
 	width: 33px;
 }
-input[type="range"]::-ms-track {
+/* input[type="range"]::-ms-track {
 	background: transparent;
 	border-color: transparent;
 	color: transparent;
@@ -193,23 +196,23 @@ input[type="range"]::-ms-track {
 	width: calc(100% - 1px);
 }
 input[type="range"]::-ms-fill-lower {
-	background: var(--back-color-secundus);
-	border: 1px solid var(--back-color-tertius);
+	background: var(--input-range-track-back-color);
+	border: 1px solid var(--input-range-track-border-color);
 	border-radius: 0;
 }
 input[type="range"]::-ms-fill-upper {
-	background: var(--back-color-secundus);
-	border: 1px solid var(--back-color-tertius);
+	background: var(--input-range-track-back-color);
+	border: 1px solid var(--input-range-track-border-color);
 	border-radius: 0;
 }
 input[type="range"]::-ms-thumb {
-	background: #249;
-	border: 1px solid #46b;
+	background: var(--input-range-thumb-back-color);
+	border: 1px solid var(--input-range-thumb-border-color);
 	border-radius: 0;
 	cursor: pointer;
 	height: 16px;
 	width: 33px;
-}
+} */
 /* END: input[type="range"] */
 input:not(:disabled):focus,
 select:not(:disabled):focus,
@@ -217,14 +220,14 @@ textarea:not(:disabled):focus,
 input:not(:disabled):hover,
 select:not(:disabled):hover,
 textarea:not(:disabled):hover {
-	background-color: #222;
-	border-color: var(--fore-color);
+	background-color: var(--input-hover-back-color);
+	border-color: var(--input-hover-border-color);
 }
 hr {
 	display: block;
 	height: 1px;
 	border: none;
-	border-top: 1px solid var(--fore-color);
+	border-top: 1px solid var(--base-color);
 	margin: 1em 0;
 	padding: 0;
 }
@@ -242,8 +245,8 @@ video {
 }
 
 .error-view {
-	background-color: #400;
-	border-left: 0.5em solid #a00;
+	background-color: var(--error-back-color);
+	border-left: 0.5em solid var(--error-border-color);
 	display: inline-block;
 	margin: 0.1em;
 	max-width: 100%;
@@ -271,7 +274,7 @@ video {
 	display: none;
 }
 .error-view > .error-source:not([hidden]) {
-	background-color: rgba(0, 0, 0, 0.3);
+	background-color: var(--error-source-back-color);
 	display: block;
 	margin: 0 0 0.25em;
 	overflow-x: auto;
@@ -298,6 +301,6 @@ a.link-external::after {
 	margin-right: 0.4em;
 }
 a.link-external::after {
-	content: var(--icon-link-ext);
+	content: var(--icon-external-link-alt);
 	margin-left: 0.2em;
 }

@@ -90,7 +90,7 @@
 }
 #ui-dialog.saves > #ui-dialog-body #saves-list > li > div .details {
 	/* font-size: 0.78rem; */
-	font-size: var(--font-size-tertius);
+	font-size: var(--detail-font-size);
 	margin-left: 1em;
 }
 #ui-dialog.saves > #ui-dialog-body #saves-list ul.buttons {

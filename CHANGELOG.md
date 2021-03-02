@@ -5,6 +5,10 @@
 * Make auto saves not save on the same turn that any save is loaded or, probably, a session is restored.
 * Consider meshing the auto save and session update somehow, so that the state is automatically marshaled only once per turn.
 
+## 2021-03-02
+
+* Updated style custom properties.  Mostly thematic bits and bobs.
+
 ## 2021-03-01
 
 * Added `postcss-mixins` plugin development dependency.

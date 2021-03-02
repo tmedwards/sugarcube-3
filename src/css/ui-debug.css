@@ -11,14 +11,6 @@
 	Default debug bar styles.
 */
 #debug-bar {
-	/* Debug bar hierarchy variables. */
-	--debug-back-color: var(--back-color-secundus);
-	--debug-fore-color: var(--fore-color);
-	--debug-border-color: var(--back-color-tertius);
-	--debug-body-color: var(--back-color-primus);
-	--debug-head-color: var(--back-color-secundus);
-
-	/* Properties. */
 	background-color: var(--debug-back-color);
 	border-left: 1px solid var(--debug-border-color);
 	border-right: 1px solid var(--debug-border-color);
@@ -57,7 +49,7 @@
 }
 
 #debug-bar-toggle {
-	color: var(--debug-fore-color);
+	color: var(--debug-color);
 	background-color: var(--debug-back-color);
 	border: 1px solid var(--debug-border-color);
 	/* height: calc(100% + 1px); */
@@ -69,7 +61,7 @@
 }
 #debug-bar-toggle:hover {
 	background-color: #333;
-	border-color: var(--debug-fore-color);
+	border-color: var(--debug-color);
 }
 
 #debug-bar-hint {
@@ -158,7 +150,7 @@
 }
 #debug-bar-watch-toggle,
 #debug-bar-views-toggle {
-	color: var(--debug-fore-color);
+	color: var(--debug-color);
 	background-color: transparent;
 	border: 1px solid var(--debug-border-color);
 	margin-right: 1em;
@@ -167,7 +159,7 @@
 #debug-bar-views-toggle:hover,
 #debug-bar-watch-toggle:hover {
 	background-color: #333;
-	border-color: var(--debug-fore-color);
+	border-color: var(--debug-color);
 }
 html[data-debug~="views"] #debug-bar-views-toggle,
 html[data-debug~="watch"] #debug-bar-watch-toggle {
@@ -260,7 +252,7 @@ html:not([data-debug~="view"]) .debug.hidden {
 html[data-debug~="views"] .debug[data-name][data-type]::before,
 html[data-debug~="views"] .debug[data-name][data-type].nonvoid::after {
 	background-color: rgba(0, 0, 0, 0.25);
-	font-family: var(--code-stack);
+	font-family: var(--code-font-stack);
 	white-space: pre;
 }
 html[data-debug~="views"] .debug[data-name][data-type]::before {
