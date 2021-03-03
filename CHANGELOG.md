@@ -9,6 +9,7 @@
 ## 2021-03-03
 
 * Reorganized some of the CSS files.
+* More thematic custom properties work.
 
 ## 2021-03-02
 

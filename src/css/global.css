@@ -44,20 +44,33 @@
 	--anchor-disabled-color: #999;
 
 	/* Buttons. */
-	--button-color: var(--base-color);
+	/* --button-color: var(--base-color);
 	--button-back-color: #249;
 	--button-border-color: #46b;
 	--button-hover-back-color: #46b;
 	--button-hover-border-color: #68d;
 	--button-disabled-back-color: var(--base-border-color);
-	--button-disabled-border-color: #555;
+	--button-disabled-border-color: #555; */
+	--button-color: var(--base-color);
+	--button-back-color: transparent;
+	--button-border-color: var(--base-border-color);
+	/* --button-hover-color: var(--base-color); */
+	--button-hover-back-color: #222;
+	--button-hover-border-color: var(--base-color);
+	--button-disabled-color: var(--base-border-color);
+	/* --button-disabled-back-color: transparent; */
+	--button-disabled-border-color: var(--base-alt-back-color);
 
 	/* Input Elements (Inputs, Selects, & Textareas). */
 	--input-color: var(--base-color);
 	--input-back-color: transparent;
 	--input-border-color: var(--base-border-color);
+	/* --input-hover-color: var(--base-color); */
 	--input-hover-back-color: #222;
 	--input-hover-border-color: var(--base-color);
+	--input-disabled-color: var(--base-border-color);
+	/* --input-disabled-back-color: transparent; */
+	--input-disabled-border-color: var(--base-alt-back-color);
 	/* TODO: Add disabled properties and styles. */
 	--input-range-track-back-color: var(--base-alt-back-color);
 	--input-range-track-border-color: var(--base-border-color);
@@ -71,21 +84,27 @@
 
 	/* Macros. */
 
-	/* Sidebar. */
-	--sidebar-color: var(--base-color);
-	--sidebar-back-color: var(--base-alt-back-color);
-	--sidebar-border-color: var(--base-border-color);
-
 	/* Dialog. */
+	--dialog-overlay-back-color: var(--base-back-color);
 	/* --dialog-color: var(--base-color); */
 	--dialog-back-color: var(--base-back-color);
 	--dialog-title-back-color: var(--base-border-color);
 	--dialog-border-color: var(--base-border-color);
 	/* --dialog-body-color: var(--base-back-color); */
 	--dialog-head-color: var(--base-alt-back-color);
-	--dialog-overlay-back-color: var(--base-back-color);
 
-	/* Debug. */
+	/* Dialog: Saves. */
+	/* TODO: */
+
+	/* Dialog: Setting. */
+	/* TODO: */
+
+	/* Sidebar. */
+	--sidebar-color: var(--base-color);
+	--sidebar-back-color: var(--base-alt-back-color);
+	--sidebar-border-color: var(--base-border-color);
+
+	/* Debug bar. */
 	--debug-color: var(--base-color);
 	--debug-back-color: var(--base-alt-back-color);
 	--debug-border-color: var(--base-border-color);

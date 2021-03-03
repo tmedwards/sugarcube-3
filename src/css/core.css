@@ -97,12 +97,14 @@ button {
 }
 html[data-outlines] button:focus,
 button:hover {
-	background-color: var(--button-hover-back-color);
-	border-color: var(--button-hover-border-color);
+	color: var(--button-hover-color, var(--button-color));
+	background-color: var(--button-hover-back-color, var(--button-back-color));
+	border-color: var(--button-hover-border-color, var(--button-border-color));
 }
 button:disabled {
-	background-color: var(--button-disabled-back-color);
-	border: 1px solid var(--button-disabled-border-color);
+	color: var(--button-disabled-color, var(--button-color));
+	background-color: var(--button-disabled-back-color, var(--button-back-color));
+	border: 1px solid var(--button-disabled-border-color, var(--button-border-color));
 }
 /* button,
 input,
@@ -214,14 +216,22 @@ input[type="range"]::-ms-thumb {
 	width: 33px;
 } */
 /* END: input[type="range"] */
-input:not(:disabled):focus,
-select:not(:disabled):focus,
-textarea:not(:disabled):focus,
-input:not(:disabled):hover,
-select:not(:disabled):hover,
-textarea:not(:disabled):hover {
-	background-color: var(--input-hover-back-color);
-	border-color: var(--input-hover-border-color);
+html[data-outlines] input:focus,
+html[data-outlines] select:focus,
+html[data-outlines] textarea:focus,
+input:hover,
+select:hover,
+textarea:hover {
+	color: var(--input-hover-color, var(--input-color));
+	background-color: var(--input-hover-back-color, var(--input-back-color));
+	border-color: var(--input-hover-border-color, var(--input-border-color));
+}
+input:disabled,
+select:disabled,
+textarea:disabled {
+	color: var(--input-disabled-color, var(--input-color));
+	background-color: var(--input-disabled-back-color, var(--input-back-color));
+	border-color: var(--input-disabled-border-color, var(--input-border-color));
 }
 hr {
 	display: block;
@@ -263,6 +273,14 @@ video {
 	top: 0;
 	width: 1.75em;
 }
+html[data-outlines] .error-view > .error-toggle:focus,
+.error-view > .error-toggle:hover {
+	/*
+		This could also be achieved by simply adding `!important` to the base
+		`background-color` property above.
+	*/
+	background-color: transparent;
+}
 .error-view > .error {
 	display: inline-block;
 	margin-left: 0.25em;
@@ -302,5 +320,5 @@ a.link-external::after {
 }
 a.link-external::after {
 	content: var(--icon-external-link-alt);
-	margin-left: 0.2em;
+	margin-left: 0.4em;
 }
