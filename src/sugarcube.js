@@ -44,6 +44,7 @@ import I18n from '~/i18n/i18n';
 import LoadScreen from '~/loadscreen';
 import { MIN_DOM_ACTION_DELAY } from '~/constants';
 import Macro from '~/macros/macro';
+import Outliner from '~/lib/outliner';
 import Passage from '~/passage';
 import Save from '~/save';
 import Serial from '~/lib/serial';
@@ -164,6 +165,7 @@ jQuery(() => {
 			UI.init();
 			UIBar.init();
 			Engine.init();
+			Outliner.init();
 
 			// Load the user styles.
 			(() => {

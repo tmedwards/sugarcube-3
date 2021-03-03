@@ -16,7 +16,6 @@ import { MIN_DOM_ACTION_DELAY } from '~/constants';
 import Save from '~/save';
 import State from '~/state';
 import Story from '~/story';
-import StyleWrapper from '~/lib/stylewrapper';
 import UI from '~/ui';
 import Wikifier from '~/markup/wikifier';
 import mappingFrom from '~/utils/mappingfrom';
@@ -43,9 +42,6 @@ const Engine = (() => {
 
 	// Cache of the debug view for the StoryInit special passage.
 	let storyInitDebugView = null;
-
-	// Cache of the outline patching <style> element (`StyleWrapper`-wrapped).
-	let outlinePatch = null;
 
 	// List of objects describing `StoryInterface` elements to update via passages during navigation.
 	let updateList = null;
@@ -110,37 +106,6 @@ const Engine = (() => {
 			// Insert the core UI elements into the page before the main script.
 			$elems.insertBefore('body>script#script-sugarcube');
 		})();
-
-		// Generate and cache the ARIA outlines <style> element (`StyleWrapper`-wrapped)
-		// and set up the handler to manipulate the outlines.
-		//
-		// IDEA: http://www.paciellogroup.com/blog/2012/04/how-to-remove-css-outlines-in-an-accessible-manner/
-		outlinePatch = new StyleWrapper((
-			() => jQuery(document.createElement('style'))
-				.attr({
-					id   : 'style-aria-outlines',
-					type : 'text/css'
-				})
-				.appendTo(document.head)
-				.get(0) // return the <style> element itself
-		)());
-		hideOutlines(); // initially hide outlines
-		let lastOutlineEvent;
-		jQuery(document).on(
-			'mousedown.aria-outlines keydown.aria-outlines',
-			ev => {
-				if (ev.type !== lastOutlineEvent) {
-					lastOutlineEvent = ev.type;
-
-					if (ev.type === 'keydown') {
-						showOutlines();
-					}
-					else {
-						hideOutlines();
-					}
-				}
-			}
-		);
 	}
 
 	/*
@@ -584,19 +549,6 @@ const Engine = (() => {
 		lastPlay = now();
 
 		return true;
-	}
-
-
-	/*******************************************************************************
-		Utility Functions.
-	*******************************************************************************/
-
-	function hideOutlines() {
-		outlinePatch.set('*:focus{outline:none;}');
-	}
-
-	function showOutlines() {
-		outlinePatch.clear();
 	}
 
 

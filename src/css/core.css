@@ -54,7 +54,7 @@ a {
 	text-decoration: none;
 	transition: background-color 200ms, border 200ms, color 200ms, text-decoration 200ms;
 }
-a:focus,
+html[data-outlines] a:focus,
 a:hover {
 	color: var(--anchor-hover-color);
 	text-decoration: underline;
@@ -62,8 +62,8 @@ a:hover {
 a.link-broken {
 	color: var(--anchor-broken-color);
 }
-a.link-broken:hover,
-a.link-broken:focus {
+html[data-outlines] a.link-broken:focus,
+a.link-broken:hover {
 	color: var(--anchor-broken-hover-color);
 }
 a[disabled],
@@ -95,7 +95,7 @@ button {
 	user-select: none;
 	-webkit-touch-callout: none;
 }
-button:focus,
+html[data-outlines] button:focus,
 button:hover {
 	background-color: var(--button-hover-back-color);
 	border-color: var(--button-hover-border-color);
