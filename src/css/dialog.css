@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 
-	css/ui-dialog.css
+	css/dialog.css
 
 	Copyright © 2013–2021 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
 	Use of this source code is governed by a BSD 2-clause "Simplified" License, which may be found in the LICENSE file.
@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Patches to the core styles.
+	Core style patches.
 */
 html[data-dialog] body {
 	overflow: hidden;
@@ -16,7 +16,7 @@ html[data-dialog] body {
 
 
 /*
-	Default styles.
+	Dialog styles.
 */
 #ui-overlay[data-open] {
 	opacity: 0.8;
@@ -117,7 +117,7 @@ html[data-dialog] body {
 	background-color: var(--dialog-back-color);
 }
 
-/* Default dialog button bar styling. */
+/* Dialog button bar styling. */
 #ui-dialog-body ul.buttons {
 	list-style: none;
 	margin: 0;
@@ -135,7 +135,7 @@ html[data-dialog] body {
 
 
 /*
-	Default font icon styles.
+	Dialog font icon styles.
 */
 #ui-dialog-close::before {
 	@mixin sc-icons-properties;

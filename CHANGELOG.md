@@ -4,9 +4,15 @@
 
 * Make auto saves not save on the same turn that any save is loaded or, probably, a session is restored.
 * Consider meshing the auto save and session update somehow, so that the state is automatically marshaled only once per turn.
+* Newer versions of `normalize.css` seem to be breaking some focus outlines in Firefox. 😒
+
+## 2021-03-03
+
+* Reorganized some of the CSS files.
 
 ## 2021-03-02
 
+* Updated the outlining code.  Still have some styles to work on.
 * Updated style custom properties.  Mostly thematic bits and bobs.
 
 ## 2021-03-01

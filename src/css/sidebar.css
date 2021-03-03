@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 
-	css/ui-bar.css
+	css/sidebar.css
 
 	Copyright © 2013–2021 Thomas Michael Edwards <thomasmedwards@gmail.com>. All rights reserved.
 	Use of this source code is governed by a BSD 2-clause "Simplified" License, which may be found in the LICENSE file.
@@ -8,7 +8,7 @@
 ***********************************************************************************************************************/
 
 /*
-	Patches to the core styles.
+	Core style patches.
 */
 #story {
 	margin-left: 20em;
@@ -38,7 +38,7 @@
 
 
 /*
-	Default styles.
+	Sidebar styles.
 */
 #ui-bar {
 	background-color: var(--sidebar-back-color);
@@ -143,7 +143,7 @@
 
 
 /*
-	Default font icon styles.
+	Sidebar font icon styles.
 */
 #ui-bar-toggle::before,
 #menu-core li[id|="menu-item"] a::before {
