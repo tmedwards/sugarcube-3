@@ -10,7 +10,6 @@ node_modules/
 .build
 *.code-workspace
 .tern-project
-.vscode
 
 # Miscellaneous
 _*
