@@ -97,6 +97,7 @@
         "no-new-wrappers"                  : "error",
         "no-param-reassign"                : ["error", { "props" : true }],
         "no-plusplus"                      : "off",
+        "no-prototype-builtins"            : "error",
         "no-regex-spaces"                  : "error",
         "no-restricted-globals"            : ["error", "isFinite", "isNaN"],
         "no-restricted-syntax"             : ["error", "WithStatement"],
