@@ -11,11 +11,20 @@
 	Returns whether the given object has an own property by the given name.
 */
 const hasOwn = (() => {
+	// Return the native `Object.hasOwn()` static method, if it exists.
+	if (Object.hasOwn) {
+		return Object.hasOwn;
+	}
+
 	// Cache the `<Object>.hasOwnProperty()` method.
 	const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 	function hasOwn(O, P) {
-		return hasOwnProperty.call(O, P);
+		if (O == null) { // lazy equality for null
+			throw new TypeError('object parameter may not be undefined or null');
+		}
+
+		return hasOwnProperty.call(Object(O), P);
 	}
 
 	return hasOwn;
