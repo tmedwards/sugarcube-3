@@ -37,7 +37,7 @@ const Passage = (() => {
 					value : el || null
 				},
 
-				// Passage tags array (sorted and unique).
+				// Passage tags array (unique).
 				tags : {
 					value : Object.freeze(
 						el && el.hasAttribute('tags')
