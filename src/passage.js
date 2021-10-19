@@ -41,11 +41,7 @@ const Passage = (() => {
 				tags : {
 					value : Object.freeze(
 						el && el.hasAttribute('tags')
-							? el.getAttribute('tags')
-								.trim()
-								.splitOrEmpty(/\s+/)
-								.sort()
-								.filter((tag, i, aref) => i === 0 || aref[i - 1] !== tag)
+							? [...new Set(el.getAttribute('tags').trim().splitOrEmpty(/\s+/))]
 							: []
 					)
 				}
