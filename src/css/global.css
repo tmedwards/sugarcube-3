@@ -18,7 +18,7 @@
 	*/
 	--base-font-stack: /*system-ui,*/ -apple-system, BlinkMacSystemFont, "Segoe UI", /*Roboto,*/ "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", /* for Windows 7/8 users */ "Segoe UI Symbol"; /* stylelint-disable-line value-keyword-case */
 	--code-font-stack: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; /* stylelint-disable-line value-keyword-case */
-	--base-font-size: 18px;
+	--base-font-size: 1.125rem; /* 18px */
 	/* --xxx-font-size: calc(var(--base-font-size) - 2px); */
 	--detail-font-size: calc(var(--base-font-size) - 4px);
 

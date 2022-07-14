@@ -40,11 +40,21 @@ tw-storydata { /* stylelint-disable-line selector-type-no-unknown */
 	z-index: 0;
 }
 
+/*
+	TODO: Check to see if `rem` values are still rendered differently between browsers.
+
+	SEE: https://coderwall.com/p/i_ltpg/rem-values-rendering-differently-in-modern-browsers
+
+html {
+	|* Set the font size here to avoid browser shenanigans. *|
+	font-size: var(--base-font-size, 1.125rem);
+}
+*/
 body {
 	color: var(--base-color);
 	background-color: var(--base-back-color);
 	font-family: var(--base-font-stack, sans-serif);
-	font-size: var(--base-font-size, 18px);
+	font-size: var(--base-font-size, 1.125rem);
 	line-height: 1;
 	overflow: auto;
 }
