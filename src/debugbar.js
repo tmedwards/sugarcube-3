@@ -342,7 +342,7 @@ const DebugBar = (() => {
 					return JSON.stringify(O);
 
 				case 'function':
-					// return JSON.stringify(value.toString());
+					// return JSON.stringify(O.toString());
 					return 'function';
 			}
 
@@ -360,18 +360,18 @@ const DebugBar = (() => {
 			// 	Handle instances of the primitive exemplar objects (`Boolean`, `Number`, `String`).
 			// */
 			// if (objType === 'Boolean') {
-			// 	return `Boolean\u202F{${String(value)}}`;
+			// 	return `Boolean\u202F{${String(O)}}`;
 			// }
 			// if (objType === 'Number') {
-			// 	return `Number\u202F{${String(value)}}`;
+			// 	return `Number\u202F{${String(O)}}`;
 			// }
 			// if (objType === 'String') {
-			// 	return `String\u202F{"${String(value)}"}`;
+			// 	return `String\u202F{"${String(O)}"}`;
 			// }
 
 			// Handle `Date` objects.
 			if (objType === 'Date') {
-				// return `Date\u202F${value.toISOString()}`;
+				// return `Date\u202F${O.toISOString()}`;
 				return `Date\u202F{${O.toLocaleString()}}`;
 			}
 
